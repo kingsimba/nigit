@@ -8,9 +8,10 @@ with each component has its own Git repository.
 
 The benefit this approach are:
 
-* Help cutting clear lines between modules. Each module can be compiled and tested.
-* Each module can have difference collaborators and different permissions.
-  This is very important in cooperate projects.
+* Help cutting clear lines between components. Components can be compiled and tested individually.
+  This will foster stable public APIs and better modularization.
+* Each component can have different collaborators and permissions.
+  This is very important in corporates in which source code permission is enforced.
 
 Initialization
 --------------
