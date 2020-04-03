@@ -1,0 +1,22 @@
+{
+    "indirectProjects": [], 
+    "branch": "master",
+    "projects": [
+        {
+            "url": "git@gitlab.mapbar.com:nc/cq_stdlib.git", 
+            "projectName": "cq_stdlib", 
+            "branch": "master"
+        }, 
+        {
+            "url": "git@gitlab.mapbar.com:nc/mapdal.git", 
+            "projectName": "mapdal", 
+            "branch": "master"
+        }, 
+        {
+            "url": "http://navicore.mapbar.com/ncgit/navicore-lib.zip", 
+            "projectName": "navicore-lib", 
+            "hasLib": false, 
+            "branch": "master"
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+    --require ts-node/register
+    -u bdd
+    --timeout 999999
+    --colors
+    --recursive
+    ./src/**/*.spec.ts
+    --exit
