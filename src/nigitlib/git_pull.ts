@@ -1,4 +1,4 @@
-import { GitForall } from "./git_forall";
+import { GitForAll } from "./git_forall";
 import { CmdUtils, CmdResult, println, print, MessageType } from "./cmd_utils";
 import { FileDownloader } from "./file_downloader";
 import ExtractZip from 'extract-zip'
@@ -11,7 +11,7 @@ export class GitPull {
         // we'd like to run them in parallel for all projects.
         const promises: Promise<number>[] = [];
 
-        GitForall.forall('.', (projDir, proj) => {
+        GitForAll.forAll('.', (projDir, proj) => {
 
             const p = new Promise<number>(async (resolve) => {
 

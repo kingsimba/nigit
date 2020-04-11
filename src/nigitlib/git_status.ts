@@ -1,7 +1,7 @@
 import { GitProject, GitConfig } from "./git_config";
 import fs from 'fs';
 import { CmdUtils, print, println } from "./cmd_utils";
-import { GitForall } from "./git_forall";
+import { GitForAll as GitForAll } from "./git_forall";
 
 export class GitStatus {
 
@@ -9,7 +9,7 @@ export class GitStatus {
      * Print the status of projects. In current directory.
      */
     static cmdStatus(): number {
-        GitForall.forall('.', (projDir, proj) => {
+        GitForAll.forAll('.', (projDir, proj) => {
             if (proj.isGitRepository()) {
                 const result = CmdUtils.exec(`cd ${projDir} & git status`);
                 if (result.exitCode == 0) {

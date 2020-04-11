@@ -3,8 +3,9 @@ import program from 'commander';
 import process from 'process';
 import { GitSwitcher } from "./nigitlib/git_switcher";
 import { GitStatus } from "./nigitlib/git_status";
-import { GitForall } from './nigitlib/git_forall';
+import { GitForAll } from './nigitlib/git_forall';
 import { GitPull } from './nigitlib/git_pull';
+import { println } from './nigitlib/cmd_utils';
 
 class Options {
     infoFile: string;
@@ -34,7 +35,19 @@ program
         if (opts.workingDir) {
             process.chdir(opts.workingDir);
         }
-        GitForall.cmdGitForall(command);
+        GitForAll.cmdGitForAll(command);
+    })
+
+program
+    .command('list')
+    .option('--working-dir <DIR>')
+    .action((command: string, opts: Options) => {
+        if (opts.workingDir) {
+            process.chdir(opts.workingDir);
+        }
+        GitForAll.forAll('.', (projDir, proj) => {
+            println(`${proj.name} => ${proj.url}`);
+        });
     })
 
 program

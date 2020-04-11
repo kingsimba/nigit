@@ -1,0 +1,10 @@
+{
+    "projects": [
+        {
+            "url": "git@gitlab.mapbar.com:navicore/ncsearch-language-support.git"
+        }, 
+        {
+            "url": "git@github.com:kingsimba/express-typescript-mocha-vscode.git"
+        }
+    ]
+}

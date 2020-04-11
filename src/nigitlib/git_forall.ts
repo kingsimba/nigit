@@ -1,15 +1,16 @@
 import { GitProject, GitConfig } from "./git_config";
 import fs from 'fs';
 import { CmdUtils, println } from "./cmd_utils";
+import { normalize, relative } from "path";
 import { resolve } from "path";
 
-export class GitForall {
+export class GitForAll {
 
     /**
      * Execute the same command for all projects. in current directory
      */
-    static cmdGitForall(command: string): number {
-        this.forall('.', (projDir, proj) => {
+    static cmdGitForAll(command: string): number {
+        this.forAll('.', (projDir, proj) => {
             println(`=== ${proj.name} ===`);
             if (proj.isGitRepository()) {
                 CmdUtils.execInConsole(`cd ${projDir} & ${command}`);
@@ -24,52 +25,79 @@ export class GitForall {
     /**
      * Execute the same command for all projects. It will try to find ncgit.json in |workDir| directory.
      */
-    static forall(workDir: string, callback: (projDir: string, proj: GitProject) => void): number {
-        let ncgitJson = this._findGitConfigFile(workDir);
-        if (!ncgitJson) {
-            console.error('error: failed to locate ncgit.json');
+    static forAll(workDir: string, callback: (projDir: string, proj: GitProject) => void): number {
+        const mainProject = this._findMainProject(workDir);
+        if (mainProject == null) {
+            println('error: no ncgit.json is found');
             return -1;
         }
 
-        ncgitJson = resolve(ncgitJson).replace(/\\/g, '/');
-        const config = GitConfig.instanceWithConfigFile(ncgitJson);
+        const config = GitConfig.instanceWithMainProjectPath(mainProject);
+        if (config == undefined) {
+            return -1;
+        }
 
-        const workspaceDir = ncgitJson.split('/').slice(0, -2).join('/');
+        const workspaceDir = mainProject.substr(0, mainProject.lastIndexOf('/'));
 
-        config.projects.forEach(proj => {
-            const projDir = `${workspaceDir}/${proj.name}`;
+        for (const proj of config.projects) {
+            const projDir = (workspaceDir == '') ? proj.name : `${workspaceDir}/${proj.name}`;
             callback(projDir, proj);
-        });
+        }
 
         return 0;
     }
 
     /**
-     * Find the 'ncgit.json' file.
+     * Find the main project which contains the 'ncgit.json' file.
      * @param rootDir the root directory to search for `ncgit.json`
      */
-    static _findGitConfigFile(rootDir: string): string {
+    static _findMainProject(rootDir: string): string {
 
-        // search in the root dir
-        var tryFile = `${rootDir}/ncgit.json`;
-        if (fs.existsSync(tryFile)) {
-            return tryFile;
-        }
-        else {
-            // find "ncgit.workspace" and read its "master_project" node.
-            tryFile = `${rootDir}/ncgit.workspace`;
-            if (fs.existsSync(tryFile)) {
-                const text = fs.readFileSync(tryFile, 'utf8');
+        let mainProjPath = undefined;
+        let path = rootDir;
+        let lastCheckedPath;
+        while (fs.existsSync(path)) {
+
+            // prevent dead loop over root path like 'C:\'
+            const fullPath = resolve(path);
+            if (fullPath === lastCheckedPath)
+                break;
+            lastCheckedPath = fullPath;
+
+            // try ncgit.json
+            if (fs.existsSync(`${path}/ncgit.json`)) {
+                mainProjPath = path;
+                break;
+            }
+
+            // try ncgit.workspace
+            const workspaceFile = `${path}/ncgit.workspace`;
+            if (fs.existsSync(workspaceFile)) {
+                const text = fs.readFileSync(workspaceFile, 'utf8');
                 const node = JSON.parse(text);
                 if (node && node.master_project) {
-                    tryFile = `${rootDir}/${node.master_project}/ncgit.json`;
-                    if (fs.existsSync(tryFile)) {
-                        return tryFile;
+                    const projFile = `${path}/${node.master_project}/ncgit.json`;
+                    if (fs.existsSync(projFile)) {
+                        mainProjPath = `${path}/${node.master_project}`;
                     }
                 }
+                break;
             }
+
+            path = path + '/..';
         }
 
-        return null;
+        if (mainProjPath != undefined) {
+            const rel = relative(rootDir, mainProjPath);
+            if (rel !== '') {
+                mainProjPath = rootDir + '/' + rel;
+            } else {
+                mainProjPath = rootDir;
+            }
+            mainProjPath = normalize(mainProjPath).replace(/\\/g, '/');
+        }
+
+        return mainProjPath;
     }
+
 }

@@ -16,7 +16,7 @@
                 "forall",
                 "git status",
                 "--working-dir",
-                "C:\\Users\\kingsimba\\Documents\\nc"
+                "C:\\Users\\simba\\Documents\\git"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
@@ -35,7 +35,7 @@
             "args": [
                 "status",
                 "--working-dir",
-                "C:\\Users\\kingsimba\\Documents\\nc"
+                "C:\\Users\\simba\\Documents\\git"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
@@ -54,7 +54,7 @@
             "args": [
                 "pull",
                 "--working-dir",
-                "C:\\Users\\kingsimba\\Documents\\nc"
+                "C:\\Users\\simba\\Documents\\git"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
