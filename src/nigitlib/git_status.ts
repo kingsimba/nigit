@@ -9,20 +9,27 @@ export class GitStatus {
      * Print the status of projects. In current directory.
      */
     static cmdStatus(): number {
+        let allIsClean = true;
         GitForAll.forAll('.', (projDir, proj) => {
             if (proj.isGitRepository()) {
                 const result = CmdUtils.exec(`cd ${projDir} & git status`);
                 if (result.exitCode == 0) {
                     if (result.stdout.indexOf('nothing to commit, working tree clean') == -1) {
+                        allIsClean = false;
                         println(`=== ${proj.name} ===`);
                         print(this._filterOutput(result.stdout));
                     }
                 } else {
+                    allIsClean = false;
                     println(`=== ${proj.name} ===`);
                     print(result.stderr);
                 }
             }
         });
+
+        if (allIsClean) {
+            println('Nothing to commit, all working trees are clean');
+        }
 
         return 0;
     }
