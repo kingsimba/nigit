@@ -17,7 +17,7 @@
                 "clone",
                 "git@github.com:kingsimba/nigit.git"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -35,7 +35,7 @@
                 "forall",
                 "git status"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -52,7 +52,7 @@
             "args": [
                 "status"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -70,7 +70,7 @@
                 "branch",
                 "--all"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -87,7 +87,7 @@
             "args": [
                 "list"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -105,7 +105,7 @@
             "args": [
                 "pull"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -125,7 +125,7 @@
                 "--info-file",
                 "abc.info"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ]
