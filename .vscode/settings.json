@@ -3,5 +3,6 @@
         "node_modules": true,
         "dist": true,
         ".gitignore": true
-    }
+    },
+    "restructuredtext.confPath": ""
 }
