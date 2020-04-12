@@ -17,7 +17,7 @@ export class GitPull {
 
                 if (fs.existsSync(`${projDir}/.git`)) {
                     // for git repository, run 'git pull'
-                    const result = await CmdUtils.execAsync(`cd ${projDir} & git pull --ff-only`);
+                    const result = await CmdUtils.execAsync(`cd "${projDir}" & git pull --ff-only`);
 
                     println(`=== ${proj.name} ===`);
                     if (result.exitCode == 0) {
@@ -30,7 +30,7 @@ export class GitPull {
                 }
                 else if (proj.isGitRepository()) {
                     // for empty git repository, run 'git clone'
-                    const result = await CmdUtils.execAsync(`cd ${projDir}/.. & git clone ${proj.url}`);
+                    const result = await CmdUtils.execAsync(`mkdir "${projDir}" & cd "${projDir}" & git clone "${proj.url}" .`);
 
                     println(`=== ${proj.name} ===`);
                     if (result.exitCode == 0) {
@@ -52,7 +52,7 @@ export class GitPull {
                         println('The file is up-to-date');
                     }
                     else {
-                        await this.extranceZipInPlace(zipFileName, projDir + "/..");
+                        await this.extractZipInPlace(zipFileName, projDir + "/..");
                         println(`=== ${proj.name} ===`);
                         println(`Files extracted: ${zipFileName}`);
                     }
@@ -67,7 +67,7 @@ export class GitPull {
         const results = await Promise.all(promises);
     }
 
-    static async extranceZipInPlace(zipFile: string, folder: string) {
+    static async extractZipInPlace(zipFile: string, folder: string) {
         try {
             await ExtractZip(zipFile, { dir: folder });
         } catch (err) {

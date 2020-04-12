@@ -1,16 +1,29 @@
 import fs from 'fs';
 import { CmdUtils, println } from './cmd_utils';
 
+interface GitProjectJsonNode {
+    name?: string;
+    url: string;
+}
+
 export class GitProject {
     public name: string;
+    public url: string;
 
-    constructor(public url: string) {
+    static instanceWithUrl(url: string) {
+        const o = new GitProject();
+        o.url = url;
         const m = url.match(/\/([^\/]+)\.(zip|git)$/);
-        this.name = m[1];
+        o.name = m[1];
+        return o;
     }
 
-    static instanceWithJson(node: any) {
-        return new GitProject(node.url);
+    static instanceWithJson(node: GitProjectJsonNode) {
+        const o = GitProject.instanceWithUrl(node.url);
+        if (node.name) {
+            o.name = node.name;
+        }
+        return o;
     }
 
     isGitRepository(): boolean {
@@ -19,7 +32,7 @@ export class GitProject {
 }
 
 /**
-    Used to parse 'ncgit.json'
+    Used to parse 'nigit.json'
 
     @remarks
         the file looks like:
@@ -59,23 +72,23 @@ export class GitConfig {
             throw new Error('failed parse main project remote URL');
         }
 
-        this.projects.push(new GitProject(m[1]));
+        this.projects.push(GitProject.instanceWithUrl(m[1]));
     }
 
     _loadSubprojects(path: string) {
         // load subprojects
         var text: string = "";
         try {
-            text = fs.readFileSync(`${path}/ncgit.json`, 'utf8');
+            text = fs.readFileSync(`${path}/nigit.json`, 'utf8');
         } catch (error) {
-            throw new Error(`Failed to load ${path}/ncgit.json`);
+            throw new Error(`Failed to load ${path}/nigit.json`);
         }
 
         try {
             const rootNode = JSON.parse(text);
             this._parseSubprojects(rootNode);
         } catch (error) {
-            throw new Error(`Failed to parse ${path}/ncgit.json: ${error}`);
+            throw new Error(`Failed to parse ${path}/nigit.json: ${error}`);
         }
     }
 

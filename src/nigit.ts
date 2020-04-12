@@ -2,15 +2,41 @@
 import program from 'commander';
 import process from 'process';
 import { GitSwitcher } from "./nigitlib/git_switcher";
-import { GitStatus } from "./nigitlib/git_status";
 import { GitForAll } from './nigitlib/git_forall';
+import { println, print, MessageType, CmdUtils } from './nigitlib/cmd_utils';
+import { GitStatus } from './nigitlib/git_status';
 import { GitPull } from './nigitlib/git_pull';
-import { println } from './nigitlib/cmd_utils';
+import fs from 'fs';
+import { GitProject } from './nigitlib/git_config';
 
 class Options {
     infoFile: string;
     workingDir: string;
 }
+
+function createWorkDirFileForUrl(path: string, url: string) {
+    const proj = GitProject.instanceWithUrl(url);
+    fs.writeFileSync(`${path}/.nigit.workspace`, `{ "master_project" : "${proj.name}}`);
+}
+
+program
+    .version('0.1.0')
+
+program
+    .command('clone <URL>')
+    .action((url: string, opts: Options) => {
+        if (opts.workingDir) {
+            process.chdir(opts.workingDir);
+        }
+
+        const cmd = `git clone ${url}`;
+        println('> ' + cmd);
+        CmdUtils.exec(cmd);
+
+        createWorkDirFileForUrl('.', url);
+
+        GitPull.cmdGitPull();
+    })
 
 program
     .command('checkout [BRANCH_NAME]')
@@ -41,12 +67,13 @@ program
 program
     .command('list')
     .option('--working-dir <DIR>')
-    .action((command: string, opts: Options) => {
+    .action((opts: Options) => {
         if (opts.workingDir) {
             process.chdir(opts.workingDir);
         }
         GitForAll.forAll('.', (projDir, proj) => {
-            println(`${proj.name} => ${proj.url}`);
+            print(proj.name, MessageType.info);
+            print(` => ${proj.url}\n`);
         });
     })
 

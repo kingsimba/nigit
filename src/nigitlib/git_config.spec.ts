@@ -20,20 +20,28 @@ describe('GitConfig', () => {
         cfg._parseSubprojects({
             "projects": [
                 {
-                    "url": "git@gitlab.mapbar.com:nc/cq_stdlib.git"
+                    "url": "git@github.com:NavInfoNC/json-script.git"
                 }, 
                 {
-                    "url": "git@gitlab.mapbar.com:nc/mapdal.git"
-                }, 
+                    "url": "git@github.com:kingsimba/express-typescript-mocha-vscode.git"
+                },
                 {
-                    "url": "http://navicore.mapbar.com/ncgit/navicore-lib.zip"
+                    "name": "ncgeo",
+                    "url": "git@github.com:NavInfoNC/nc-geo.git"
+                },
+                {
+                    "name": "zlib",
+                    "url": "https://www.zlib.net/zlib1211.zip"
                 }
             ]
-        });
+        }
+        );
         expect(cfg).not.null;
-        expect(cfg.projects).to.have.lengthOf(3);
-        expect(cfg.projects[1].name).equals('mapdal');
-        expect(cfg.projects[1].url).equals('git@gitlab.mapbar.com:nc/mapdal.git');
+        expect(cfg.projects).to.have.lengthOf(4);
+        expect(cfg.projects[1].name).equals('express-typescript-mocha-vscode');
+        expect(cfg.projects[1].url).equals('git@github.com:kingsimba/express-typescript-mocha-vscode.git');
+        expect(cfg.projects[2].name).equals('ncgeo');
+        expect(cfg.projects[2].url).equals('git@github.com:NavInfoNC/nc-geo.git');
     });
 
     it('can load main project', () => {

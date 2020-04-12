@@ -9,26 +9,22 @@ const expect = chai.expect;
 describe('GitForAll', () => {
     it('should execute command for all git projects', () => {
         const commands : string[] = [];
-        GitForAll.forAll('assets/workdir', (projDir, proj) => {
+        GitForAll.forAll('.', (projDir, proj) => {
             commands.push(`${proj.name}`);
-            expect(projDir).endsWith(`assets/workdir/${proj.name}`);
+            expect(projDir).endsWith(`${proj.name}`);
         });
-        expect(commands.join(' ')).equals('nigit cq_stdlib mapdal navicore-lib');
+        expect(commands.join(' ')).equals('nigit json-script express-typescript-mocha-vscode ncgeo zlib');
     });
 
-    it('should return ncgit.json in root dir', () => {
-        expect(GitForAll._findMainProject('assets/workdir')).equals('assets/workdir/navicore');
+    it('should return nigit.json in root dir', () => {
+        expect(GitForAll._findMainProject('..')).equals('../nigit');
     });
 
-    it('should return ncgit.json in specified dir', () => {
-        expect(GitForAll._findMainProject('assets/workdir/navicore')).equals('assets/workdir/navicore');
+    it('should return nigit.json even in subfolder', () => {
+        expect(GitForAll._findMainProject('src/nigitlib')).equals('.');
     });
 
-    it('should return ncgit.json even in subfolder', () => {
-        expect(GitForAll._findMainProject('assets/workdir/navicore/subdir')).equals('assets/workdir/navicore');
-    });
-
-    it('should return undefined if ncgit.json is not found', () => {
+    it('should return undefined if nigit.json is not found', () => {
         expect(GitForAll._findMainProject('../..')).is.undefined;
     });
 });

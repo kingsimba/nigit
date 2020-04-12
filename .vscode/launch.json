@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "ncgit forall",
+            "name": "nigit forall",
             "type": "node",
             "request": "launch",
             "skipFiles": [
@@ -14,9 +14,7 @@
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
                 "forall",
-                "git status",
-                "--working-dir",
-                "C:\\Users\\simba\\Documents\\git"
+                "git status"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
@@ -25,7 +23,7 @@
             "outputCapture": "std"
         },
         {
-            "name": "ncgit status",
+            "name": "nigit status",
             "type": "node",
             "request": "launch",
             "skipFiles": [
@@ -33,9 +31,7 @@
             ],
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
-                "status",
-                "--working-dir",
-                "C:\\Users\\simba\\Documents\\git"
+                "status"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
@@ -44,7 +40,7 @@
             "outputCapture": "std"
         },
         {
-            "name": "ncgit pull",
+            "name": "nigit list",
             "type": "node",
             "request": "launch",
             "skipFiles": [
@@ -52,9 +48,24 @@
             ],
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
-                "pull",
-                "--working-dir",
-                "C:\\Users\\simba\\Documents\\git"
+                "list"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
+            "name": "nigit pull",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "args": [
+                "pull"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
