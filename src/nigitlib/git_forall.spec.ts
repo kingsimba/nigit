@@ -17,14 +17,14 @@ describe('GitForAll', () => {
     });
 
     it('should return nigit.json in root dir', () => {
-        expect(GitForAll._findMainProject('..')).equals('../nigit');
+        expect(GitForAll.findMainProject('..')).equals('../nigit');
     });
 
     it('should return nigit.json even in subfolder', () => {
-        expect(GitForAll._findMainProject('src/nigitlib')).equals('.');
+        expect(GitForAll.findMainProject('src/nigitlib')).equals('.');
     });
 
     it('should return undefined if nigit.json is not found', () => {
-        expect(GitForAll._findMainProject('../..')).is.undefined;
+        expect(GitForAll.findMainProject('../..')).is.undefined;
     });
 });

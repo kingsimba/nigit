@@ -41,7 +41,7 @@ export class CmdUtils {
     }
 
     /**
-     * Asynchrously execute command. It supports both callback and Promise.
+     * Asynchronously execute command. It supports both callback and Promise.
      * @param cmd The command to run. Like 'git status'
      * @param callback A optional callback function
      */

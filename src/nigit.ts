@@ -16,7 +16,7 @@ class Options {
 
 function createWorkDirFileForUrl(path: string, url: string) {
     const proj = GitProject.instanceWithUrl(url);
-    fs.writeFileSync(`${path}/.nigit.workspace`, `{ "master_project" : "${proj.name}}`);
+    fs.writeFileSync(`${path}/.nigit.workspace`, JSON.stringify({ master_project: proj.name }));
 }
 
 program
@@ -24,18 +24,15 @@ program
 
 program
     .command('clone <URL>')
-    .action((url: string, opts: Options) => {
-        if (opts.workingDir) {
-            process.chdir(opts.workingDir);
-        }
-
+    .action((url: string) => {
         const cmd = `git clone ${url}`;
         println('> ' + cmd);
-        CmdUtils.exec(cmd);
+        if (CmdUtils.execInConsole(cmd) !== 0) {
+            process.exit(1);
+        }
 
         createWorkDirFileForUrl('.', url);
-
-        GitPull.cmdGitPull();
+        GitPull.cmdGitPull({ updateMainProject: false });
     })
 
 program
@@ -56,21 +53,13 @@ program
 
 program
     .command('forall <COMMAND>')
-    .option('--working-dir <DIR>')
-    .action((command: string, opts: Options) => {
-        if (opts.workingDir) {
-            process.chdir(opts.workingDir);
-        }
+    .action((command: string) => {
         GitForAll.cmdGitForAll(command);
     })
 
 program
     .command('list')
-    .option('--working-dir <DIR>')
-    .action((opts: Options) => {
-        if (opts.workingDir) {
-            process.chdir(opts.workingDir);
-        }
+    .action(() => {
         GitForAll.forAll('.', (projDir, proj) => {
             print(proj.name, MessageType.info);
             print(` => ${proj.url}\n`);
@@ -79,21 +68,13 @@ program
 
 program
     .command('status')
-    .option('--working-dir <DIR>')
-    .action((opts: Options) => {
-        if (opts.workingDir) {
-            process.chdir(opts.workingDir);
-        }
+    .action(() => {
         GitStatus.cmdStatus();
     })
 
 program
     .command('pull')
-    .option('--working-dir <DIR>')
-    .action((opts: Options) => {
-        if (opts.workingDir) {
-            process.chdir(opts.workingDir);
-        }
+    .action(() => {
         GitPull.cmdGitPull();
     })
 

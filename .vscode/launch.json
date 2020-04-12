@@ -5,6 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "nigit clone",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "cwd": "C:\\Users\\simba\\Desktop\\a",
+            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "args": [
+                "clone",
+                "git@github.com:kingsimba/nigit.git"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
             "name": "nigit forall",
             "type": "node",
             "request": "launch",
@@ -63,6 +82,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "cwd": "C:\\Users\\simba\\Desktop\\a",
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
                 "pull"

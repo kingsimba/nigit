@@ -1,5 +1,8 @@
 import fs from 'fs';
 import axios from "axios";
+import { println, CmdUtils } from "./cmd_utils";
+import ExtractZip from 'extract-zip'
+import { resolve } from 'path';
 
 export class FileDownloader {
 
@@ -45,5 +48,17 @@ export class FileDownloader {
             writer.on('finish', resolve)
             writer.on('error', reject)
         })
+    }
+
+    static async extractZipInPlace(zipFile: string, folder: string) {
+        try {
+            const fullPath = resolve(folder);
+            CmdUtils.createDeepDir(fullPath);
+            await ExtractZip(zipFile, { dir: fullPath });
+        } catch (err) {
+            // handle any errors
+            println('error: failed to extract zip file');
+            println(err);
+        }
     }
 }

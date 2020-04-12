@@ -1,6 +1,7 @@
 import { FileDownloader } from "./file_downloader";
 import fs from 'fs';
 import chai from 'chai';
+import del from 'del';
 
 const expect = chai.expect;
 
@@ -11,7 +12,7 @@ describe('FileDownloader', () => {
         fs.unlinkSync(fileName);
     }
 
-    it('can download file and avoid redownload with Last-Modified', async () => {
+    it('can download file and avoid re-download with Last-Modified', async () => {
         const result = await FileDownloader.downloadFile('https://www.baidu.com/favicon.ico', fileName);
         expect(result).not.equals(0);
         expect(fs.existsSync(fileName)).to.be.true;
@@ -19,5 +20,13 @@ describe('FileDownloader', () => {
 
         const result2 = await FileDownloader.downloadFile('https://www.baidu.com/favicon.ico', fileName);
         expect(result2).equals(0);
+    });
+
+    it('can extract zip file', async () => {
+        await del('zlib-1.2.11');
+        expect(fs.existsSync('zlib-1.2.11')).is.false;
+        await FileDownloader.extractZipInPlace('assets/zlib/zlib1211.zip', 'assets');
+        expect(fs.existsSync('assets/zlib-1.2.11/zlib-readme.txt')).is.true;
+        expect(fs.existsSync('assets/zlib-1.2.11/zlib-src')).is.true;
     });
 });
