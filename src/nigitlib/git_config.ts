@@ -3,6 +3,7 @@ import { CmdUtils, println } from './cmd_utils';
 
 interface GitProjectJsonNode {
     name?: string;
+    projectName?: string;   // compatible with old ncgit.json
     url: string;
 }
 
@@ -22,6 +23,8 @@ export class GitProject {
         const o = GitProject.instanceWithUrl(node.url);
         if (node.name) {
             o.name = node.name;
+        } else if (node.projectName) {
+            o.name = node.projectName;
         }
         return o;
     }
@@ -78,8 +81,17 @@ export class GitConfig {
     _loadSubprojects(path: string) {
         // load subprojects
         var text: string = "";
+        let nigitFileName;
+        if (fs.existsSync(`${path}/nigit.json`)) {
+            nigitFileName = `${path}/nigit.json`;
+        } else if (fs.existsSync(`${path}/ncgit.json`)) {
+            nigitFileName = `${path}/ncgit.json`;
+        } else {
+            throw new Error(`${path}/nigit.json is not found`);
+        }
+
         try {
-            text = fs.readFileSync(`${path}/nigit.json`, 'utf8');
+            text = fs.readFileSync(nigitFileName, 'utf8');
         } catch (error) {
             throw new Error(`Failed to load ${path}/nigit.json`);
         }

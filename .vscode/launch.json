@@ -82,7 +82,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "cwd": "C:\\Users\\simba\\Desktop\\a",
+            "cwd": "C:\\Users\\simba\\Desktop\\a\\nigit",
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
                 "pull"

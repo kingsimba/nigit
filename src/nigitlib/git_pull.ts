@@ -1,35 +1,57 @@
 import { GitForAll } from "./git_forall";
-import { CmdUtils, println, print, MessageType } from "./cmd_utils";
+import { CmdUtils, println, print } from "./cmd_utils";
 import { FileDownloader } from "./file_downloader";
 import fs from 'fs'
+import { GitProject } from "./git_config";
 
-export interface GitPullOptions {
-    updateMainProject?: boolean;
+export class GitPullOptions {
+    skipMainProject = false;
 }
 
 export class GitPull {
     static async cmdGitPull(options?: GitPullOptions) {
 
-        // because "git pull --ff-only" is a slow operation.
-        // we'd like to run them in parallel for all projects.
-        const promises: Promise<number>[] = [];
+        // The first project is the main project. We need to update it before all others.
+        // So that nigit.json is update-to-date
         let isFirstProject = true;
-
-        GitForAll.forAll('.', (projDir, proj) => {
+        const succ = GitForAll.forAll('.', (projDir, proj) => {
 
             // first project is the main project. We need to update it before all other projects.
             if (isFirstProject) {
                 isFirstProject = false;
 
-                if (options == undefined || options.updateMainProject) {
+                // write .nigit.workspace if not exist
+                if (!fs.existsSync(`${projDir}/../.nigit.workspace`)) {
+                    fs.writeFileSync(`${projDir}/../.nigit.workspace`, JSON.stringify({ master_project: proj.name }));
+                }
+
+                if (options == undefined || !options.skipMainProject) {
                     println(`=== ${proj.name} ===`);
-                    const result = CmdUtils.exec(`cd "${projDir}" & git pull --ff-only`);
+                    const cmd = `cd "${projDir}" & git pull --ff-only`;
+                    const result = CmdUtils.exec(cmd);
                     if (result.exitCode == 0) {
                         print(result.stdout);
                     } else {
-                        print(result.stderr, MessageType.error);
+                        CmdUtils.printCommandError(cmd, result.stderr);
                     }
                 }
+            }
+        });
+
+        if (!succ) {
+            return 1;
+        }
+
+        // because "git pull --ff-only" is a slow operation.
+        // we'd like to run them in parallel for all projects.
+        const promises: Promise<number>[] = [];
+        isFirstProject = true;
+
+        GitForAll.forAll('.', (projDir, proj) => {
+
+            // skip main project
+            if (isFirstProject) {
+                isFirstProject = false;
                 return;
             }
 
@@ -44,9 +66,7 @@ export class GitPull {
                     if (result.exitCode == 0) {
                         print(result.stdout);
                     } else {
-                        println(`error: Failed to execute command`);
-                        println(`> ${cmd}`);
-                        print(result.stderr, MessageType.error);
+                        CmdUtils.printCommandError(cmd, result.stderr);
                     }
 
                     resolve(result.exitCode);
@@ -60,9 +80,7 @@ export class GitPull {
                     if (result.exitCode == 0) {
                         println(`Git repository cloned: ${proj.url}`);
                     } else {
-                        println(`error: failed to clone ${proj.url}.`);
-                        println(`> ${cmd}`);
-                        print(result.stderr);
+                        CmdUtils.printCommandError(cmd, result.stderr);
                     }
 
                     resolve(result.exitCode);

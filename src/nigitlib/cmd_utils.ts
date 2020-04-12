@@ -45,9 +45,8 @@ export class CmdUtils {
      * @param cmd The command to run. Like 'git status'
      * @param callback A optional callback function
      */
-    static execAsync(cmd: string, callback?: (result: CmdResult) => void) : Promise<CmdResult> | null {
-        if (callback)
-        {
+    static execAsync(cmd: string, callback?: (result: CmdResult) => void): Promise<CmdResult> | null {
+        if (callback) {
             exec(cmd, (err, stdout, stderr) => {
                 const rtn = new CmdResult();
                 if (err) {
@@ -71,7 +70,7 @@ export class CmdUtils {
     }
 
     /**
-     * Run command the print stdout/stderror to console
+     * Run command the print stdout/stderr to console
      * @param cmd The command to run. Like 'git status'
      * @return The exit code of the command
      */
@@ -115,7 +114,13 @@ export class CmdUtils {
         }
     }
 
-    static createDeepDir(path: string) : boolean {
+    static printCommandError(cmd: string, error: any) {
+        println('error: failed to execute command');
+        print(`> ${cmd}`, MessageType.error);
+        print(error, MessageType.error);
+    }
+
+    static createDeepDir(path: string): boolean {
         try {
             const pieces = path.split('/');
             for (let index = 0; index < pieces.length; index++) {
@@ -127,7 +132,7 @@ export class CmdUtils {
 
             return true;
         } catch (error) {
-            return false;            
+            return false;
         }
     }
 }

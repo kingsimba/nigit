@@ -30,22 +30,22 @@ export class GitForAll {
     /**
      * Execute the same command for all projects. It will try to find nigit.json in |workDir| directory.
      */
-    static forAll(workDir: string, callback: (projDir: string, proj: GitProject) => void): number {
+    static forAll(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
         let mainProject;
         try {
             mainProject = this.findMainProject(workDir);
         } catch (error) {
             println('error: ' + error);
-            return -1;
+            return false;
         }
         if (mainProject == null) {
             println('error: no nigit.json is found');
-            return -1;
+            return false;
         }
 
         const config = GitConfig.instanceWithMainProjectPath(mainProject);
         if (config == undefined) {
-            return -1;
+            return false;
         }
 
         let workspaceDir;
@@ -62,12 +62,13 @@ export class GitForAll {
             callback(projDir, proj);
         }
 
-        return 0;
+        return true;
     }
 
     /**
      * Find the main project which contains the 'nigit.json' file.
      * @param rootDir the root directory to search for `nigit.json`
+     * @return the path of the main project
      */
     static findMainProject(rootDir: string): string | undefined {
 
@@ -88,19 +89,24 @@ export class GitForAll {
                 break;
             }
 
+            // try ncgit.json. for compatibility
+            if (fs.existsSync(`${path}/ncgit.json`)) {
+                mainProjPath = path;
+                break;
+            }
+
             // try .nigit.workspace
-            const workspaceFile = `${path}/.nigit.workspace`;
+            let workspaceFile = `${path}/.nigit.workspace`;
+            if (!fs.existsSync(workspaceFile)) {
+                // for backward compatibility
+                workspaceFile = `${path}/ncgit.workspace`;
+            }
             if (fs.existsSync(workspaceFile)) {
                 try {
                     const text = fs.readFileSync(workspaceFile, 'utf8');
                     const node = JSON.parse(text);
                     if (node.master_project == undefined) {
                         throw new Error('"master_project" is not found.')
-                    }
-
-                    const projFile = `${path}/${node.master_project}/nigit.json`;
-                    if (!fs.existsSync(projFile)) {
-                        throw new Error(`${projFile} is not found`);
                     }
 
                     mainProjPath = `${path}/${node.master_project}`;
