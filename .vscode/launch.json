@@ -59,6 +59,24 @@
             "outputCapture": "std"
         },
         {
+            "name": "nigit branch",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "args": [
+                "branch",
+                "--all"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
             "name": "nigit list",
             "type": "node",
             "request": "launch",

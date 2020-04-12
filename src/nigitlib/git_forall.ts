@@ -1,6 +1,6 @@
 import { GitProject, GitConfig } from "./git_config";
 import fs from 'fs';
-import { CmdUtils, println } from "./cmd_utils";
+import { CmdUtils, println, print } from "./cmd_utils";
 import { normalize, relative } from "path";
 import { resolve } from "path";
 
@@ -15,6 +15,33 @@ export class GitForAll {
             if (proj.isGitRepository()) {
                 if (fs.existsSync(projDir)) {
                     CmdUtils.execInConsole(`cd ${projDir} & ${command}`);
+                } else {
+                    println(`error: project doesn't exist: ${proj.name}. Please run 'nigit pull'?`);
+                    return -1;
+                }
+            } else {
+                println('Not a git repository. skipped.');
+            }
+        })
+
+        return 0;
+    }
+
+    /**
+     * Execute the same command for all projects. If succeeded, handle the output.
+     */
+    static cmdGitForAllWithOutputHandler(command: string, handler: (stdout: string) => void ): number {
+        this.forAll('.', (projDir, proj) => {
+            println(`=== ${proj.name} ===`);
+            if (proj.isGitRepository()) {
+                if (fs.existsSync(projDir)) {
+                    const cmd = `cd ${projDir} & ${command}`;
+                    const result = CmdUtils.exec(cmd);
+                    if (result.exitCode !== 0) {
+                        CmdUtils.printCommandError(cmd, result.stdout);
+                    } else {
+                        handler(result.stdout);
+                    }
                 } else {
                     println(`error: project doesn't exist: ${proj.name}. Please run 'nigit pull'?`);
                     return -1;

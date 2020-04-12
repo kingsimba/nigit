@@ -49,6 +49,30 @@ program
     })
 
 program
+    .command('branch')
+    .description('Run "git branch" for all projects')
+    .option('--all', 'Show all branches. Not only the current branch.')
+    .action((options: any) => {
+        GitForAll.cmdGitForAllWithOutputHandler('git branch', (stdout) => {
+            if (options.all) {
+                print(stdout);
+            } else {
+                const m = stdout.match(/^\* .*$/m);
+                if (m) {
+                    println(m[0]);
+                }
+            }
+        });
+    })
+
+program
+    .command('checkout <BRANCH_NAME>')
+    .description('Switch to specific branch')
+    .action((branchName: string) => {
+        println("Not implemented yet.")
+    })
+    
+program
     .command('pull')
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
     .action(() => {
