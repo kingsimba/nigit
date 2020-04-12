@@ -1,23 +1,23 @@
 A tool to manage large Git projects
 ===================================
 
-WARNING: This project is still in progress.
+WARNING: This project is still under development. And will be released before May 1, 2020.
 
 It's often helpful to divide a large project into subprojects,
 with each subproject has its own Git repository.
 
-The benefit this approach are:
+The benefits of this approach are:
 
 * Help cutting clear lines between subprojects. Subprojects can be compiled and tested individually.
   This will foster stable public APIs and better modularization. 
 * Each subproject can have different collaborators and permissions.
-  This is very important in corporations in which source code permission is enforced.
+  This is very important in corporations in which different people have different access permissions.
 
 Prerequisites
 -------------
 
 For it to work, the main project must contain a 'nigit.json' file.
-This project itself contains such a file.
+It lists its subprojects.
 
 .. code-block:: js
 
@@ -40,13 +40,12 @@ This project itself contains such a file.
       ]
    }
 
-Each project can have an optional name field, in case you want to have a folder name which is different from the project itself.
-For example, `ncgeo` in the above example.
+`name` is Optional. If not given, the name will be deduced frm the URL.
 
 Initialization
 --------------
 
-The `clone` command will clone/donwload the main project and then all subprojects.
+The `clone` command will clone/download the main project and then all subprojects.
 
 .. code-block:: bash
 
@@ -66,10 +65,10 @@ The `clone` command will clone/donwload the main project and then all subproject
    === ncgeo ===
    cloning git@github.com:NavInfoNC/nc-geo.git
    === zlib ===
-   downloading https://www.zlib.net/zlib1211.zip
-   extract zip file.
+   Downloading https://www.zlib.net/zlib1211.zip
+   Extracted zlib1211.zip
 
-Verify:
+After cloning, all the projects will be ready, side-by-side.
 
 .. code-block:: bash
 
@@ -95,8 +94,8 @@ The first project is the main project.
    ncgeo => git@github.com:NavInfoNC/nc-geo.git
    zlib => https://www.zlib.net/zlib1211.zip
 
-Update
-------
+Pull
+----
 
 The `pull` command will make sure all subprojects are properly cloned/download and update-to-date.
 
@@ -140,20 +139,25 @@ The `pull` command will make sure all subprojects are properly cloned/download a
    delete mode 100644 src/cq_hashmap.h
    delete mode 100644 test/cq_hashmap_unittest.cpp
 
-Branch or Tag
--------------
+Status
+------
 
-Create a feature branch
-^^^^^^^^^^^^^^^^^^^^^^^
-
-To implement a feature, sometimes several subprojects will be changed.
-They should have the same git branch name.
-
-.. warning:: Not implemented yet
+The command `status` will show the current state of all projects. Similar with 'git status'.
 
 .. code-block:: bash
 
-   $ nigit branch feature_XXX subproject_A subproject_B
+   $ nigit status
+   === nigit ===
+   + some_new_file
+   - some_deleted_file
+   M some_modified_file
+   ? some_untracked_file
+   === ncgeo ===
+   - other_deleted_file
+   ? other_untracked_file
+
+Branch or Tag
+-------------
 
 Show current branch
 ^^^^^^^^^^^^^^^^^^^
@@ -162,19 +166,49 @@ Show current branch
 
    $ nigit branch
    === main_project ===
-   master
+   * master
    === subproject_A ===
-   master
+   * master
    === subproject_B ===
-   warning: Access denied.
+   * warning: Access denied.
    === subproject_C ===
-   master
+   * master
+
+Show all branches
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+   $ nigit branch --all
+   === main_project ===
+   branches/1.0.x
+   * master
+   === subproject_A ===
+   branches/1.0.x
+   * master
+   feature_xxx
+   feature_yyy
+   === subproject_B ===
+   * warning: Access denied.
+   === subproject_C ===
+   branches/1.0.x
+   * master
+
+Create a feature branch
+^^^^^^^^^^^^^^^^^^^^^^^
+
+To implement a feature, sometimes several subprojects will be modified.
+They should have the same branch name.
+
+.. code-block:: bash
+
+   $ nigit branch feature_XXX subproject_A subproject_B
 
 Switch to a feature branch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Checkout to a branch. If no such branch exist for a subproject, fallback 
-to a branch which is consistent with the master project.
+to a branch which is the same as the main project.
 
 .. code-block:: bash
 
@@ -209,10 +243,10 @@ Only the ones who have access to all the subprojects can create a release branch
 
    $ nigit branch branches/1.0.x
    === main_project ===
-   create branches/1.0.x
+   + branches/1.0.x
    === subproject_A ===
-   create branches/1.0.x
+   + branches/1.0.x
    === subproject_B ===
-   create branches/1.0.x
+   + branches/1.0.x
    === subproject_C ===
-   create branches/1.0.x
+   + branches/1.0.x
