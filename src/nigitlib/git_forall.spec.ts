@@ -17,6 +17,7 @@ describe('GitForAll', () => {
     });
 
     it('should return nigit.json in root dir', () => {
+        GitForAll.createWorkspaceFile('..', 'nigit');
         expect(GitForAll.findMainProject('..')).equals('../nigit');
     });
 

@@ -48,6 +48,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "cwd": "C:\\Users\\kingsimba\\Documents\\nc\\ite",
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
                 "status"

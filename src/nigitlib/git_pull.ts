@@ -21,9 +21,7 @@ export class GitPull {
                 isFirstProject = false;
 
                 // write .nigit.workspace if not exist
-                if (!fs.existsSync(`${projDir}/../.nigit.workspace`)) {
-                    fs.writeFileSync(`${projDir}/../.nigit.workspace`, JSON.stringify({ master_project: proj.name }));
-                }
+                GitForAll.createWorkspaceFile(`${projDir}/..`, proj.name);
 
                 if (options == undefined || !options.skipMainProject) {
                     println(`=== ${proj.name} ===`);

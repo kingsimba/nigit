@@ -6,13 +6,7 @@ import { GitForAll } from './nigitlib/git_forall';
 import { println, print, MessageType, CmdUtils } from './nigitlib/cmd_utils';
 import { GitStatus } from './nigitlib/git_status';
 import { GitPull } from './nigitlib/git_pull';
-import fs from 'fs';
 import { GitProject } from './nigitlib/git_config';
-
-function createWorkDirFileForUrl(path: string, url: string) {
-    const proj = GitProject.instanceWithUrl(url);
-    fs.writeFileSync(`${path}/.nigit.workspace`, JSON.stringify({ master_project: proj.name }));
-}
 
 program
     .version('0.1.0')
@@ -27,7 +21,8 @@ program
             process.exit(1);
         }
 
-        createWorkDirFileForUrl('.', url);
+        const proj = GitProject.instanceWithUrl(url);
+        GitForAll.createWorkspaceFile('.', proj.name);
         GitPull.cmdGitPull({ skipMainProject: false });
     })
 

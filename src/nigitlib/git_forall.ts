@@ -6,6 +6,13 @@ import { resolve } from "path";
 
 export class GitForAll {
 
+    static createWorkspaceFile(workspacePath: string, projName: string) {
+        const filename = `${workspacePath}/.nigit.workspace`;
+        if (!fs.existsSync(filename)) {
+            fs.writeFileSync(filename, JSON.stringify({ master_project: projName }));    
+        }
+    }
+
     /**
      * Execute the same command for all projects. in current directory
      */
@@ -79,7 +86,7 @@ export class GitForAll {
         if (mainProject == '.') {
             workspaceDir = '..';
         } else if (mainProject.lastIndexOf('/') !== -1) {
-            mainProject.substr(0, mainProject.lastIndexOf('/'));
+            workspaceDir = mainProject.substr(0, mainProject.lastIndexOf('/'));
         } else {
             workspaceDir = '.';
         }
