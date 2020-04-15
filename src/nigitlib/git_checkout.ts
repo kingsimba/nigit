@@ -1,6 +1,7 @@
-import { CmdUtils, print, println } from "./cmd_utils";
+import { CmdUtils, print, println, MessageType } from "./cmd_utils";
 import { GitForAll as GitForAll } from "./git_forall";
 import { GitConfig } from "./git_config";
+import fs from 'fs';
 
 function getCurrentBranch(projDir: string): string {
     const cmd = `cd ${projDir} & git branch`;
@@ -15,40 +16,57 @@ function getCurrentBranch(projDir: string): string {
     return undefined;
 }
 
+function checkout(projDir: string, branchName: string) {
+    let checkoutSucc = false;
+    let cmd = `cd ${projDir} & git checkout ${branchName}`;
+    let result = CmdUtils.exec(cmd);
+    if (result.exitCode == 0) {
+        return true;
+    } else if (!result.stderr.match(/error: pathspec '.*' did not match any file\(s\) known to git/)) {
+        throw new Error(result.stderr);
+    }
+
+    return false;
+}
+
 export class GitCheckout {
 
     /**
      * Checkout to branch
      */
     static cmdCheckout(branchName: string): number {
+        try {
+            const mainProjectBranch = GitCheckout.checkoutMainProject(branchName);
 
-        const mainProjectBranchName = GitCheckout.checkoutMainProject(branchName);
+            GitForAll.forSubprojects('.', (projDir, proj) => {
+                println(`=== ${proj.name} ===`);
 
-        if (mainProjectBranchName == branchName) {
-            println(`* ${branchName}`);
-        } else {
-            println(`warning: Branch ${branchName} doesn't exist. Currently on ${mainProjectBranchName}`);
-        }
-
-        GitForAll.forSubprojects('.', (projDir, proj) => {
-            // checkout to specified branch
-            let cmd = `cd ${projDir} & git checkout ${branchName}`;
-            let result = CmdUtils.exec(cmd);
-            if (result.exitCode == 0) {
-                println(`* ${branchName}`);
-            } else {
-                // if failed, checkout to the main project branch
-                cmd = `cd ${projDir} & git checkout ${mainProjectBranchName}`;
-                result = CmdUtils.exec(cmd);
-                if (result.exitCode == 0) {
-                    println(`warning: Branch ${branchName} doesn't exist. Currently on ${mainProjectBranchName}`);
-                } else {
-                    // if failed, print current branch
-                    const branch = getCurrentBranch(projDir);
-                    println(`warning: Branch ${branchName} doesn't exist. Currently on ${branch}`);
+                if (!proj.isGitRepository()) {
+                    println('(not a git repository)');
+                    return;
                 }
-            }
-        });
+
+                if (!fs.existsSync(projDir) || !fs.statSync(projDir).isDirectory()) {
+                    println("error: subproject doesn't exist. Please run `nigit pull` first?");
+                    return;
+                }
+
+                // checkout to specified branch
+                if (!checkout(projDir, branchName)) {
+                    // if failed, checkout to the main project branch
+                    if (checkout(projDir, mainProjectBranch)) {
+                        println(`warning: pathspec '${branchName}' did not match any file\(s\) known to git. Currently on '${mainProjectBranch}'`);
+                    } else {
+                        // if failed, print current branch
+                        const branch = getCurrentBranch(projDir);
+                        println(`warning: pathspec '${branchName}' did not match any file\(s\) known to git. Currently on '${branch}'`);
+                    }
+                }
+            });
+        } catch (error) {
+            print(error.message, MessageType.error);
+            return 1;
+        }
 
         return 0;
     }
@@ -56,19 +74,21 @@ export class GitCheckout {
     static checkoutMainProject(branchName: string): string {
         let mainProjectBranch: string;
         GitForAll.forMainProject('.', (projDir, proj) => {
+            println(`=== ${proj.name} ===`);
 
             // checkout
-            let checkoutSucc = false;
-            let cmd = `cd ${projDir} & git checkout ${branchName}`;
-            let result = CmdUtils.exec(cmd);
-            if (result.exitCode == 0) {
-                checkoutSucc = true;
-            }
+            checkout(projDir, branchName);
 
             // get current branch
             mainProjectBranch = getCurrentBranch(projDir);
             if (mainProjectBranch == undefined) {
-                throw new Error(`Failed to get the branch name of main project ${proj.name}`);
+                throw new Error(`Failed to get the branch name of main project '${proj.name}'`);
+            }
+
+            if (mainProjectBranch == branchName) {
+                println(`* ${branchName}`);
+            } else {
+                println(`warning: pathspec '${branchName}' did not match any file\(s\) known to git. Currently on '${mainProjectBranch}'`);
             }
         });
 
