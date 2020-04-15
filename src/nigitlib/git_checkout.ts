@@ -55,12 +55,14 @@ export class GitCheckout {
                 if (!checkout(projDir, branchName)) {
                     // if failed, checkout to the main project branch
                     if (checkout(projDir, mainProjectBranch)) {
-                        println(`warning: pathspec '${branchName}' did not match any file\(s\) known to git. Currently on '${mainProjectBranch}'`);
+                        print(`* ${mainProjectBranch} (pathspec '${branchName}' did not match any file\(s\) known to git)\n`, MessageType.warning);
                     } else {
                         // if failed, print current branch
                         const branch = getCurrentBranch(projDir);
-                        println(`warning: pathspec '${branchName}' did not match any file\(s\) known to git. Currently on '${branch}'`);
+                        print(`* ${branch} (pathspec '${branchName}' did not match any file\(s\) known to git)\n`, MessageType.warning);
                     }
+                } else {
+                    println(`* ${branchName}`);
                 }
             });
         } catch (error) {
@@ -88,7 +90,7 @@ export class GitCheckout {
             if (mainProjectBranch == branchName) {
                 println(`* ${branchName}`);
             } else {
-                println(`warning: pathspec '${branchName}' did not match any file\(s\) known to git. Currently on '${mainProjectBranch}'`);
+                print(`* ${mainProjectBranch} (pathspec '${branchName}' did not match any file\(s\) known to git)\n`, MessageType.warning);
             }
         });
 

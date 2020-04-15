@@ -14,7 +14,7 @@
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
                 "checkout",
-                "master"
+                "imple_checkout"
             ],
             "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [
