@@ -116,7 +116,7 @@ export class CmdUtils {
 
     static printCommandError(cmd: string, error: any) {
         println('error: failed to execute command');
-        print(`> ${cmd}`, MessageType.error);
+        print(`> ${cmd}\n`, MessageType.error);
         print(error, MessageType.error);
     }
 

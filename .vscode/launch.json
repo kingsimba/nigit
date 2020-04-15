@@ -5,6 +5,24 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "nigit checkout",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "args": [
+                "checkout",
+                "imple_checkout"
+            ],
+            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
             "name": "nigit clone",
             "type": "node",
             "request": "launch",
@@ -101,7 +119,6 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "cwd": "C:\\Users\\simba\\Desktop\\a\\nigit",
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
                 "pull"

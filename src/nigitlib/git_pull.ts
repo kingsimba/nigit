@@ -11,27 +11,20 @@ export class GitPullOptions {
 export class GitPull {
     static async cmdGitPull(options?: GitPullOptions) {
 
-        // The first project is the main project. We need to update it before all others.
+        // We need to update the main project first before all others.
         // So that nigit.json is update-to-date
-        let isFirstProject = true;
-        const succ = GitForAll.forAll('.', (projDir, proj) => {
+        const succ = GitForAll.forMainProject('.', (projDir, proj) => {
+            // write .nigit.workspace if not exist
+            GitForAll.createWorkspaceFile(`${projDir}/..`, proj.name);
 
-            // first project is the main project. We need to update it before all other projects.
-            if (isFirstProject) {
-                isFirstProject = false;
-
-                // write .nigit.workspace if not exist
-                GitForAll.createWorkspaceFile(`${projDir}/..`, proj.name);
-
-                if (options == undefined || !options.skipMainProject) {
-                    println(`=== ${proj.name} ===`);
-                    const cmd = `cd "${projDir}" & git pull --ff-only`;
-                    const result = CmdUtils.exec(cmd);
-                    if (result.exitCode == 0) {
-                        print(result.stdout);
-                    } else {
-                        CmdUtils.printCommandError(cmd, result.stderr);
-                    }
+            if (options == undefined || !options.skipMainProject) {
+                println(`=== ${proj.name} ===`);
+                const cmd = `cd "${projDir}" & git pull --ff-only`;
+                const result = CmdUtils.exec(cmd);
+                if (result.exitCode == 0) {
+                    print(result.stdout);
+                } else {
+                    CmdUtils.printCommandError(cmd, result.stderr);
                 }
             }
         });
@@ -43,16 +36,7 @@ export class GitPull {
         // because "git pull --ff-only" is a slow operation.
         // we'd like to run them in parallel for all projects.
         const promises: Promise<number>[] = [];
-        isFirstProject = true;
-
-        GitForAll.forAll('.', (projDir, proj) => {
-
-            // skip main project
-            if (isFirstProject) {
-                isFirstProject = false;
-                return;
-            }
-
+        GitForAll.forSubprojects('.', (projDir, proj) => {
             const p = new Promise<number>(async (resolve) => {
 
                 if (fs.existsSync(`${projDir}/.git`)) {

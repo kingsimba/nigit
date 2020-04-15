@@ -99,6 +99,27 @@ export class GitForAll {
         return true;
     }
 
+    static forMainProject(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
+        let firstProjet = true;
+        return this.forAll(workDir, (projDir: string, proj: GitProject) => {
+            if (firstProjet) {
+                firstProjet = false;
+                callback(projDir, proj);
+            }
+        });
+    }
+
+    static forSubprojects(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
+        let firstProjet = true;
+        return this.forAll(workDir, (projDir: string, proj: GitProject) => {
+            if (firstProjet) {
+                firstProjet = false;
+            } else {
+                callback(projDir, proj);
+            }
+        });
+    }
+
     /**
      * Find the main project which contains the 'nigit.json' file.
      * @param rootDir the root directory to search for `nigit.json`

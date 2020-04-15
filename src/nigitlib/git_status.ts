@@ -1,5 +1,3 @@
-import { GitProject, GitConfig } from "./git_config";
-import fs from 'fs';
 import { CmdUtils, print, println } from "./cmd_utils";
 import { GitForAll as GitForAll } from "./git_forall";
 
