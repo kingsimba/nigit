@@ -16,6 +16,25 @@ describe('GitForAll', () => {
         expect(commands.join(' ')).equals('nigit json-script express-typescript-mocha-vscode ncgeo zlib');
     });
 
+    
+    it('should execute command for main project', () => {
+        const commands : string[] = [];
+        GitForAll.forMainProject('.', (projDir, proj) => {
+            commands.push(`${proj.name}`);
+            expect(projDir).endsWith(`${proj.name}`);
+        });
+        expect(commands.join(' ')).equals('nigit');
+    });
+
+    it('should execute command for sub-project', () => {
+        const commands : string[] = [];
+        GitForAll.forSubprojects('.', (projDir, proj) => {
+            commands.push(`${proj.name}`);
+            expect(projDir).endsWith(`${proj.name}`);
+        });
+        expect(commands.join(' ')).equals('json-script express-typescript-mocha-vscode ncgeo zlib');
+    });
+
     it('should return nigit.json in root dir', () => {
         GitForAll.createWorkspaceFile('..', 'nigit');
         expect(GitForAll.findMainProject('..')).equals('../nigit');

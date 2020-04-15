@@ -7,6 +7,7 @@ import { println, print, MessageType, CmdUtils } from './nigitlib/cmd_utils';
 import { GitStatus } from './nigitlib/git_status';
 import { GitPull } from './nigitlib/git_pull';
 import { GitProject } from './nigitlib/git_config';
+import { GitCheckout } from './nigitlib/git_checkout';
 
 program
     .version('0.1.0')
@@ -61,13 +62,6 @@ program
     })
 
 program
-    .command('checkout <BRANCH_NAME>')
-    .description('Switch to specific branch')
-    .action((branchName: string) => {
-        println("Not implemented yet.")
-    })
-    
-program
     .command('pull')
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
     .action(() => {
@@ -75,11 +69,11 @@ program
     })
 
 program
-    .command('checkout [BRANCH_NAME]')
+    .command('checkout <BRANCH_NAME>')
     .description('Run "git checkout BRANCH_NAME" for all projects.'
         + 'If a subproject doesn\'t have it, fallback to the same branch as the main project.')
     .action((branchName: string) => {
-        console.log("error: Not implemented!");
+        GitCheckout.cmdCheckout(branchName);
     })
 
 program
