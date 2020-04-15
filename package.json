@@ -1,4 +1,8 @@
 {
+	"scripts": {
+		"prebuild": "del dist\\nigit",
+		"build": "node_modules/.bin/tsc && ncc build dist/nigit.js -o dist && rename dist\\index.js nigit"
+	},
 	"dependencies": {
 		"@types/axios": "^0.14.0",
 		"@types/chai": "^4.2.11",

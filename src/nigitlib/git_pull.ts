@@ -55,7 +55,7 @@ export class GitPull {
                 }
                 else if (proj.isGitRepository()) {
                     // for empty git repository, run 'git clone'
-                    const cmd = `mkdir "${projDir}" & cd "${projDir}" & git clone "${proj.url}" .`;
+                    const cmd = `git clone "${proj.url}" "${projDir}"`;
                     const result = await CmdUtils.execAsync(cmd);
 
                     println(`=== ${proj.name} ===`);
