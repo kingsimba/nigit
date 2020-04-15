@@ -29,48 +29,58 @@ function checkout(projDir: string, branchName: string) {
     return false;
 }
 
+function printBranchWarning(currentBranch: string, missingBranch: string) {
+    print(`* ${currentBranch} `, MessageType.warning);
+    println(`(Cannot find '${missingBranch}')`, MessageType.weakText);
+}
+
 export class GitCheckout {
 
     /**
      * Checkout to branch
      */
     static cmdCheckout(branchName: string): number {
+        let exitCode = 0;
         try {
             const mainProjectBranch = GitCheckout.checkoutMainProject(branchName);
 
             GitForAll.forSubprojects('.', (projDir, proj) => {
-                println(`=== ${proj.name} ===`);
-
-                if (!proj.isGitRepository()) {
-                    println('(not a git repository)');
-                    return;
-                }
-
-                if (!fs.existsSync(projDir) || !fs.statSync(projDir).isDirectory()) {
-                    println("error: subproject doesn't exist. Please run `nigit pull` first?");
-                    return;
-                }
-
-                // checkout to specified branch
-                if (!checkout(projDir, branchName)) {
-                    // if failed, checkout to the main project branch
-                    if (checkout(projDir, mainProjectBranch)) {
-                        print(`* ${mainProjectBranch} (pathspec '${branchName}' did not match any file\(s\) known to git)\n`, MessageType.warning);
-                    } else {
-                        // if failed, print current branch
-                        const branch = getCurrentBranch(projDir);
-                        print(`* ${branch} (pathspec '${branchName}' did not match any file\(s\) known to git)\n`, MessageType.warning);
+                try {
+                    if (!fs.existsSync(projDir) || !fs.statSync(projDir).isDirectory()) {
+                        return;
                     }
-                } else {
-                    println(`* ${branchName}`);
+                    
+                    println(`=== ${proj.name} ===`);
+
+                    if (!proj.isGitRepository()) {
+                        println('(not a git repository)', MessageType.weakText);
+                        return;
+                    }
+
+                    // checkout to specified branch
+                    const succ = checkout(projDir, branchName);
+                    if (!succ) {
+                        // if failed, checkout to the main project branch
+                        checkout(projDir, mainProjectBranch);
+                    }
+
+                    const branch = getCurrentBranch(projDir);
+                    if (succ) {
+                        println(`* ${branch}`);
+                    } else {
+                        printBranchWarning(branch, branchName);
+                    }
+                } catch (error) {
+                    print(error.message, MessageType.error);
+                    exitCode = 1;
                 }
             });
         } catch (error) {
             print(error.message, MessageType.error);
-            return 1;
+            exitCode = 1;
         }
 
-        return 0;
+        return exitCode;
     }
 
     static checkoutMainProject(branchName: string): string {
@@ -79,7 +89,7 @@ export class GitCheckout {
             println(`=== ${proj.name} ===`);
 
             // checkout
-            checkout(projDir, branchName);
+            const succ = checkout(projDir, branchName);
 
             // get current branch
             mainProjectBranch = getCurrentBranch(projDir);
@@ -87,10 +97,10 @@ export class GitCheckout {
                 throw new Error(`Failed to get the branch name of main project '${proj.name}'`);
             }
 
-            if (mainProjectBranch == branchName) {
-                println(`* ${branchName}`);
+            if (succ) {
+                println(`* ${mainProjectBranch}`);
             } else {
-                print(`* ${mainProjectBranch} (pathspec '${branchName}' did not match any file\(s\) known to git)\n`, MessageType.warning);
+                printBranchWarning(mainProjectBranch, branchName);
             }
         });
 

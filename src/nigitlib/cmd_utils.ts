@@ -10,6 +10,7 @@ export class CmdResult {
 
 export enum MessageType {
     auto = 1,
+    weakText,
     text,
     info,
     warning,
@@ -84,8 +85,8 @@ export class CmdUtils {
         return result.exitCode;
     }
 
-    static println(text: string) {
-        this.print(text + '\n');
+    static println(text: string, type = MessageType.auto) {
+        this.print(text + '\n', type);
     }
 
     static print(text: string, type = MessageType.auto) {
@@ -107,6 +108,9 @@ export class CmdUtils {
                 break;
             case MessageType.info:
                 process.stdout.write(colors.green(text));
+                break;
+            case MessageType.weakText:
+                process.stdout.write(colors.gray(text));
                 break;
             default:
                 process.stdout.write(text);
