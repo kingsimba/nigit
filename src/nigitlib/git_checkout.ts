@@ -16,21 +16,39 @@ function getCurrentBranch(projDir: string): string {
     return undefined;
 }
 
-function checkout(projDir: string, branchName: string) {
+function checkout(projDir: string, branchName: string): { succ: boolean, message?: string } {
     let checkoutSucc = false;
     let cmd = `cd ${projDir} & git checkout ${branchName}`;
     let result = CmdUtils.exec(cmd);
     if (result.exitCode == 0) {
-        return true;
+        let message;
+        let m = result.stdout.match(/Your branch is behind '.*' by \d+ commits, and can be fast-forwarded/m);
+        if (m) {
+            message = m[0];
+        }
+        m = result.stdout.match(/Your branch and '.*' have diverged/m);
+        if (m) {
+            message = m[0];
+        }
+        return { succ: true, message };
     } else if (!result.stderr.match(/error: pathspec '.*' did not match any file\(s\) known to git/)) {
         throw new Error(result.stderr);
     }
 
-    return false;
+    return { succ: false };
+}
+
+function printBranchMessage(currentBranch: string, message: string) {
+    if (message == undefined) {
+        println(`* ${currentBranch}`, MessageType.warning);
+    } else {
+        print(`* ${currentBranch} `, MessageType.warning);
+        println(message, MessageType.weakText);
+    }
 }
 
 function printBranchWarning(currentBranch: string, missingBranch: string) {
-    print(`* ${currentBranch} `, MessageType.warning);
+    print(`* ${currentBranch} `, MessageType.text);
     println(`(Cannot find '${missingBranch}')`, MessageType.weakText);
 }
 
@@ -49,7 +67,7 @@ export class GitCheckout {
                     if (!fs.existsSync(projDir) || !fs.statSync(projDir).isDirectory()) {
                         return;
                     }
-                    
+
                     println(`=== ${proj.name} ===`);
 
                     if (!proj.isGitRepository()) {
@@ -58,15 +76,15 @@ export class GitCheckout {
                     }
 
                     // checkout to specified branch
-                    const succ = checkout(projDir, branchName);
-                    if (!succ) {
+                    const coResult = checkout(projDir, branchName);
+                    if (!coResult.succ) {
                         // if failed, checkout to the main project branch
                         checkout(projDir, mainProjectBranch);
                     }
 
                     const branch = getCurrentBranch(projDir);
-                    if (succ) {
-                        println(`* ${branch}`);
+                    if (coResult.succ) {
+                        printBranchMessage(branch, coResult.message);
                     } else {
                         printBranchWarning(branch, branchName);
                     }
@@ -89,7 +107,7 @@ export class GitCheckout {
             println(`=== ${proj.name} ===`);
 
             // checkout
-            const succ = checkout(projDir, branchName);
+            const coResult = checkout(projDir, branchName);
 
             // get current branch
             mainProjectBranch = getCurrentBranch(projDir);
@@ -97,8 +115,8 @@ export class GitCheckout {
                 throw new Error(`Failed to get the branch name of main project '${proj.name}'`);
             }
 
-            if (succ) {
-                println(`* ${mainProjectBranch}`);
+            if (coResult.succ) {
+                printBranchMessage(mainProjectBranch, coResult.message);
             } else {
                 printBranchWarning(mainProjectBranch, branchName);
             }

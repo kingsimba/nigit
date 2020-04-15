@@ -47,11 +47,15 @@ program
 program
     .command('branch')
     .description('Run "git branch" for all projects')
-    .option('--all', 'Show all branches. Not only the current branch.')
+    .option('--all', 'Show all branches.')
+    .option('-f, --features', 'Also show all feature branches.')
     .action((options: any) => {
         GitForAll.cmdGitForAllWithOutputHandler('git branch', (stdout) => {
             if (options.all) {
                 print(stdout);
+            } else if (options.features) {
+                const branches = stdout.split('\n').map(o => o.trim()).filter(o => !o.match(/\*? ?(branches\/.*|master)$/));
+                print(branches.join('\n'));
             } else {
                 const m = stdout.match(/^\* .*$/m);
                 if (m) {

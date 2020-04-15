@@ -1,5 +1,6 @@
-import { CmdUtils, print, println } from "./cmd_utils";
+import { CmdUtils, print, println, MessageType } from "./cmd_utils";
 import { GitForAll as GitForAll } from "./git_forall";
+import fs from 'fs';
 
 export class GitStatus {
 
@@ -9,19 +10,26 @@ export class GitStatus {
     static cmdStatus(): number {
         let allIsClean = true;
         GitForAll.forAll('.', (projDir, proj) => {
-            if (proj.isGitRepository()) {
-                const result = CmdUtils.exec(`cd ${projDir} & git status`);
-                if (result.exitCode == 0) {
-                    if (result.stdout.indexOf('nothing to commit, working tree clean') == -1) {
-                        allIsClean = false;
-                        println(`=== ${proj.name} ===`);
-                        print(this._filterOutput(result.stdout));
-                    }
-                } else {
+            if (!proj.isGitRepository()) {
+                return;
+            }
+
+            if (!fs.existsSync(projDir)) {
+                // often because have no access
+                return;
+            }
+            
+            const result = CmdUtils.exec(`cd ${projDir} & git status`);
+            if (result.exitCode == 0) {
+                if (result.stdout.indexOf('nothing to commit, working tree clean') == -1) {
                     allIsClean = false;
                     println(`=== ${proj.name} ===`);
-                    print(result.stderr);
+                    print(this._filterOutput(result.stdout));
                 }
+            } else {
+                allIsClean = false;
+                println(`=== ${proj.name} ===`);
+                print(result.stderr);
             }
         });
 
