@@ -1,5 +1,5 @@
 import { GitForAll } from "./git_forall";
-import { CmdUtils, println, print } from "./cmd_utils";
+import { CmdUtils, println, print, MessageType } from "./cmd_utils";
 import { FileDownloader } from "./file_downloader";
 import fs from 'fs'
 import { GitProject } from "./git_config";
@@ -62,7 +62,14 @@ export class GitPull {
                     if (result.exitCode == 0) {
                         println(`Git repository cloned: ${proj.url}`);
                     } else {
-                        CmdUtils.printCommandError(cmd, result.stderr);
+                        const message = result.stderr.replace(/\r?\n/g, '');
+                        if (message.match(/Please make sure you have the correct access rights/)) {
+                            println(`error: Failed to clone ${proj.url}.`);
+                            println('Please make sure you have the correct access rights.', MessageType.weakText);
+                            println('and the repository exists.', MessageType.weakText);
+                        } else {
+                            CmdUtils.printCommandError(cmd, result.stderr);
+                        }
                     }
 
                     resolve(result.exitCode);
