@@ -48,6 +48,13 @@ It lists its subprojects.
 
 `name` is Optional. If not given, the name will be deduced frm the URL.
 
+**zip** file is supported. Because if someone don't have permission to some source code(subproject),
+they can use the pre-compiled libraries.
+(Of course you have to setup a CI system to generate the zip file continuously.).
+
+The zip file must contain a single folder which has the same name as the the file itself.
+For example, **abc.zip** should have a single root folder 'abc'.
+
 Initialization
 --------------
 
