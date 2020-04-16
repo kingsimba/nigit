@@ -1,10 +1,14 @@
-A tool to manage large Git projects
-===================================
+A Tool for Managing a Group of Git Projects
+===========================================
 
-WARNING: This project is still under development. And will be released before May 1, 2020.
+That is it?
+-----------
 
 It's often helpful to divide a large project into subprojects,
 with each subproject has its own Git repository.
+
+With **nigit**, you can manage the correlated projects as a whole, 
+by pulling them together, switching branch together, etc.
 
 The benefits of this approach are:
 
@@ -12,6 +16,8 @@ The benefits of this approach are:
   This will foster stable public APIs and better modularization. 
 * Each subproject can have different collaborators and permissions.
   This is very important in corporations in which different people have different access permissions.
+
+If you are familiar with 'git', you will find it easy to learn.
 
 Prerequisites
 -------------
@@ -97,7 +103,7 @@ The first project is the main project.
 Pull
 ----
 
-The `pull` command will make sure all subprojects are properly cloned/download and update-to-date.
+The `pull` command will make sure all subprojects are properly cloned/download and up-to-date.
 
 *  If a project is missing, it will clone/download it.
 *  If a project is a git repository it will run `git pull --ff-only`.
@@ -111,33 +117,18 @@ The `pull` command will make sure all subprojects are properly cloned/download a
    === subproject_A ===
    Already up to date.
    === subproject_B ===
-   warning: Access denied.
+   error: Failed to clone git@xxxx:xxx/subproject_B.git.
+   Please make sure you have the correct access rights.
+   and the repository exists.
    === subproject_C ===
-   Updating 7456c90..9597110
+   Updating 1fe91ee..5a7820f
    Fast-forward
-   .travis.yml                              |  16 +
-   CMakeLists.txt                           |  15 +
-   README.rst                               |   3 +-
-   nc-geo.vcxproj                           |   2 -
-   nc-geo.vcxproj.filters                   |   6 -
-   src/basic_types.h                        |   3 +-
-   src/cq_hashmap.h                         | 662 -------------------------------
-   src/cq_vector.h                          |   6 +-
-   src/mutable_polygon.h                    |   4 +-
-   src/polygon_merger.h                     |  12 +-
-   src/polygon_tile_splitter.cpp            |  26 +-
-   src/polyline_tile_splitter.cpp           |  33 +-
-   src/polyline_tile_splitter.h             |  16 +-
-   src/small_object_allocator.h             |   9 +-
-   src/static_polygon.cpp                   |   8 +-
-   test/cq_hashmap_unittest.cpp             |  53 ---
-   test/polygon_merger_unittest.cpp         |  34 +-
-   test/polyline_tile_splitter_unittest.cpp |   2 +-
-   18 files changed, 113 insertions(+), 797 deletions(-)
-   create mode 100644 .travis.yml
-   create mode 100644 CMakeLists.txt
-   delete mode 100644 src/cq_hashmap.h
-   delete mode 100644 test/cq_hashmap_unittest.cpp
+    src/roadnet_layer/property_item_generators.cpp |  4 +-
+    src/routing/vehicle_info_float_view.cpp        | 25 +++++------
+    src/the_app.cpp                                | 62 ++++++++++++++++----------
+    3 files changed, 53 insertions(+), 38 deletions(-)
+
+As shown above, if you have no access to a project, it will be skipped.
 
 Status
 ------
@@ -159,8 +150,8 @@ The command `status` will show the current state of all projects. Similar with '
 Branch or Tag
 -------------
 
-Show current branch
-^^^^^^^^^^^^^^^^^^^
+Show Branches
+^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -174,70 +165,50 @@ Show current branch
    === subproject_C ===
    * master
 
-Show all branches
-^^^^^^^^^^^^^^^^^
+You can also show all branches or feature branches with --all and --features
 
-.. code-block:: bash
-
-   $ nigit branch --all
-   === main_project ===
-   branches/1.0.x
-   * master
-   === subproject_A ===
-   branches/1.0.x
-   * master
-   feature_xxx
-   feature_yyy
-   === subproject_B ===
-   * warning: Access denied.
-   === subproject_C ===
-   branches/1.0.x
-   * master
-
-Create a feature branch
-^^^^^^^^^^^^^^^^^^^^^^^
+Create Feature Branch
+^^^^^^^^^^^^^^^^^^^^^
 
 To implement a feature, sometimes several subprojects will be modified.
 They should have the same branch name.
+
+.. warning:: not implemented yet.
 
 .. code-block:: bash
 
    $ nigit branch feature_XXX subproject_A subproject_B
 
-Switch to a feature branch
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Switch Branch
+^^^^^^^^^^^^^
 
-Checkout to a branch. If no such branch exist for a subproject, fallback 
+Try to checkout all projects to the same branch.
+
+If no such branch exist for a subproject, fallback 
 to a branch which is the same as the main project.
 
 .. code-block:: bash
 
-   $ nigit checkout feature_xxx
+   $ nigit checkout data-driver
    === main_project ===
-   warning: Branch feature_xxx does not exist, stay on master.
+   * master (Cannot find 'data-driver')
    === subproject_A ===
-   Checking out to branch feature_xxx.
+   * data-driver
    === subproject_B ===
-   Checking out to branch feature_xxx.
+   * data-driver
    === subproject_C ===
-   warning: Branch feature_xxx does not exist, fallback to master.
+   * master (Cannot find 'data-driver')
 
-.. code-block:: bash
+* 'main_project' has no such branch, so it will remain on **master**.
+* 'subproject_A' and 'subproject_B' has **data-driver** branch, so they will switched.
+* 'subproject_C' has no such branch, so it will follow 'main_project'.
 
-   $ nigit branch
-   === main_project ===
-   master
-   === subproject_A ===
-   feature_xxx
-   === subproject_B ===
-   feature_xxx
-   === subproject_C ===
-   master
-
-Create a release branch
+Create a Release Branch
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Only the ones who have access to all the subprojects can create a release branch.
+
+.. warning:: not implemented yet.
 
 .. code-block:: bash
 

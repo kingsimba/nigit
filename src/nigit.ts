@@ -10,7 +10,7 @@ import { GitProject } from './nigitlib/git_config';
 import { GitCheckout } from './nigitlib/git_checkout';
 
 program
-    .version('0.1.0')
+    .version('1.0')
 
 program
     .command('clone <URL>')
