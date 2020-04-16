@@ -1,7 +1,7 @@
 A Tool for Managing a Group of Git Projects
 ===========================================
 
-That is it?
+What is it?
 -----------
 
 It's often helpful to divide a large project into subprojects,
