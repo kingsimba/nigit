@@ -11,8 +11,9 @@ class GitBranch {
 
     execute(options: any) {
         const table = new Table({
-            head: [colors.green('Project'), colors.green('Branches')]
-            , colWidths: [30, 30]
+            style: { 'padding-left': 1, 'padding-right': 1 },
+            head: [colors.green('Project'), colors.green('Branches')],
+            colWidths: [30, 30]
         });
 
         this.options = options;
@@ -42,15 +43,10 @@ class GitBranch {
 
     private executeCurrentBranch(options: any) {
         const table = new Table({
-            chars: {
-                'top': '', 'top-mid': '', 'top-left': '', 'top-right': ''
-                , 'bottom': '', 'bottom-mid': '', 'bottom-left': '', 'bottom-right': ''
-                , 'left': '', 'left-mid': '', 'mid': '', 'mid-mid': ''
-                , 'right': '', 'right-mid': '', 'middle': ' '
-            },
-            style: { 'padding-left': 0, 'padding-right': 0 },
-            head: [colors.green('Project'), colors.green('Current Branch')]
-            , colWidths: [30, 30]
+            chars: { 'mid': '', 'left-mid': '', 'mid-mid': '', 'right-mid': '' },
+            style: { 'padding-left': 1, 'padding-right': 1 },
+            head: [colors.green('Project'), colors.green('Current Branch')],
+            colWidths: [30, 30]
         });
 
         let firstProject = true;
