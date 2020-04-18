@@ -69,7 +69,7 @@ class GitBranch {
                     branch = colors.yellow(branch);
                 }
 
-                table.push([proj.name, branch + '\n' + branch]);
+                table.push([proj.name, branch]);
             } else {
                 table.push([proj.name, colors.red('(error)')]);
             }
