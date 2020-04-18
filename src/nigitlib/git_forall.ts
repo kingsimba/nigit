@@ -35,33 +35,6 @@ export class GitForAll {
     }
 
     /**
-     * Execute the same command for all projects. If succeeded, handle the output.
-     */
-    static cmdGitForAllWithOutputHandler(command: string, handler: (stdout: string) => void ): number {
-        this.forAll('.', (projDir, proj) => {
-            println(`=== ${proj.name} ===`);
-            if (proj.isGitRepository()) {
-                if (fs.existsSync(projDir)) {
-                    const cmd = `cd ${projDir} & ${command}`;
-                    const result = CmdUtils.exec(cmd);
-                    if (result.exitCode !== 0) {
-                        CmdUtils.printCommandError(cmd, result.stdout);
-                    } else {
-                        handler(result.stdout);
-                    }
-                } else {
-                    println(`error: project doesn't exist: ${proj.name}. Please run 'nigit pull'?`);
-                    return -1;
-                }
-            } else {
-                println('Not a git repository. skipped.');
-            }
-        })
-
-        return 0;
-    }
-
-    /**
      * Execute the same command for all projects. It will try to find nigit.json in |workDir| directory.
      */
     static forAll(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {

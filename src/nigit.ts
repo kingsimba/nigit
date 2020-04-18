@@ -8,6 +8,7 @@ import { GitStatus } from './nigitlib/git_status';
 import { GitPull } from './nigitlib/git_pull';
 import { GitProject } from './nigitlib/git_config';
 import { GitCheckout } from './nigitlib/git_checkout';
+import { gitBranch } from './nigitlib/git_branch';
 
 program
     .version('1.0')
@@ -50,19 +51,7 @@ program
     .option('--all', 'Show all branches.')
     .option('-f, --features', 'Also show all feature branches.')
     .action((options: any) => {
-        GitForAll.cmdGitForAllWithOutputHandler('git branch', (stdout) => {
-            if (options.all) {
-                print(stdout);
-            } else if (options.features) {
-                const branches = stdout.split('\n').map(o => o.trim()).filter(o => !o.match(/\*? ?(branches\/.*|master)$/));
-                print(branches.join('\n'));
-            } else {
-                const m = stdout.match(/^\* .*$/m);
-                if (m) {
-                    println(m[0]);
-                }
-            }
-        });
+        gitBranch.execute(options);
     })
 
 program

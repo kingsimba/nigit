@@ -4,5 +4,9 @@
         "dist": true,
         ".gitignore": true
     },
-    "restructuredtext.confPath": ""
+    "restructuredtext.confPath": "",
+    "cSpell.words": [
+        "forall",
+        "println"
+    ]
 }
