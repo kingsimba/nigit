@@ -38,22 +38,11 @@ It lists its subprojects.
          {
                "name": "ncgeo",
                "url": "git@github.com:NavInfoNC/nc-geo.git"
-         },
-         {
-               "name": "zlib",
-               "url": "https://www.zlib.net/zlib1211.zip"
          }
       ]
    }
 
 `name` is Optional. If not given, the name will be deduced frm the URL.
-
-**zip** file is supported. Because if someone don't have permission to some source code(subproject),
-they can use the pre-compiled libraries.
-(Of course you have to setup a CI system to generate the zip file continuously.).
-
-The zip file must contain a single folder which has the same name as the the file itself.
-For example, **abc.zip** should have a single root folder 'abc'.
 
 Initialization
 --------------
@@ -77,9 +66,6 @@ The `clone` command will clone/download the main project and then all subproject
    cloning git@github.com:kingsimba/express-typescript-mocha-vscode.git
    === ncgeo ===
    cloning git@github.com:NavInfoNC/nc-geo.git
-   === zlib ===
-   Downloading https://www.zlib.net/zlib1211.zip
-   Extracted zlib1211.zip
 
 After cloning, all the projects will be ready, side-by-side.
 
@@ -90,7 +76,6 @@ After cloning, all the projects will be ready, side-by-side.
    json-script/
    express-typescript-mocha-vscode/
    ncgeo/
-   zlib/
 
 List
 ----
@@ -105,7 +90,6 @@ The first project is the main project.
    json-script => git@github.com:NavInfoNC/json-script.git
    express-typescript-mocha-vscode => git@github.com:kingsimba/express-typescript-mocha-vscode.git
    ncgeo => git@github.com:NavInfoNC/nc-geo.git
-   zlib => https://www.zlib.net/zlib1211.zip
 
 Pull
 ----
@@ -163,28 +147,20 @@ Show Branches
 .. code-block:: bash
 
    $ nigit branch
-   === main_project ===
-   * master
-   === subproject_A ===
-   * master
-   === subproject_B ===
-   * warning: Access denied.
-   === subproject_C ===
-   * master
+   ┌──────────────────────────────┬──────────────────────────────┐
+   │ Project                      │ Current Branch               │
+   │ nigit                        │ master                       │
+   │ json-script                  │ test_branch                  │
+   │ express-typescript-mocha-vs… │ master                       │
+   │ ncgeo                        │ master                       │
+   │ zlib                         │ (not git repo)               │
+   └──────────────────────────────┴──────────────────────────────┘
 
-You can also show all branches or feature branches with --all and --features
+--all
+   Show all branches.
 
-Create Feature Branch
-^^^^^^^^^^^^^^^^^^^^^
-
-To implement a feature, sometimes several subprojects will be modified.
-They should have the same branch name.
-
-.. warning:: not implemented yet.
-
-.. code-block:: bash
-
-   $ nigit branch feature_XXX subproject_A subproject_B
+--features
+   Show all feature branches(not 'master' or 'branches/xxx').
 
 Switch Branch
 ^^^^^^^^^^^^^
@@ -206,16 +182,35 @@ to a branch which is the same as the main project.
    === subproject_C ===
    * master (Cannot find 'data-driver')
 
-* 'main_project' has no such branch, so it will remain on **master**.
-* 'subproject_A' and 'subproject_B' has **data-driver** branch, so they will switched.
-* 'subproject_C' has no such branch, so it will follow 'main_project'.
+*  'main_project' has no such branch, so it will remain on **master**.
+*  'subproject_A' and 'subproject_B' has **data-driver** branch, so they will switched.
+*  'subproject_C' has no such branch, so it will follow 'main_project'.
 
-Create a Release Branch
-^^^^^^^^^^^^^^^^^^^^^^^
+--force
+   Discard all local changes. Checkout to specified branch forcefully.
+
+Create Feature Branch
+^^^^^^^^^^^^^^^^^^^^^
+
+To implement a feature, sometimes several subprojects will be modified.
+They should have the same branch name.
+
+.. warning:: not implemented yet.
+
+.. code-block:: bash
+
+   $ nigit branch feature_XXX subproject_A subproject_B
+
+Create Release Branch
+^^^^^^^^^^^^^^^^^^^^^
 
 Only the ones who have access to all the subprojects can create a release branch.
 
-.. warning:: not implemented yet.
+.. warning::
+
+   Not implemented yet. You can use::
+   
+      nigit forall 'git branch branches/1.0.x'
 
 .. code-block:: bash
 
@@ -228,3 +223,90 @@ Only the ones who have access to all the subprojects can create a release branch
    + branches/1.0.x
    === subproject_C ===
    + branches/1.0.x
+
+Using Precompiled Binaries
+--------------------------
+
+If someone has no permission to some subprojects.
+They won't be able to build the project as a whole.
+
+But they can use the pre-compiled binaries. Here is how to set it up.
+
+1. Let's assume we have a project with the following structure::
+   
+      ├── awesome-project
+      │   └── nigit.json
+      ├── module-a
+      │   ├── include
+      │   │   └── module-a
+      │   │       └── module-a.h
+      │   └── src
+      │       └── some-src.cpp
+      └── module-b
+          ├── include
+          │   └── module-b
+          │       └── module-b.h
+          └── src
+              └── some-src.cpp
+
+2. Setup a CI system to continuously build all projects. 
+
+   The compiled binaries/libraries must be put in a ZIP file.
+   The zip file must contain a single folder which has the same name as the the file itself.
+   For example, **awesome-libs.zip** should have a single root folder 'awesome-libs/'.
+
+   The content of `awesome-libs.zip` is::
+
+      └── awesome-libs
+          ├── include
+          │   ├── module-a
+          │   │   └── module-a.h     // collected header files
+          │   └── module-b
+          │       └── module-b.h      // collected header files
+          └── lib
+              ├── module-a.lib         // pre-compiled libraries
+              └── module-b.lib         // pre-compiled libraries
+
+3. Modify the nigit.json to include the ZIP file
+   
+   .. code-block:: js
+
+      {
+         "projects": [
+            {
+                  "url": "git@github.com:someone/module-a.git"
+            }, 
+            {
+                  "url": "git@github.com:someone/module-b.git"
+            },
+            {
+                  "url": "https://my-ci-system.com/awesome-libs.zip"
+            }
+         ]
+      }
+
+   If someone don't have access to `module-b`, after running 'nigit pull', he will have a working tree like::
+
+      ├── awesome-project
+      │   └── nigit.json
+      ├── module-a
+      │   ├── include
+      │   │   └── module-a
+      │   │       └── module-a.h
+      │   └── src
+      │       └── some-src.cpp
+      └── awesome-libs
+          ├── include
+          │   ├── module-a
+          │   │   └── module-a.h
+          │   └── module-b
+          │       └── module-b.h
+          └── lib
+              ├── module-a.lib
+              └── module-b.lib
+
+4. Modify project settings.
+   
+   *  Use **awesome-libs/inlcude/** before **module-a/include** and **module-b/include**.
+   *  Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
+   
