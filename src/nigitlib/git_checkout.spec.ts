@@ -34,8 +34,8 @@ describe('GitCheckout', () => {
         CmdUtils.exec('cd ../json-script & git checkout test_branch --force && echo abc>> ../json-script/README.rst');
         expect(fs.readFileSync('../json-script/README.rst', 'utf8').trim()).endsWith('abc');
 
-        // checkout to master will override README.rst. So it will fail
-        expect(() => { o._checkout('../json-script', 'master') }).to.throw();
+        // checkout to master will overwrite README.rst. So it will fail
+        expect(() => { o._checkout('../json-script', 'master') }).to.throw('untracked working tree files would be overwritten');
     });
 
     it('should succ if forced checkout', () => {
