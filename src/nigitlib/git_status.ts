@@ -40,6 +40,10 @@ export class GitStatus {
         return 0;
     }
 
+    /**
+     * Show only the modified files with '+-?M' prefix
+     * @param text 
+     */
     static _filterOutput(text: string): string {
         const rtn: String[] = [];
         const lines = text.split('\n');

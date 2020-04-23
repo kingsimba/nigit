@@ -7,7 +7,7 @@ import { println, print, MessageType, CmdUtils } from './nigitlib/cmd_utils';
 import { GitStatus } from './nigitlib/git_status';
 import { GitPull } from './nigitlib/git_pull';
 import { GitProject } from './nigitlib/git_config';
-import { GitCheckout } from './nigitlib/git_checkout';
+import { GitCheckout, GitCheckoutOptions } from './nigitlib/git_checkout';
 import { gitBranch } from './nigitlib/git_branch';
 
 program
@@ -65,8 +65,10 @@ program
     .command('checkout <BRANCH_NAME>')
     .description('Run "git checkout BRANCH_NAME" for all projects.'
         + 'If a subproject doesn\'t have it, fallback to the same branch as the main project.')
-    .action((branchName: string) => {
-        GitCheckout.cmdCheckout(branchName);
+    .option('--force', '.')
+    .action((branchName: string, options: GitCheckoutOptions) => {
+        const o = new GitCheckout();
+        o.cmdCheckout(branchName, options);
     })
 
 program

@@ -1,0 +1,51 @@
+import { GitCheckout } from './git_checkout';
+import chai from 'chai';
+import { CmdUtils } from './cmd_utils';
+import fs from 'fs';
+
+const expect = chai.expect;
+
+describe('GitCheckout', () => {
+    before(() => {
+        // delete test branch
+        CmdUtils.exec('cd ../json-script & git checkout master --force && git branch -D test_branch');
+        // create test branch from master
+        CmdUtils.exec('cd ../json-script & git checkout -b test_branch');
+        // remove README.rst
+        fs.unlinkSync('../json-script/README.rst');
+        CmdUtils.exec('cd ../json-script & git add README.rst && git commit -m"delete README.rst"');
+    });
+
+    it('should be able to checkout to specific branch', () => {
+        const o = new GitCheckout();
+        const result = o._checkout('../json-script', 'test_branch');
+        expect(result.succ).is.true;
+    });
+
+    it('should fail if branch does not exist', () => {
+        const o = new GitCheckout();
+        const result = o._checkout('../json-script', 'nonExistBranch');
+        expect(result.succ).is.false;
+    });
+
+    it('should throw if local changes will be discarded', () => {
+        const o = new GitCheckout();
+        // create json-script/README.rst
+        CmdUtils.exec('cd ../json-script & git checkout test_branch --force && echo abc>> ../json-script/README.rst');
+        expect(fs.readFileSync('../json-script/README.rst', 'utf8').trim()).endsWith('abc');
+
+        // checkout to master will override README.rst. So it will fail
+        expect(() => { o._checkout('../json-script', 'master') }).to.throw();
+    });
+
+    it('should succ if forced checkout', () => {
+        const o = new GitCheckout();
+        // create json-script/README.rst
+        CmdUtils.exec('cd ../json-script & git checkout test_branch --force && echo abc>> ../json-script/README.rst');
+        expect(fs.readFileSync('../json-script/README.rst', 'utf8').trim()).endsWith('abc');
+
+        // force checkout will overwrite the modified README.rst
+        o.setOptions({ force: true });
+        expect(o._checkout('../json-script', 'master').succ).is.true;
+    });
+});
