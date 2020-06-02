@@ -1,12 +1,12 @@
 {
-	"name": "@kingsimba/nigit",
+	"name": "nigit",
 	"version": "1.0.1",
 	"description": "A tool to manage large projects which consists of a group of GIT repositories",
 	"files": [
-		"nigit"
+		"dist/nigit.js"
 	],
 	"scripts": {
-		"build": "node bin/build.js"
+		"my_build": "node bin/build.js"
 	},
 	"dependencies": {
 		"axios": "^0.19.2",
@@ -48,5 +48,8 @@
 	"bugs": {
 		"url": "https://github.com/kingsimba/nigit/issues"
 	},
-	"homepage": "https://github.com/kingsimba/nigit#readme"
+	"homepage": "https://github.com/kingsimba/nigit#readme",
+	"bin": {
+		"nigit": "dist/nigit.js"
+	}
 }

@@ -34,4 +34,4 @@ deleteFolderRecursive('./dist');
 exec('npx tsc');
 exec('ncc build dist/nigit.js -o dist --minify');
 
-fs.renameSync('dist/index.js', 'nigit');
+fs.renameSync('dist/index.js', 'dist/nigit.js');
