@@ -1,6 +1,6 @@
 {
 	"name": "@kingsimba/nigit",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A tool to manage large projects which consists of a group of GIT repositories",
 	"files": [
 		"nigit"
