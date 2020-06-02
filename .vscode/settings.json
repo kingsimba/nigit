@@ -5,11 +5,5 @@
         ".gitignore": true
     },
     "restructuredtext.confPath": "",
-    "cSpell.words": [
-        "forall",
-        "println",
-        "succ",
-        "untracked"
-    ],
     "editor.formatOnSave": true
 }

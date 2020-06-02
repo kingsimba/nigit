@@ -1,7 +1,12 @@
 {
+	"name": "@kingsimba/nigit",
+	"version": "1.0.0",
+	"description": "A tool to manage large projects which consists of a group of GIT repositories",
+	"files": [
+		"nigit"
+	],
 	"scripts": {
-		"prebuild": "node clean_dist_folder.js",
-		"build": "node_modules/.bin/tsc && ncc build dist/nigit.js -o dist && rename dist\\index.js nigit"
+		"build": "node bin/build.js"
 	},
 	"dependencies": {
 		"axios": "^0.19.2",
@@ -25,5 +30,23 @@
 		"mocha": "^7.1.1",
 		"ts-node": "^8.8.1",
 		"typescript": "^3.8.3"
-	}
+	},
+	"main": "nigit",
+	"directories": {
+		"test": "test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kingsimba/nigit.git"
+	},
+	"keywords": [
+		"git",
+		"repository"
+	],
+	"author": "kingsimba",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/kingsimba/nigit/issues"
+	},
+	"homepage": "https://github.com/kingsimba/nigit#readme"
 }

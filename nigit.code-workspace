@@ -4,5 +4,13 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"cSpell.words": [
+			"nigit",
+			"forall",
+			"println",
+			"succ",
+			"untracked"
+		]
+	}
 }

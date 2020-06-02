@@ -1,5 +1,7 @@
 #!/usr/bin/env node
+var child_process = require('child_process');
 var fs = require('fs');
+var colors = require('colors');
 
 function deleteFolderRecursive(path) {
     if (fs.existsSync(path) && fs.lstatSync(path).isDirectory()) {
@@ -13,10 +15,23 @@ function deleteFolderRecursive(path) {
             }
         });
 
-        console.log(`Deleting directory "${path}"...`);
         fs.rmdirSync(path);
     }
 };
 
+function printCommand(cmd) {
+    console.log(colors.green('$ ' + cmd));
+}
+
+function exec(cmd) {
+    printCommand(cmd);
+    child_process.execSync(cmd, { encoding: 'utf8', stdio: 'inherit' });
+}
+
+printCommand("rm dist");
 deleteFolderRecursive('./dist');
 
+exec('npx tsc');
+exec('ncc build dist/nigit.js -o dist --minify');
+
+fs.renameSync('dist/index.js', 'nigit');
