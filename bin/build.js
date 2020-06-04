@@ -32,6 +32,7 @@ printCommand("rm dist");
 deleteFolderRecursive('./dist');
 
 exec('npx tsc');
-exec('ncc build dist/nigit.js -o dist --minify');
 
-fs.renameSync('dist/index.js', 'dist/nigit.js');
+// Merge into a single file will cause trouble when published with 'npm link'
+// exec('ncc build dist/nigit.js -o dist --minify');
+// fs.renameSync('dist/index.js', 'dist/nigit.js');
