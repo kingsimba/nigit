@@ -17,6 +17,14 @@ The benefits of this approach are:
 
 If you are familiar with 'git', you will find it easy to learn.
 
+## Installation
+
+Please use npm package manager to install it:
+
+```bash
+npm install nigit -g
+```
+
 ## Prerequisites
 
 For it to work, the main project must contain a 'nigit.json' file.
@@ -65,7 +73,7 @@ cloning git@github.com:NavInfoNC/nc-geo.git
 
 After cloning, all the projects will be ready, side-by-side.
 
-```bash
+```
 $ ls
 nigit/
 json-script/
@@ -94,7 +102,7 @@ The `pull` command will make sure all subprojects are properly cloned/download a
 - If a project is a git repository it will run `git pull --ff-only`.
 - If a project is a zip file, it will check if it's update-to-date and download it if not.
 
-```bash
+```
 $ nigit pull
 === main_project ===
 Already up to date.
@@ -122,13 +130,13 @@ The command `status` will show the current state of all projects. Similar with '
 ```
 $ nigit status
 === nigit ===
-- some_new_file
-* some_deleted_file
-  M some_modified_file
-  ? some_untracked_file
-  === ncgeo ===
-* other_deleted_file
-  ? other_untracked_file
++ some_new_file
+- some_deleted_file
+M some_modified_file
+? some_untracked_file
+=== ncgeo ===
+- some_deleted_file
+? some_untracked_file
 ```
 
 ## Branch or Tag
