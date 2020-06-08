@@ -1,4 +1,24 @@
+<style type="text/css">
+    ol ol { list-style-type: lower-alpha; }
+    ol ol ol { list-style-type: lower-roman; }
+</style>
+
+<!-- omit in toc -->
 # A Tool for Managing a Group of Git Projects
+
+- [What is it?](#what-is-it)
+- [Installation](#installation)
+- [Prerequisites](#prerequisites)
+- [Initialization](#initialization)
+- [List](#list)
+- [Pull](#pull)
+- [Status](#status)
+- [Branch or Tag](#branch-or-tag)
+  - [Show Branches](#show-branches)
+  - [Switch Branch](#switch-branch)
+  - [Create Feature Branch](#create-feature-branch)
+  - [Create Release Branch](#create-release-branch)
+- [Using Precompiled Binaries](#using-precompiled-binaries)
 
 ## What is it?
 
@@ -246,7 +266,7 @@ But they can use the pre-compiled binaries. Here is how to set it up.
               └── some-src.cpp
    ```
 
-1. Setup a CI system to continuously build all projects.
+2. Setup a CI system to continuously build all projects.
 
    The compiled binaries/libraries must be put in a ZIP file.
    The zip file must contain a single folder which has the same name as the the file itself.
@@ -266,7 +286,7 @@ But they can use the pre-compiled binaries. Here is how to set it up.
               └── module-b.lib         // pre-compiled libraries
    ```
 
-1. Modify the nigit.json to include the ZIP file
+3. Modify the nigit.json to include the ZIP file
 
    ```js
    {
@@ -306,7 +326,7 @@ But they can use the pre-compiled binaries. Here is how to set it up.
               └── module-b.lib
    ```
 
-1. Modify project settings.
+4. Modify project settings.
 
    - Use **awesome-libs/inlcude/** before **module-a/include** and **module-b/include**.
    - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
