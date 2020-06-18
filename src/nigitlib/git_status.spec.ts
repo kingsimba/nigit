@@ -1,5 +1,6 @@
 import { GitStatus } from "./git_status";
 import chai from 'chai';
+import colors from 'colors';
 
 const expect = chai.expect;
 
@@ -28,14 +29,14 @@ Untracked files:
 no changes added to commit (use "git add" and/or "git commit -a")`;
 
         const result = [
-            '+ src/a.txt',
+            colors.green('+ src/a.txt'),
             'M test-data/ev/v3/lane/1-2.png',
-            '- guidance.sln',
-            '? a.py',
-            '? ite_win32.zip',
-            ''];
+            colors.red('- guidance.sln'),
+            colors.grey('? a.py'),
+            colors.grey('? ite_win32.zip'),
+        ];
 
-        expect(GitStatus._filterOutput(log)).equals(result.join('\n'));
+        expect(GitStatus._filterOutput(log)).deep.equals(result);
 
     });
 });

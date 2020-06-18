@@ -151,14 +151,16 @@ The command `status` will show the current state of all projects. Similar with '
 
 ```
 $ nigit status
-=== nigit ===
-+ some_new_file
-- some_deleted_file
-M some_modified_file
-? some_untracked_file
-=== ncgeo ===
-- some_deleted_file
-? some_untracked_file
+Project                          Changes
+----------------------------------------
+nigit                            + nigit-1.0.5.tgz
+                                 M README.md
+                                 M src/nigitlib/git_checkout.ts
+                                 M src/nigitlib/git_status.ts
+                                 ? nigit-1.1.0.tgz
+express-typescript-mocha-vscode  M package-lock.json
+                                 M package.json
+                                 M src/users.spec.ts
 ```
 
 ## Branch or Tag
@@ -167,14 +169,13 @@ M some_modified_file
 
 ```
 $ nigit branch
-┌──────────────────────────────┬──────────────────────────────┐
-│ Project                      │ Current Branch               │
-│ nigit                        │ master                       │
-│ json-script                  │ test_branch                  │
-│ express-typescript-mocha-vs… │ master                       │
-│ ncgeo                        │ master                       │
-│ zlib                         │ (not git repo)               │
-└──────────────────────────────┴──────────────────────────────┘
+Project                          Current Branch
+-----------------------------------------------
+nigit                            master
+json-script                      test_branch
+express-typescript-mocha-vscode  master
+ncgeo                            master
+zlib                             (not git repo)
 ```
 
 --all
@@ -192,14 +193,12 @@ to a branch which is the same as the main project.
 
 ```
 $ nigit checkout data-driver
-=== main_project ===
-- master (Cannot find 'data-driver')
-=== subproject_A ===
-- data-driver
-=== subproject_B ===
-- data-driver
-=== subproject_C ===
-- master (Cannot find 'data-driver')
+Project        Branch
+---------------------
+main_project   master (Cannot find 'data-driver')
+subproject_A   data-driver
+subproject_B   data-driver
+subproject_C   master (Cannot find 'data-driver')
 ```
 
 - 'main_project' has no such branch, so it will remain on **master**.
@@ -231,15 +230,13 @@ $ nigit branch feature_XXX subproject_A subproject_B
 Only the ones who have access to all the subprojects can create a release branch.
 
 ```
-$ nigit branch branches/1.0.x
-=== main_project ===
-- branches/1.0.x
-=== subproject_A ===
-- branches/1.0.x
-=== subproject_B ===
-- branches/1.0.x
-=== subproject_C ===
-- branches/1.0.x
+$ nigit start branches/1.0.x
+Project       Branch
+--------------------
+main_project  branches/1.0.x
+subproject_A  branches/1.0.x
+subproject_B  branches/1.0.x
+subproject_C  branches/1.0.x
 ```
 
 ## Using Precompiled Binaries

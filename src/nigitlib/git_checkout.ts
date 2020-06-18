@@ -1,6 +1,6 @@
-import { CmdUtils, print, println, MessageType } from "./cmd_utils";
-import { GitForAll as GitForAll } from "./git_forall";
-import { GitConfig, GitProject } from "./git_config";
+import { CmdUtils, print, MessageType } from "./cmd_utils";
+import { GitForAll } from "./git_forall";
+import { GitProject } from "./git_config";
 import colors from 'colors';
 import fs from 'fs';
 import { TablePrinter } from "./table-printer";
