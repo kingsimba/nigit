@@ -18,7 +18,7 @@ export class GitStatus {
                 // often because have no access
                 return;
             }
-            
+
             const result = CmdUtils.exec(`cd ${projDir} & git status`);
             if (result.exitCode == 0) {
                 if (result.stdout.indexOf('nothing to commit, working tree clean') == -1) {
@@ -42,10 +42,9 @@ export class GitStatus {
 
     /**
      * Show only the modified files with '+-?M' prefix
-     * @param text 
      */
     static _filterOutput(text: string): string {
-        const rtn: String[] = [];
+        const rtn: string[] = [];
         const lines = text.split('\n');
         lines.forEach(line => {
             if ((line.startsWith(' ') || line.startsWith('\t')) && !line.trim().startsWith('(')) {

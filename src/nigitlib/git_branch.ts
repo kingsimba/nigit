@@ -10,77 +10,74 @@ class GitBranch {
     private showCurrentBranch: boolean;
 
     execute(options: any) {
-        const table = new Table({
-            style: { 'padding-left': 1, 'padding-right': 1 },
-            head: [colors.green('Project'), colors.green('Branches')],
-            colWidths: [30, 30]
-        });
+        const nameColumnLength = this.maximumNameLength() + 3;
+        console.log(colors.green('Project'.padEnd(nameColumnLength) + 'Branches'))
 
         this.options = options;
         this.showCurrentBranch = options.all == undefined && options.features == undefined;
 
         if (this.showCurrentBranch) {
-            this.executeCurrentBranch(options);
+            this.executeCurrentBranch(nameColumnLength, options);
             return;
         }
 
         this.cmdGitForAllWithOutputHandler('git branch', (proj: GitProject, branches: string[]) => {
             if (!proj.isGitRepository()) {
-                table.push([proj.name, colors.grey('(not git repo)')]);
+                console.log(proj.name.padEnd(nameColumnLength) + colors.grey('(not git repo)'));
             } else {
                 if (options.features) {
                     // remove master and branches/*
                     branches = branches.filter(o => !o.match(/\*? ?(branches\/.*|master)$/));
                 }
-                // change current branch to yellow color
-                branches = branches.map(o => o.startsWith('* ') ? colors.yellow(o) : o);
-                table.push([proj.name, branches.join('\n')]);
+
+                for (let [i, branch] of branches.entries()) {
+                    // change current branch to yellow color
+                    if (branch.startsWith('* ')) {
+                        branch = colors.yellow(branch.substr(2) + '(*)');
+                    }
+
+                    if (i == 0) {
+                        console.log(proj.name.padEnd(nameColumnLength) + branch);
+                    } else {
+                        console.log(''.padEnd(nameColumnLength) + branch);
+                    }
+                }
             }
         });
-
-        console.log(table.toString());
     }
 
-    private executeCurrentBranch(options: any) {
-        const table = new Table({
-            chars: { 'mid': '', 'left-mid': '', 'mid-mid': '', 'right-mid': '' },
-            style: { 'padding-left': 1, 'padding-right': 1 },
-            head: [colors.green('Project'), colors.green('Current Branch')],
-            colWidths: [30, 30]
-        });
-
+    private executeCurrentBranch(nameColumnLength: number, options: any) {
         let firstProject = true;
         let firstProjectBranch = '';
         this.cmdGitForAllWithOutputHandler('git branch', (proj: GitProject, branches: string[]) => {
             let branch = branches.find(o => o.startsWith('* '));
             if (!proj.isGitRepository()) {
-                table.push([proj.name, colors.grey('(not git repo)')]);
+                console.log(proj.name.padEnd(nameColumnLength) + colors.grey('(not git repo)'));
             } else if (branch) {
                 branch = branch.substr(2);
                 if (firstProject) {
                     firstProjectBranch = branch;
                 }
 
+                // If the branch is different from the first project(main project), it should be warned
                 if (branch !== firstProjectBranch) {
                     branch = colors.yellow(branch);
                 }
 
-                table.push([proj.name, branch]);
+                console.log(proj.name.padEnd(nameColumnLength) + branch);
             } else {
-                table.push([proj.name, colors.red('(error)')]);
+                console.log(proj.name.padEnd(nameColumnLength) + colors.red('(error)'));
             }
 
             firstProject = false;
         });
-
-        console.log(table.toString());
     }
 
 
     /**
      * Execute the same command for all projects. If succeeded, handle the output.
      */
-    cmdGitForAllWithOutputHandler(command: string, handler: (proj: GitProject, branches: string[]) => void): number {
+    private cmdGitForAllWithOutputHandler(command: string, handler: (proj: GitProject, branches: string[]) => void): number {
         GitForAll.forAll('.', (projDir, proj) => {
             if (proj.isGitRepository()) {
                 if (fs.existsSync(projDir)) {
@@ -100,6 +97,15 @@ class GitBranch {
         })
 
         return 0;
+    }
+
+    private maximumNameLength(): number {
+        let maxLength = 0;
+        GitForAll.forAll('.', (projDir, proj) => {
+            maxLength = Math.max(maxLength, proj.name.length);
+        });
+
+        return maxLength;
     }
 }
 

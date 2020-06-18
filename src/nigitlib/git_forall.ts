@@ -9,7 +9,7 @@ export class GitForAll {
     static createWorkspaceFile(workspacePath: string, projName: string) {
         const filename = `${workspacePath}/.nigit.workspace`;
         if (!fs.existsSync(filename)) {
-            fs.writeFileSync(filename, JSON.stringify({ master_project: projName }));    
+            fs.writeFileSync(filename, JSON.stringify({ master_project: projName }));
         }
     }
 
@@ -73,20 +73,20 @@ export class GitForAll {
     }
 
     static forMainProject(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
-        let firstProjet = true;
+        let firstProject = true;
         return this.forAll(workDir, (projDir: string, proj: GitProject) => {
-            if (firstProjet) {
-                firstProjet = false;
+            if (firstProject) {
+                firstProject = false;
                 callback(projDir, proj);
             }
         });
     }
 
     static forSubprojects(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
-        let firstProjet = true;
+        let firstProject = true;
         return this.forAll(workDir, (projDir: string, proj: GitProject) => {
-            if (firstProjet) {
-                firstProjet = false;
+            if (firstProject) {
+                firstProject = false;
             } else {
                 callback(projDir, proj);
             }
@@ -99,8 +99,7 @@ export class GitForAll {
      * @return the path of the main project
      */
     static findMainProject(rootDir: string): string | undefined {
-
-        let mainProjPath = undefined;
+        let mainProjPath;
         let path = rootDir;
         let lastCheckedPath;
         while (fs.existsSync(path)) {

@@ -4,21 +4,24 @@
 </style>
 
 <!-- omit in toc -->
+
 # A Tool for Managing a Group of Git Projects
 
-- [What is it?](#what-is-it)
-- [Installation](#installation)
-- [Prerequisites](#prerequisites)
-- [Initialization](#initialization)
-- [List](#list)
-- [Pull](#pull)
-- [Status](#status)
-- [Branch or Tag](#branch-or-tag)
-  - [Show Branches](#show-branches)
-  - [Switch Branch](#switch-branch)
-  - [Create Feature Branch](#create-feature-branch)
-  - [Create Release Branch](#create-release-branch)
-- [Using Precompiled Binaries](#using-precompiled-binaries)
+- [A Tool for Managing a Group of Git Projects](#a-tool-for-managing-a-group-of-git-projects)
+  - [What is it?](#what-is-it)
+  - [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Initialization](#initialization)
+  - [List](#list)
+  - [Pull](#pull)
+  - [Status](#status)
+  - [Branch or Tag](#branch-or-tag)
+    - [Show Branches](#show-branches)
+    - [Switch Branch](#switch-branch)
+    - [Create Feature Branch](#create-feature-branch)
+    - [Create Release Branch](#create-release-branch)
+  - [Using Precompiled Binaries](#using-precompiled-binaries)
+  - [Changelog](#changelog)
 
 ## What is it?
 
@@ -26,7 +29,7 @@ It's often helpful to divide a large project into subprojects,
 with each subproject has its own Git repository.
 
 With **nigit**, you can manage the correlated projects as a whole,
-by pulling them together, switching branch together, etc.
+by syncing them together, switching branch together, etc.
 
 The benefits of this approach are:
 
@@ -36,6 +39,8 @@ The benefits of this approach are:
   This is very important in corporations in which different people have different access permissions.
 
 If you are familiar with 'git', you will find it easy to learn.
+
+There is a similar tool https://gerrit.googlesource.com/git-repo made by Google for Android system development.
 
 ## Installation
 
@@ -330,3 +335,13 @@ But they can use the pre-compiled binaries. Here is how to set it up.
 
    - Use **awesome-libs/inlcude/** before **module-a/include** and **module-b/include**.
    - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
+
+## Changelog
+
+- 1.0.5 @2020-06-18
+
+  - Optimize the output of 'branch' command.
+
+- 1.0.1 @2020-04-23
+
+  - Support '--force' in 'nigit checkout'. It will discard local changes.
