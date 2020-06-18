@@ -3,25 +3,22 @@
     ol ol ol { list-style-type: lower-roman; }
 </style>
 
-<!-- omit in toc -->
+# A Tool for Managing a Group of Git Projects <!-- omit in toc -->
 
-# A Tool for Managing a Group of Git Projects
-
-- [A Tool for Managing a Group of Git Projects](#a-tool-for-managing-a-group-of-git-projects)
-  - [What is it?](#what-is-it)
-  - [Installation](#installation)
-  - [Prerequisites](#prerequisites)
-  - [Initialization](#initialization)
-  - [List](#list)
-  - [Pull](#pull)
-  - [Status](#status)
-  - [Branch or Tag](#branch-or-tag)
-    - [Show Branches](#show-branches)
-    - [Switch Branch](#switch-branch)
-    - [Create Feature Branch](#create-feature-branch)
-    - [Create Release Branch](#create-release-branch)
-  - [Using Precompiled Binaries](#using-precompiled-binaries)
-  - [Changelog](#changelog)
+- [What is it?](#what-is-it)
+- [Installation](#installation)
+- [Prerequisites](#prerequisites)
+- [Initialization](#initialization)
+- [List](#list)
+- [Pull](#pull)
+- [Status](#status)
+- [Branch or Tag](#branch-or-tag)
+  - [Show Branches](#show-branches)
+  - [Switch Branch](#switch-branch)
+  - [Create Feature Branch](#create-feature-branch)
+  - [Create Release Branch](#create-release-branch)
+- [Using Precompiled Binaries](#using-precompiled-binaries)
+- [Changelog](#changelog)
 
 ## What is it?
 
