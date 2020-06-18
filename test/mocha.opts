@@ -1,4 +1,4 @@
-    --require ts-node/register
+    --require ts-node/register/transpile-only
     -u bdd
     --timeout 1000
     --colors

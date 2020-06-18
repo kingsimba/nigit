@@ -330,14 +330,14 @@ But they can use the pre-compiled binaries. Here is how to set it up.
 
 4. Modify project settings.
 
-   - Use **awesome-libs/inlcude/** before **module-a/include** and **module-b/include**.
+   - Use **awesome-libs/include/** before **module-a/include** and **module-b/include**.
    - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
 
 ## Changelog
 
-- 1.0.5 @2020-06-18
+- 1.0.6 @2020-06-18
 
-  - Optimize the output of 'branch' command.
+  - Make the output of 'branch' and 'checkout' command more readable.
 
 - 1.0.1 @2020-04-23
 

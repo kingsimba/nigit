@@ -11,7 +11,7 @@ describe('CmdUtils', () => {
             const path = 'assets/deepdir/sub';
             CmdUtils.createDeepDir(path);
             expect(fs.existsSync(path)).to.be.true;
-        });        
+        });
     });
 
     describe('exec', () => {
@@ -23,6 +23,7 @@ describe('CmdUtils', () => {
         });
 
         it('if run unsuccessfully, it should return stdout, stderr and exit code', () => {
+            // cSpell: disable-next-line
             const result = CmdUtils.exec('git checkout blarblarxxx');
             expect(result.stdout).to.be.empty;
             expect(result.stderr).not.empty;
@@ -33,10 +34,10 @@ describe('CmdUtils', () => {
 
     describe('execAsync', () => {
         it('if should support callback', (done) => {
-            const result = CmdUtils.execAsync('git status', (result) => {
-                expect(result.stdout).not.empty;
-                expect(result.stderr).to.be.empty;
-                expect(result.exitCode).equals(0);
+            const result = CmdUtils.execAsync('git status', (r) => {
+                expect(r.stdout).not.empty;
+                expect(r.stderr).to.be.empty;
+                expect(r.exitCode).equals(0);
                 done();
             });
         });

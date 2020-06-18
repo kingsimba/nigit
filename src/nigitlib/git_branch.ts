@@ -1,58 +1,52 @@
 import { GitForAll } from "./git_forall";
-import { print, println, CmdUtils } from "./cmd_utils";
+import { println, CmdUtils } from "./cmd_utils";
 import fs from 'fs';
 import { GitProject } from "./git_config";
-import Table from 'cli-table';
 import colors from "colors";
+import { TablePrinter } from "./table-printer";
 
 class GitBranch {
     options: any;
     private showCurrentBranch: boolean;
 
     execute(options: any) {
-        const nameColumnLength = this.maximumNameLength() + 3;
-        console.log(colors.green('Project'.padEnd(nameColumnLength) + 'Branches'))
+        const table = new TablePrinter();
+        table.firstColumnWidth = GitForAll.longestProjectName().length;
+        if (table.firstColumnWidth == 0)
+            return;
+        table.firstColumnWidth = table.firstColumnWidth + 2;
+        table.printHeader('Project', 'Branches');
 
         this.options = options;
         this.showCurrentBranch = options.all == undefined && options.features == undefined;
 
         if (this.showCurrentBranch) {
-            this.executeCurrentBranch(nameColumnLength, options);
+            this.executeCurrentBranch(table, options);
             return;
         }
 
         this.cmdGitForAllWithOutputHandler('git branch', (proj: GitProject, branches: string[]) => {
             if (!proj.isGitRepository()) {
-                console.log(proj.name.padEnd(nameColumnLength) + colors.grey('(not git repo)'));
+                table.printLine(proj.name, colors.grey('(not git repo)'));
             } else {
                 if (options.features) {
                     // remove master and branches/*
                     branches = branches.filter(o => !o.match(/\*? ?(branches\/.*|master)$/));
                 }
 
-                for (let [i, branch] of branches.entries()) {
-                    // change current branch to yellow color
-                    if (branch.startsWith('* ')) {
-                        branch = colors.yellow(branch.substr(2) + '(*)');
-                    }
-
-                    if (i == 0) {
-                        console.log(proj.name.padEnd(nameColumnLength) + branch);
-                    } else {
-                        console.log(''.padEnd(nameColumnLength) + branch);
-                    }
-                }
+                branches = branches.map(b => b.startsWith('* ') ? colors.yellow(b.substr(2) + '(*)') : b);
+                table.printLines(proj.name, branches);
             }
         });
     }
 
-    private executeCurrentBranch(nameColumnLength: number, options: any) {
+    private executeCurrentBranch(table: TablePrinter, options: any) {
         let firstProject = true;
         let firstProjectBranch = '';
         this.cmdGitForAllWithOutputHandler('git branch', (proj: GitProject, branches: string[]) => {
             let branch = branches.find(o => o.startsWith('* '));
             if (!proj.isGitRepository()) {
-                console.log(proj.name.padEnd(nameColumnLength) + colors.grey('(not git repo)'));
+                table.printLine(proj.name, colors.grey('(not git repo)'));
             } else if (branch) {
                 branch = branch.substr(2);
                 if (firstProject) {
@@ -64,9 +58,9 @@ class GitBranch {
                     branch = colors.yellow(branch);
                 }
 
-                console.log(proj.name.padEnd(nameColumnLength) + branch);
+                table.printLine(proj.name, branch);
             } else {
-                console.log(proj.name.padEnd(nameColumnLength) + colors.red('(error)'));
+                table.printLine(proj.name, colors.red('(error)'));
             }
 
             firstProject = false;
@@ -97,15 +91,6 @@ class GitBranch {
         })
 
         return 0;
-    }
-
-    private maximumNameLength(): number {
-        let maxLength = 0;
-        GitForAll.forAll('.', (projDir, proj) => {
-            maxLength = Math.max(maxLength, proj.name.length);
-        });
-
-        return maxLength;
     }
 }
 

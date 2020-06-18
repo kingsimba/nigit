@@ -1,7 +1,9 @@
 import { CmdUtils, print, println, MessageType } from "./cmd_utils";
 import { GitForAll as GitForAll } from "./git_forall";
 import { GitConfig, GitProject } from "./git_config";
+import colors from 'colors';
 import fs from 'fs';
+import { TablePrinter } from "./table-printer";
 
 function getCurrentBranch(projDir: string): string {
     const cmd = `cd ${projDir} & git branch`;
@@ -16,18 +18,16 @@ function getCurrentBranch(projDir: string): string {
     return undefined;
 }
 
-function printBranchMessage(currentBranch: string, message: string) {
+function getBranchMessage(currentBranch: string, message: string) {
     if (message == undefined) {
-        println(`* ${currentBranch}`, MessageType.warning);
+        return `* ${currentBranch}`;
     } else {
-        print(`* ${currentBranch} `, MessageType.warning);
-        println(message, MessageType.weakText);
+        return `* ${currentBranch} ` + colors.grey(message);
     }
 }
 
-function printBranchWarning(currentBranch: string, missingBranch: string) {
-    print(`* ${currentBranch} `, MessageType.text);
-    println(`(Cannot find '${missingBranch}')`, MessageType.weakText);
+function getBranchWarning(currentBranch: string, missingBranch: string) {
+    return colors.yellow(`* ${currentBranch} `) + colors.grey(`(Cannot find '${missingBranch}')`);
 }
 
 export class GitCheckoutOptions {
@@ -52,15 +52,22 @@ export class GitCheckout {
      * Checkout to branch
      */
     cmdCheckout(branchName: string, options: GitCheckoutOptions): number {
+        const table = new TablePrinter();
+        table.firstColumnWidth = GitForAll.longestProjectName().length;
+        if (table.firstColumnWidth == 0)
+            return;
+        table.firstColumnWidth = table.firstColumnWidth + 2;
+        table.printHeader('Project', 'Branches');
+
         this.branchName = branchName;
         this.options = options;
 
         let exitCode = 0;
         try {
-            this.mainProjectBranch = this._checkoutMainProject();
+            this.mainProjectBranch = this._checkoutMainProject(table);
 
             GitForAll.forSubprojects('.', (projDir, proj) => {
-                if (!this._checkoutSubproject(projDir, proj)) {
+                if (!this._checkoutSubproject(table, projDir, proj)) {
                     exitCode = 1;
                 }
             });
@@ -72,11 +79,9 @@ export class GitCheckout {
         return exitCode;
     }
 
-    private _checkoutMainProject(): string {
+    private _checkoutMainProject(table: TablePrinter): string {
         let mainProjectBranch: string;
         GitForAll.forMainProject('.', (projDir, proj) => {
-            println(`=== ${proj.name} ===`);
-
             // checkout
             const coResult = this._checkout(projDir, this.branchName);
 
@@ -87,22 +92,20 @@ export class GitCheckout {
             }
 
             if (coResult.succ) {
-                printBranchMessage(mainProjectBranch, coResult.message);
+                table.printLine(proj.name, getBranchMessage(mainProjectBranch, coResult.message));
             } else {
-                printBranchWarning(mainProjectBranch, this.branchName);
+                table.printLine(proj.name, getBranchWarning(mainProjectBranch, this.branchName));
             }
         });
 
         return mainProjectBranch;
     }
 
-    private _checkoutSubproject(projDir: string, proj: GitProject): boolean {
+    private _checkoutSubproject(table: TablePrinter, projDir: string, proj: GitProject): boolean {
         try {
             if (!fs.existsSync(projDir) || !fs.statSync(projDir).isDirectory()) {
                 return;
             }
-
-            println(`=== ${proj.name} ===`);
 
             if (!proj.isGitRepository()) {
                 println('(not a git repository)', MessageType.weakText);
@@ -118,28 +121,31 @@ export class GitCheckout {
 
             const branch = getCurrentBranch(projDir);
             if (coResult.succ) {
-                printBranchMessage(branch, coResult.message);
+                table.printLine(proj.name, getBranchMessage(branch, coResult.message));
             } else {
-                printBranchWarning(branch, this.branchName);
+                table.printLine(proj.name, getBranchWarning(branch, this.branchName));
             }
 
             return true;
 
         } catch (error) {
-            print(error.message, MessageType.error);
+            const messages: string[] = error.message.split(/\r?\n/);
+            table.printLines(proj.name, messages.map(s => colors.red(s)));
             return false;
         }
     }
 
     _checkout(projDir: string, branchName: string): ProjectCheckoutResult {
-        let checkoutSucc = false;
-        let cmd = `cd ${projDir} & git checkout ${branchName} ${this.options.force ? '--force' : ''}`;
-        let result = CmdUtils.exec(cmd);
+        const checkoutSucc = false;
+        const cmd = `cd ${projDir} & git checkout ${branchName} ${this.options.force ? '--force' : ''}`;
+        const result = CmdUtils.exec(cmd);
         if (result.exitCode == 0) {
             let message;
             let m;
+            // tslint:disable-next-line: no-conditional-assignment
             if (m = result.stdout.match(/Your branch is behind '.*' by \d+ commits, and can be fast-forwarded/m)) {
                 message = m[0];
+                // tslint:disable-next-line: no-conditional-assignment
             } else if (m = result.stdout.match(/Your branch and '.*' have diverged/m)) {
                 message = m[0];
             }

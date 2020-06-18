@@ -7,10 +7,17 @@
 	"settings": {
 		"cSpell.words": [
 			"Precompiled",
+			"deepdir",
 			"forall",
+			"gitinfo",
+			"modularization",
+			"ncgeo",
 			"ncgit",
 			"nigit",
+			"nigitlib",
+			"pathspec",
 			"println",
+			"roadnet",
 			"succ",
 			"untracked"
 		]

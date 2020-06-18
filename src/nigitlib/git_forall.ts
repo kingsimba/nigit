@@ -35,6 +35,20 @@ export class GitForAll {
     }
 
     /**
+     * Return the maximum length of all project Names
+     */
+    static longestProjectName(): string {
+        let longestProjectName = '';
+        GitForAll.forAll('.', (projDir, proj) => {
+            if (proj.name.length > longestProjectName.length) {
+                longestProjectName = proj.name;
+            }
+        });
+
+        return longestProjectName;
+    }
+
+    /**
      * Execute the same command for all projects. It will try to find nigit.json in |workDir| directory.
      */
     static forAll(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
