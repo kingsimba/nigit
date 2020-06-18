@@ -108,7 +108,7 @@ export class GitCheckout {
             }
 
             if (!proj.isGitRepository()) {
-                println('(not a git repository)', MessageType.weakText);
+                table.printLine(proj.name, colors.grey('(not a git repository)'));
                 return;
             }
 
