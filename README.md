@@ -335,7 +335,7 @@ But they can use the pre-compiled binaries. Here is how to set it up.
 
 ## Changelog
 
-- 1.0.6 @2020-06-18
+- 1.1.0 @2020-06-18
 
   - Make the output of 'branch' and 'checkout' command more readable.
 
