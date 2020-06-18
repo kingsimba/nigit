@@ -11,9 +11,6 @@ import { GitCheckout, GitCheckoutOptions } from './nigitlib/git_checkout';
 import { gitBranch } from './nigitlib/git_branch';
 
 program
-    .version('1.0.2')
-
-program
     .command('clone <URL>')
     .description('Clone a main project and all its subprojects')
     .action((url: string) => {
