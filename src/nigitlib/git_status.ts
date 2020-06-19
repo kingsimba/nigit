@@ -12,11 +12,9 @@ export class GitStatus {
     static cmdStatus(): number {
         let allIsClean = true;
 
-        const table = new TablePrinter();
-        table.firstColumnWidth = GitForAll.longestProjectName().length;
-        if (table.firstColumnWidth == 0)
+        const table = GitForAll.newTablePrinter();
+        if (table == undefined)
             return;
-        table.firstColumnWidth = table.firstColumnWidth + 2;
 
         GitForAll.forAll('.', (projDir, proj) => {
             if (!proj.isGitRepository()) {

@@ -10,19 +10,19 @@ class GitBranch {
     private showCurrentBranch: boolean;
 
     execute(options: any) {
-        const table = new TablePrinter();
-        table.firstColumnWidth = GitForAll.longestProjectName().length;
-        if (table.firstColumnWidth == 0)
+        const table = GitForAll.newTablePrinter();
+        if (table == undefined)
             return;
-        table.firstColumnWidth = table.firstColumnWidth + 2;
-        table.printHeader('Project', 'Branches');
 
         this.options = options;
         this.showCurrentBranch = options.all == undefined && options.features == undefined;
 
         if (this.showCurrentBranch) {
+            table.printHeader('Project', 'Current Branch');
             this.executeCurrentBranch(table, options);
             return;
+        } else {
+            table.printHeader('Project', 'Branches');
         }
 
         this.cmdGitForAllWithOutputHandler('git branch', (proj: GitProject, branches: string[]) => {

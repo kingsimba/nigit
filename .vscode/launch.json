@@ -66,7 +66,6 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "cwd": "C:\\Users\\kingsimba\\Documents\\nc\\ite",
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
                 "status"
@@ -79,6 +78,23 @@
         },
         {
             "name": "nigit branch",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "args": [
+                "branch"
+            ],
+            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
+            "name": "nigit branch --all",
             "type": "node",
             "request": "launch",
             "skipFiles": [

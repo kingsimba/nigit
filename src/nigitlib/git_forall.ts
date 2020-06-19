@@ -3,6 +3,7 @@ import fs from 'fs';
 import { CmdUtils, println, print } from "./cmd_utils";
 import { normalize, relative } from "path";
 import { resolve } from "path";
+import { TablePrinter } from "./table-printer";
 
 export class GitForAll {
 
@@ -37,7 +38,7 @@ export class GitForAll {
     /**
      * Return the maximum length of all project Names
      */
-    static longestProjectName(): string {
+    private static longestProjectName(): string {
         let longestProjectName = '';
         GitForAll.forAll('.', (projDir, proj) => {
             if (proj.name.length > longestProjectName.length) {
@@ -46,6 +47,19 @@ export class GitForAll {
         });
 
         return longestProjectName;
+    }
+
+    /**
+     * Create a table printer for the project.
+     * @returns undefined if no workspace is found.
+     */
+    static newTablePrinter(): TablePrinter | undefined {
+        const table = new TablePrinter();
+        table.firstColumnWidth = GitForAll.longestProjectName().length;
+        if (table.firstColumnWidth == 0)
+            return undefined;
+        table.firstColumnWidth = table.firstColumnWidth + 2;
+        return table;
     }
 
     /**

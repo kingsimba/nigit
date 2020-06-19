@@ -52,13 +52,11 @@ export class GitCheckout {
      * Checkout to branch
      */
     cmdCheckout(branchName: string, options: GitCheckoutOptions): number {
-        const table = new TablePrinter();
-        table.firstColumnWidth = GitForAll.longestProjectName().length;
-        if (table.firstColumnWidth == 0)
+        const table = GitForAll.newTablePrinter();
+        if (table == undefined)
             return;
-        table.firstColumnWidth = table.firstColumnWidth + 2;
-        table.printHeader('Project', 'Branches');
 
+        table.printHeader('Project', 'Branches');
         this.branchName = branchName;
         this.options = options;
 
