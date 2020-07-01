@@ -10,15 +10,16 @@ export class GitPullOptions {
 
 export class GitPull {
     static async cmdGitPull(options?: GitPullOptions) {
-        const forall = GitForAll.instance('.');
+        let forall = GitForAll.instance('.');
         if (forall == undefined) {
             return;
         }
 
         // We need to update the main project first before all others.
         // So that nigit.json is update-to-date
-        // write .nigit.workspace if not exist
         const mainProject = forall.mainProject;
+
+        // write .nigit.workspace if not exist
         GitForAll.createWorkspaceFile(`${mainProject.directory}/..`, mainProject.name);
 
         if (options == undefined || !options.skipMainProject) {
@@ -32,6 +33,9 @@ export class GitPull {
                 return;
             }
         }
+
+        // reload the config file. Because the main project may be updated
+        forall = GitForAll.instance('.');
 
         // because "git pull --ff-only" is a slow operation.
         // we'd like to run them in parallel for all projects.
