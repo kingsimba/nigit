@@ -10,7 +10,12 @@ class GitBranch {
     private showCurrentBranch: boolean;
 
     execute(options: any) {
-        const table = GitForAll.newTablePrinter();
+        const forall = GitForAll.instance('.');
+        if (forall == undefined) {
+            return;
+        }
+
+        const table = forall.newTablePrinter();
         if (table == undefined)
             return;
 

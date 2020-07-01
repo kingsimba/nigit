@@ -10,35 +10,35 @@ export class GitPullOptions {
 
 export class GitPull {
     static async cmdGitPull(options?: GitPullOptions) {
+        const forall = GitForAll.instance('.');
+        if (forall == undefined) {
+            return;
+        }
 
         // We need to update the main project first before all others.
         // So that nigit.json is update-to-date
-        const succ = GitForAll.forMainProject('.', (projDir, proj) => {
-            // write .nigit.workspace if not exist
-            GitForAll.createWorkspaceFile(`${projDir}/..`, proj.name);
+        // write .nigit.workspace if not exist
+        const mainProject = forall.mainProject;
+        GitForAll.createWorkspaceFile(`${mainProject.directory}/..`, mainProject.name);
 
-            if (options == undefined || !options.skipMainProject) {
-                println(`=== ${proj.name} ===`);
-                const cmd = `cd "${projDir}" & git pull --ff-only`;
-                const result = CmdUtils.exec(cmd);
-                if (result.exitCode == 0) {
-                    print(result.stdout);
-                } else {
-                    CmdUtils.printCommandError(cmd, result.stderr);
-                }
+        if (options == undefined || !options.skipMainProject) {
+            println(`=== ${mainProject.name} ===`);
+            const cmd = `cd "${mainProject.directory}" & git pull --ff-only`;
+            const result = CmdUtils.exec(cmd);
+            if (result.exitCode == 0) {
+                print(result.stdout);
+            } else {
+                CmdUtils.printCommandError(cmd, result.stderr);
+                return;
             }
-        });
-
-        if (!succ) {
-            return 1;
         }
 
         // because "git pull --ff-only" is a slow operation.
         // we'd like to run them in parallel for all projects.
         const promises: Promise<number>[] = [];
-        GitForAll.forSubprojects('.', (projDir, proj) => {
+        for (const [i, proj] of forall.subprojects.entries()) {
+            const projDir = proj.directory;
             const p = new Promise<number>(async (resolve) => {
-
                 if (fs.existsSync(`${projDir}/.git`)) {
                     // for git repository, run 'git pull'
                     const cmd = `cd "${projDir}" & git pull --ff-only`;
@@ -52,8 +52,7 @@ export class GitPull {
                     }
 
                     resolve(result.exitCode);
-                }
-                else if (proj.isGitRepository()) {
+                } else if (proj.isGitRepository()) {
                     // for empty git repository, run 'git clone'
                     const cmd = `git clone "${proj.url}" "${projDir}"`;
                     const result = await CmdUtils.execAsync(cmd);
@@ -99,7 +98,7 @@ export class GitPull {
             });
 
             promises.push(p);
-        });
+        }
 
         // wait for all commands to complete
         const results = await Promise.all(promises);

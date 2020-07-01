@@ -38,14 +38,13 @@ export class GitForAll {
     /**
      * Return the maximum length of all project Names
      */
-    private static longestProjectName(): string {
+    private longestProjectName(): string {
         let longestProjectName = '';
-        GitForAll.forAll('.', (projDir, proj) => {
+        for (const proj of this.projects) {
             if (proj.name.length > longestProjectName.length) {
                 longestProjectName = proj.name;
             }
-        });
-
+        }
         return longestProjectName;
     }
 
@@ -53,19 +52,28 @@ export class GitForAll {
      * Create a table printer for the project.
      * @returns undefined if no workspace is found.
      */
-    static newTablePrinter(): TablePrinter | undefined {
+    newTablePrinter(): TablePrinter | undefined {
         const table = new TablePrinter();
-        table.firstColumnWidth = GitForAll.longestProjectName().length;
+        table.firstColumnWidth = this.longestProjectName().length;
         if (table.firstColumnWidth == 0)
             return undefined;
         table.firstColumnWidth = table.firstColumnWidth + 2;
         return table;
     }
 
-    /**
-     * Execute the same command for all projects. It will try to find nigit.json in |workDir| directory.
-     */
-    static forAll(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
+    static instance(workDir: string | undefined): GitForAll {
+        let o = new GitForAll();
+        if (!o.init(workDir)) {
+            o = undefined;
+        }
+        return o;
+    }
+
+    private init(workDir: string | undefined): boolean {
+        if (workDir == undefined) {
+            workDir = '.';
+        }
+
         let mainProject;
         try {
             mainProject = this.findMainProject(workDir);
@@ -73,7 +81,7 @@ export class GitForAll {
             println('error: ' + error);
             return false;
         }
-        if (mainProject == null) {
+        if (mainProject == undefined) {
             println('error: no nigit.json is found');
             return false;
         }
@@ -92,33 +100,33 @@ export class GitForAll {
             workspaceDir = '.';
         }
 
-        for (const proj of config.projects) {
-            const projDir = `${workspaceDir}/${proj.name}`;
-            callback(projDir, proj);
+        this.mainProjectPath = mainProject;
+        this.workspaceDir = workspaceDir;
+        this.projects = config.projects;
+        this.mainProject = this.projects[0];
+        this.subprojects = this.projects.slice(1);
+
+        for (const proj of this.projects) {
+            proj.directory = `${workspaceDir}/${proj.name}`;
         }
 
         return true;
     }
 
-    static forMainProject(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
-        let firstProject = true;
-        return this.forAll(workDir, (projDir: string, proj: GitProject) => {
-            if (firstProject) {
-                firstProject = false;
-                callback(projDir, proj);
-            }
-        });
-    }
+    /**
+     * Execute the same command for all projects. It will try to find nigit.json in |workDir| directory.
+     */
+    static forAll(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
+        const o = GitForAll.instance('.');
+        if (!o.init(workDir)) {
+            return;
+        }
 
-    static forSubprojects(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
-        let firstProject = true;
-        return this.forAll(workDir, (projDir: string, proj: GitProject) => {
-            if (firstProject) {
-                firstProject = false;
-            } else {
-                callback(projDir, proj);
-            }
-        });
+        for (const proj of o.projects) {
+            callback(proj.directory, proj);
+        }
+
+        return true;
     }
 
     /**
@@ -126,7 +134,7 @@ export class GitForAll {
      * @param rootDir the root directory to search for `nigit.json`
      * @return the path of the main project
      */
-    static findMainProject(rootDir: string): string | undefined {
+    findMainProject(rootDir: string): string | undefined {
         let mainProjPath;
         let path = rootDir;
         let lastCheckedPath;
@@ -187,5 +195,15 @@ export class GitForAll {
 
         return mainProjPath;
     }
+
+    private mainProjectPath: string;
+
+    /**
+     * The projects. The first one is the main project.
+     */
+    public projects: GitProject[];
+    public mainProject: GitProject;
+    public subprojects: GitProject[];
+    private workspaceDir: string;
 
 }

@@ -2,7 +2,6 @@ import { CmdUtils, println } from "./cmd_utils";
 import { GitForAll as GitForAll } from "./git_forall";
 import fs from 'fs';
 import colors from 'colors';
-import { TablePrinter } from "./table-printer";
 
 export class GitStatus {
 
@@ -10,20 +9,24 @@ export class GitStatus {
      * Print the status of projects. In current directory.
      */
     static cmdStatus(): number {
-        let allIsClean = true;
-
-        const table = GitForAll.newTablePrinter();
-        if (table == undefined)
+        const forall = GitForAll.instance('.');
+        if (forall == undefined) {
             return;
+        }
 
-        GitForAll.forAll('.', (projDir, proj) => {
+        let allIsClean = true;
+        const table = forall.newTablePrinter();
+
+        for (const proj of forall.projects) {
+            const projDir = proj.directory;
+
             if (!proj.isGitRepository()) {
-                return;
+                continue;
             }
 
             if (!fs.existsSync(projDir)) {
                 // often because have no access
-                return;
+                continue;
             }
 
             const result = CmdUtils.exec(`cd ${projDir} & git status`);
@@ -43,7 +46,7 @@ export class GitStatus {
                 println(`=== ${proj.name} ===`);
                 table.printLine(proj.name, result.stderr);
             }
-        });
+        }
 
         if (allIsClean) {
             println('Nothing to commit, all working trees are clean');

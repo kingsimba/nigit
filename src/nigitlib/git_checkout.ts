@@ -52,9 +52,12 @@ export class GitCheckout {
      * Checkout to branch
      */
     cmdCheckout(branchName: string, options: GitCheckoutOptions): number {
-        const table = GitForAll.newTablePrinter();
-        if (table == undefined)
+        const forall = GitForAll.instance('.');
+        if (forall == undefined) {
             return;
+        }
+
+        const table = forall.newTablePrinter();
 
         table.printHeader('Project', 'Branches');
         this.branchName = branchName;
@@ -62,13 +65,13 @@ export class GitCheckout {
 
         let exitCode = 0;
         try {
-            this.mainProjectBranch = this._checkoutMainProject(table);
+            this.mainProjectBranch = this._checkoutMainProject(forall.mainProject, table);
 
-            GitForAll.forSubprojects('.', (projDir, proj) => {
-                if (!this._checkoutSubproject(table, projDir, proj)) {
+            for (const proj of forall.subprojects) {
+                if (!this._checkoutSubproject(table, proj)) {
                     exitCode = 1;
                 }
-            });
+            }
         } catch (error) {
             print(error.message, MessageType.error);
             exitCode = 1;
@@ -77,30 +80,31 @@ export class GitCheckout {
         return exitCode;
     }
 
-    private _checkoutMainProject(table: TablePrinter): string {
+    private _checkoutMainProject(proj: GitProject, table: TablePrinter): string {
+        const projDir = proj.directory;
         let mainProjectBranch: string;
-        GitForAll.forMainProject('.', (projDir, proj) => {
-            // checkout
-            const coResult = this._checkout(projDir, this.branchName);
+        // checkout
+        const coResult = this._checkout(projDir, this.branchName);
 
-            // get current branch
-            mainProjectBranch = getCurrentBranch(projDir);
-            if (mainProjectBranch == undefined) {
-                throw new Error(`Failed to get the branch name of main project '${proj.name}'`);
-            }
+        // get current branch
+        mainProjectBranch = getCurrentBranch(projDir);
+        if (mainProjectBranch == undefined) {
+            throw new Error(`Failed to get the branch name of main project '${proj.name}'`);
+        }
 
-            if (coResult.succ) {
-                table.printLine(proj.name, getBranchMessage(mainProjectBranch, coResult.message));
-            } else {
-                table.printLine(proj.name, getBranchWarning(mainProjectBranch, this.branchName));
-            }
-        });
+        if (coResult.succ) {
+            table.printLine(proj.name, getBranchMessage(mainProjectBranch, coResult.message));
+        } else {
+            table.printLine(proj.name, getBranchWarning(mainProjectBranch, this.branchName));
+        }
 
         return mainProjectBranch;
     }
 
-    private _checkoutSubproject(table: TablePrinter, projDir: string, proj: GitProject): boolean {
+    private _checkoutSubproject(table: TablePrinter, proj: GitProject): boolean {
         try {
+            const projDir: string = proj.directory;
+
             if (!fs.existsSync(projDir) || !fs.statSync(projDir).isDirectory()) {
                 return;
             }
