@@ -332,6 +332,10 @@ But they can use the pre-compiled binaries. Here is how to set it up.
 
 ## Changelog
 
+- 1.3.0 @2020-07-01
+
+  - Support "nigit start" to create branches.
+
 - 1.1.0 @2020-06-18
 
   - Make the output of 'branch' and 'checkout' command more readable.
