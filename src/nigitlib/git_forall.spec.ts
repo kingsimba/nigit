@@ -8,43 +8,34 @@ const expect = chai.expect;
 
 describe('GitForAll', () => {
     it('should execute command for all git projects', () => {
-        const commands : string[] = [];
-        GitForAll.forAll('.', (projDir, proj) => {
-            commands.push(`${proj.name}`);
-            expect(projDir).endsWith(`${proj.name}`);
-        });
-        expect(commands.join(' ')).equals('nigit json-script express-typescript-mocha-vscode ncgeo zlib');
+        const o = GitForAll.instance('.');
+        const names: string[] = o.projects.map(proj => proj.name);
+        expect(names.join(' ')).equals('nigit json-script express-typescript-mocha-vscode ncgeo zlib');
     });
 
-    
-    it('should execute command for main project', () => {
-        const commands : string[] = [];
-        GitForAll.forMainProject('.', (projDir, proj) => {
-            commands.push(`${proj.name}`);
-            expect(projDir).endsWith(`${proj.name}`);
-        });
-        expect(commands.join(' ')).equals('nigit');
-    });
 
-    it('should execute command for sub-project', () => {
-        const commands : string[] = [];
-        GitForAll.forSubprojects('.', (projDir, proj) => {
-            commands.push(`${proj.name}`);
-            expect(projDir).endsWith(`${proj.name}`);
-        });
-        expect(commands.join(' ')).equals('json-script express-typescript-mocha-vscode ncgeo zlib');
+    it('should find main project and sub-projects', () => {
+        const o = GitForAll.instance('.');
+        expect(o.mainProject.name).equals('nigit');
+        expect(o.mainProject.directory).endsWith('nigit');
+
+        const names: string[] = o.subprojects.map(proj => proj.name);
+        expect(names.join(' ')).equals('json-script express-typescript-mocha-vscode ncgeo zlib');
     });
 
     it('should return nigit.json in root dir', () => {
         GitForAll.createWorkspaceFile('..', 'nigit');
-        expect(GitForAll.findMainProject('..')).equals('../nigit');
+        const o = new GitForAll();
+        expect(o.findMainProject('..')).equals('../nigit');
     });
 
     it('should return nigit.json even in subfolder', () => {
-        expect(GitForAll.findMainProject('src/nigitlib')).equals('.');
+        const o = new GitForAll();
+        expect(o.findMainProject('src/nigitlib')).equals('.');
     });
 
     it('should return undefined if nigit.json is not found', () => {
-        expect(GitForAll.findMainProject('../..')).is.undefined;
+        const o = new GitForAll();
+        expect(o.findMainProject('../..')).is.undefined;
     });
 });

@@ -10,6 +10,7 @@ interface GitProjectJsonNode {
 export class GitProject {
     public name: string;
     public url: string;
+    public directory: string;
 
     static instanceWithUrl(url: string) {
         const o = new GitProject();
@@ -35,24 +36,25 @@ export class GitProject {
 }
 
 /**
-    Used to parse 'nigit.json'
-
-    @remarks
-        the file looks like:
-
-        {
-            "projects": [
-                {
-                    "url": "git@gitlab.mapbar.com:nc/cq_stdlib.git"
-                }, 
-            ]
-        }
-*/
+ * Used to parse 'nigit.json'
+ *
+ * The file looks like:
+ *
+ * ```json
+ *     {
+ *         "projects": [
+ *             {
+ *                 "url": "git@gitlab.mapbar.com:nc/cq_stdlib.git"
+ *             }
+ *         ]
+ *     }
+ * ```
+ */
 export class GitConfig {
     public projects: GitProject[] = [];
 
     static instanceWithMainProjectPath(path: string): GitConfig {
-        var o = new GitConfig()
+        const o = new GitConfig()
         try {
             o._loadMainProject(path);
             o._loadSubprojects(path);
@@ -80,7 +82,7 @@ export class GitConfig {
 
     _loadSubprojects(path: string) {
         // load subprojects
-        var text: string = "";
+        let text: string = "";
         let nigitFileName;
         if (fs.existsSync(`${path}/nigit.json`)) {
             nigitFileName = `${path}/nigit.json`;
