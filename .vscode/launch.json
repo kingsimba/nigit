@@ -14,7 +14,7 @@
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
                 "checkout",
-                "imple_checkout"
+                "master"
             ],
             "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [
@@ -138,6 +138,26 @@
             "program": "${workspaceFolder}\\dist\\nigit.js",
             "args": [
                 "pull"
+            ],
+            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
+            "name": "nigit start",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "args": [
+                "start",
+                "sample_branch",
+                "nigit",
+                "ncgeo"
             ],
             "preLaunchTask": "tsc: watch - tsconfig.json",
             "outFiles": [

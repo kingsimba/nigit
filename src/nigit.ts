@@ -9,6 +9,7 @@ import { GitPull } from './nigitlib/git_pull';
 import { GitProject } from './nigitlib/git_config';
 import { GitCheckout, GitCheckoutOptions } from './nigitlib/git_checkout';
 import { gitBranch } from './nigitlib/git_branch';
+import { GitStart } from './nigitlib/git_start';
 
 program
     .command('clone <URL>')
@@ -44,7 +45,7 @@ program
 
 program
     .command('branch')
-    .description('Run "git branch" for all projects')
+    .description('Show branch information')
     .option('--all', 'Show all branches.')
     .option('-f, --features', 'Also show all feature branches.')
     .action((options: any) => {
@@ -56,6 +57,13 @@ program
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
     .action(() => {
         GitPull.cmdGitPull();
+    })
+
+program
+    .command('start <branch> [projects...]')
+    .description('create branch for projects')
+    .action((branch: string, projects: string[]) => {
+        GitStart.cmdStart(branch, projects);
     })
 
 program

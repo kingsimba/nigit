@@ -213,30 +213,30 @@ subproject_C   master (Cannot find 'data-driver')
 To implement a feature, sometimes several subprojects will be modified.
 They should have the same branch name.
 
-.. warning:: not implemented yet.
-
 ```
-$ nigit branch feature_XXX subproject_A subproject_B
+$ nigit start another_branch nigit ncgeo
+=== nigit ===
+Branch 'another_branch' set up to track local branch 'sample_branch'.
+=== ncgeo ===
+Branch 'another_branch' set up to track local branch 'master'.
 ```
 
 ### Create Release Branch
-
-> :warning: Not implemented yet. You can temporarily use:
->
-> ```
-> nigit forall 'git branch branches/1.0.x'
-> ```
 
 Only the ones who have access to all the subprojects can create a release branch.
 
 ```
 $ nigit start branches/1.0.x
-Project       Branch
---------------------
-main_project  branches/1.0.x
-subproject_A  branches/1.0.x
-subproject_B  branches/1.0.x
-subproject_C  branches/1.0.x
+=== nigit ===
+Branch 'branches/1.0.x' set up to track local branch 'another_branch'.
+=== json-script ===
+Branch 'branches/1.0.x' set up to track local branch 'master'.
+=== express-typescript-mocha-vscode ===
+Branch 'branches/1.0.x' set up to track local branch 'master'.
+=== ncgeo ===
+Branch 'branches/1.0.x' set up to track local branch 'another_branch'.
+=== zlib ===
+Not a git repository. skipped.
 ```
 
 ## Using Precompiled Binaries

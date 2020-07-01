@@ -48,6 +48,20 @@ export class GitForAll {
         return longestProjectName;
     }
 
+    projectNames(): string[] {
+        return this.projects.map(proj => proj.name);
+    }
+
+    projectWithName(name: string): GitProject {
+        for (const proj of this.projects) {
+            if (proj.name == name) {
+                return proj;
+            }
+        }
+
+        return undefined;
+    }
+
     /**
      * Create a table printer for the project.
      * @returns undefined if no workspace is found.

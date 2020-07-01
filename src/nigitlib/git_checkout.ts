@@ -66,15 +66,17 @@ export class GitCheckout {
         let exitCode = 0;
         try {
             this.mainProjectBranch = this._checkoutMainProject(forall.mainProject, table);
-
-            for (const proj of forall.subprojects) {
-                if (!this._checkoutSubproject(table, proj)) {
-                    exitCode = 1;
-                }
-            }
         } catch (error) {
-            print(error.message, MessageType.error);
+            table.firstColumnWidth = forall.mainProject.name.length + 2;
+            table.printLine(forall.mainProject.name, colors.red(error.message));
             exitCode = 1;
+            return;
+        }
+
+        for (const proj of forall.subprojects) {
+            if (!this._checkoutSubproject(table, proj)) {
+                exitCode = 1;
+            }
         }
 
         return exitCode;
