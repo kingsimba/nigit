@@ -60,10 +60,10 @@ program
     })
 
 program
-    .command('start <BRANCH_NAME> [projects...]')
+    .command('start <branch> [projects...]')
     .description('create branch for projects')
-    .action((options: any) => {
-        GitStart.cmdStart(options);
+    .action((branch: string, projects: string[]) => {
+        GitStart.cmdStart(branch, projects);
     })
 
 program

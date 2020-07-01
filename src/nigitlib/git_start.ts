@@ -1,22 +1,29 @@
-import { CmdUtils, println } from "./cmd_utils";
-import { GitForAll as GitForAll } from "./git_forall";
+import { println, CmdUtils } from "./cmd_utils";
+import { GitForAll } from "./git_forall";
 import fs from 'fs';
-import colors from 'colors';
 
-export class GitPush {
+export class GitStart {
 
     /**
      * push a branch to remote repository
      */
     static cmdStart(branchName: string, projectNames: string[]): number {
+        const forall = GitForAll.instance('.');
+        if (forall == undefined) {
+            return;
+        }
+
         // Verify projectNames. All specified projects must exist.
         if (projectNames != undefined) {
-            const allNames = GitForAll.projectNames();
             let projectNotFound = false;
             for (const name of projectNames) {
-                if (allNames.indexOf(name) == -1) {
+                const proj = forall.projectWithName(name);
+                if (proj == undefined) {
                     projectNotFound = true;
-                    println(`error: project ${name} not found`);
+                    println(`error: project '${name}' not found`);
+                } else if (!fs.existsSync(proj.directory)) {
+                    projectNotFound = true;
+                    println(`error: project '${name}' not checked out`);
                 }
             }
             if (projectNotFound) {
@@ -25,7 +32,17 @@ export class GitPush {
         }
 
         // run 'git checkout -b BRANCH_NAME -t'
-        GitForAll.cmdGitForAll(`git checkout -b ${branchName} -t`);
+        for (const proj of forall.projects) {
+            const projDir = proj.directory;
+
+            println(`=== ${proj.name} ===`);
+            if (proj.isGitRepository()) {
+                CmdUtils.execInConsole(`cd ${projDir} & git checkout -b ${branchName} -t`);
+            } else {
+                println('Not a git repository. skipped.');
+            }
+        }
+
 
         return 0;
     }
