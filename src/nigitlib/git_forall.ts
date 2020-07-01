@@ -48,6 +48,14 @@ export class GitForAll {
         return longestProjectName;
     }
 
+    static projectNames(): string[] {
+        const names: string[] = [];
+        GitForAll.forAll('.', (projDir, proj) => {
+            names.push(proj.name);
+        });
+        return names;
+    }
+
     /**
      * Create a table printer for the project.
      * @returns undefined if no workspace is found.
@@ -120,14 +128,14 @@ export class GitForAll {
         const o = GitForAll.instance('.');
         if (!o.init(workDir)) {
             return;
-        }
+            }
 
         for (const proj of o.projects) {
             callback(proj.directory, proj);
-        }
+    }
 
         return true;
-    }
+            }
 
     /**
      * Find the main project which contains the 'nigit.json' file.
