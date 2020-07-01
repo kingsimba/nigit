@@ -35,6 +35,12 @@ export class GitStart {
         for (const proj of forall.projects) {
             const projDir = proj.directory;
 
+            // skip unspecified projects
+            if (projectNames.length != 0 && projectNames.indexOf(proj.name) == -1) {
+                continue;
+            }
+
+            // do it
             println(`=== ${proj.name} ===`);
             if (proj.isGitRepository()) {
                 CmdUtils.execInConsole(`cd ${projDir} & git checkout -b ${branchName} -t`);
