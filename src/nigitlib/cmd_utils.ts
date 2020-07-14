@@ -139,6 +139,28 @@ export class CmdUtils {
             return false;
         }
     }
+
+    static deleteFileIfExists(path: string) {
+        if (fs.existsSync(path)) {
+            fs.unlinkSync(path);
+        }
+    }
+
+    static deleteFolderRecursive(path: string) {
+        if (fs.existsSync(path) && fs.lstatSync(path).isDirectory()) {
+            fs.readdirSync(path).forEach((file, index) => {
+                const curPath = path + "/" + file;
+
+                if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                    CmdUtils.deleteFolderRecursive(curPath);
+                } else { // delete file
+                    fs.unlinkSync(curPath);
+                }
+            });
+
+            fs.rmdirSync(path);
+        }
+    };
 }
 
 export const print = CmdUtils.print;

@@ -21,7 +21,7 @@ describe('GitConfig', () => {
             "projects": [
                 {
                     "url": "git@github.com:NavInfoNC/json-script.git"
-                }, 
+                },
                 {
                     "url": "git@github.com:kingsimba/express-typescript-mocha-vscode.git"
                 },
