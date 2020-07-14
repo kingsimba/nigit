@@ -9,6 +9,8 @@
 		"my_build": "node bin/build.js"
 	},
 	"dependencies": {
+		"@types/adm-zip": "^0.4.33",
+		"adm-zip": "^0.4.16",
 		"axios": "^0.19.2",
 		"colors": "^1.4.0",
 		"commander": "^5.1.0",

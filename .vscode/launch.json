@@ -122,7 +122,7 @@
             "args": [
                 "list"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
