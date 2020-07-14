@@ -37,7 +37,7 @@ describe('GitConfig', () => {
         }
         );
         expect(cfg).not.null;
-        expect(cfg.projects).to.have.lengthOf(5);
+        expect(cfg.projects).to.have.lengthOf(4);
         expect(cfg.projects[1].name).equals('express-typescript-mocha-vscode');
         expect(cfg.projects[1].url).equals('git@github.com:kingsimba/express-typescript-mocha-vscode.git');
         expect(cfg.projects[2].name).equals('ncgeo');
