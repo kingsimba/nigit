@@ -88,7 +88,7 @@ export class GitPull {
                         if (result == 0) {
                             message = 'The file is up-to-date';
                         } else {
-                            await FileDownloader.extractZipInPlace(zipFileName, projDir + "/..");
+                            await FileDownloader.extractZipInPlace(zipFileName, projDir);
                             message = `Files extracted: ${zipFileName}`;
                         }
                     } catch (error) {
