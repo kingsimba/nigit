@@ -332,7 +332,7 @@ But they can use the pre-compiled binaries. Here is how to set it up.
 
 ## Changelog
 
-- 1.3.1 @2020-07-14
+- 1.3.2 @2020-07-14
 
   - Fixed bug #2: Field "name" doesn't work properly for .zip project
 
