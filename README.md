@@ -332,6 +332,10 @@ But they can use the pre-compiled binaries. Here is how to set it up.
 
 ## Changelog
 
+- 1.3.1 @2020-07-14
+
+  - Fixed bug #2: Field "name" doesn't work properly for .zip project
+
 - 1.3.0 @2020-07-01
 
   - Support "nigit start" to create branches.
