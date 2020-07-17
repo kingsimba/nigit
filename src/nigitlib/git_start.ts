@@ -10,7 +10,7 @@ export class GitStart {
     static cmdStart(branchName: string, projectNames: string[]): number {
         const forall = GitForAll.instance('.');
         if (forall == undefined) {
-            return;
+            return 1;
         }
 
         // Verify projectNames. All specified projects must exist.
@@ -27,7 +27,7 @@ export class GitStart {
                 }
             }
             if (projectNotFound) {
-                return;
+                return 1;
             }
         }
 

@@ -8,24 +8,24 @@ interface GitProjectJsonNode {
 }
 
 export class GitProject {
-    public name: string;
-    public url: string;
-    public directory: string;
+    public name!: string;
+    public url!: string;
+    public directory!: string;
 
-    static instanceWithUrl(url: string) {
+    static instanceWithUrl(url: string): GitProject {
         const o = new GitProject();
         o.url = url;
         const m = url.match(/\/([^\/]+)\.(zip|git)$/);
-        o.name = m[1];
+        o.name = m![1];
         return o;
     }
 
     static instanceWithJson(node: GitProjectJsonNode) {
         const o = GitProject.instanceWithUrl(node.url);
         if (node.name) {
-            o.name = node.name;
+            o!.name = node.name;
         } else if (node.projectName) {
-            o.name = node.projectName;
+            o!.name = node.projectName;
         }
         return o;
     }
@@ -53,14 +53,14 @@ export class GitProject {
 export class GitConfig {
     public projects: GitProject[] = [];
 
-    static instanceWithMainProjectPath(path: string): GitConfig {
+    static instanceWithMainProjectPath(path: string): GitConfig | null {
         const o = new GitConfig()
         try {
             o._loadMainProject(path);
             o._loadSubprojects(path);
         } catch (error) {
             println(`error: ${error}`);
-            return undefined;
+            return null;
         }
 
         return o;

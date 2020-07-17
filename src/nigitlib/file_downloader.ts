@@ -15,8 +15,8 @@ export class FileDownloader {
      */
     static async downloadFile(url: string, fileName: string): Promise<any> {
         // compare the Last-Modified header with file's mtime
-        let fileDate: number = null;
-        let urlDate: number = null;
+        let fileDate: number = -1;
+        let urlDate: number = -1;
 
         if (fs.existsSync(fileName)) {
             fileDate = fs.statSync(fileName).mtime.getTime();
@@ -29,7 +29,7 @@ export class FileDownloader {
             urlDate = Date.parse(lastModified);
         }
 
-        if (fileDate != null && urlDate != null && fileDate >= urlDate) {
+        if (fileDate != -1 && urlDate != -1 && fileDate >= urlDate) {
             return new Promise((resolve, reject) => {
                 resolve(0);
             });

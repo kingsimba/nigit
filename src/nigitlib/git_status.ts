@@ -11,7 +11,7 @@ export class GitStatus {
     static cmdStatus(): number {
         const forall = GitForAll.instance('.');
         if (forall == undefined) {
-            return;
+            return 1;
         }
 
         let allIsClean = true;

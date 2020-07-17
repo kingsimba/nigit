@@ -9,10 +9,10 @@ export class GitPullOptions {
 }
 
 export class GitPull {
-    static async cmdGitPull(options?: GitPullOptions) {
+    static async cmdGitPull(options?: GitPullOptions): Promise<number> {
         let forall = GitForAll.instance('.');
         if (forall == undefined) {
-            return;
+            return 1;
         }
 
         // We need to update the main project first before all others.
@@ -30,12 +30,15 @@ export class GitPull {
                 print(result.stdout);
             } else {
                 CmdUtils.printCommandError(cmd, result.stderr);
-                return;
+                return 1;
             }
         }
 
         // reload the config file. Because the main project may be updated
         forall = GitForAll.instance('.');
+        if (forall === null) {
+            return 1;
+        }
 
         // because "git pull --ff-only" is a slow operation.
         // we'd like to run them in parallel for all projects.
@@ -106,5 +109,7 @@ export class GitPull {
 
         // wait for all commands to complete
         const results = await Promise.all(promises);
+
+        return 0;
     }
 }

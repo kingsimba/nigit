@@ -3,7 +3,7 @@ import colors from 'colors';
 export class TablePrinter {
     private _firstColumnWidth = 0;
     private _debugMode = false;
-    public debugOutput: string[];
+    public debugOutput: string[] = [];
 
     set firstColumnWidth(width: number) {
         this._firstColumnWidth = width;
@@ -38,9 +38,6 @@ export class TablePrinter {
 
     set debugMode(debug: boolean) {
         this._debugMode = debug;
-        if (this.debugOutput == undefined) {
-            this.debugOutput = [];
-        }
     }
 
     get debugMode(): boolean {

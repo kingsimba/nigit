@@ -9,17 +9,17 @@ const expect = chai.expect;
 describe('GitForAll', () => {
     it('should execute command for all git projects', () => {
         const o = GitForAll.instance('.');
-        const names: string[] = o.projects.map(proj => proj.name);
+        const names: string[] = o!.projects.map(proj => proj.name);
         expect(names.join(' ')).equals('nigit json-script express-typescript-mocha-vscode ncgeo zlib');
     });
 
 
     it('should find main project and sub-projects', () => {
         const o = GitForAll.instance('.');
-        expect(o.mainProject.name).equals('nigit');
-        expect(o.mainProject.directory).endsWith('nigit');
+        expect(o!.mainProject.name).equals('nigit');
+        expect(o!.mainProject.directory).endsWith('nigit');
 
-        const names: string[] = o.subprojects.map(proj => proj.name);
+        const names: string[] = o!.subprojects.map(proj => proj.name);
         expect(names.join(' ')).equals('json-script express-typescript-mocha-vscode ncgeo zlib');
     });
 

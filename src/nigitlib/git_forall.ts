@@ -52,33 +52,34 @@ export class GitForAll {
         return this.projects.map(proj => proj.name);
     }
 
-    projectWithName(name: string): GitProject {
+    projectWithName(name: string): GitProject | null {
         for (const proj of this.projects) {
             if (proj.name == name) {
                 return proj;
             }
         }
 
-        return undefined;
+        return null;
     }
 
     /**
      * Create a table printer for the project.
      * @returns undefined if no workspace is found.
      */
-    newTablePrinter(): TablePrinter | undefined {
+    newTablePrinter(): TablePrinter {
         const table = new TablePrinter();
         table.firstColumnWidth = this.longestProjectName().length;
-        if (table.firstColumnWidth == 0)
-            return undefined;
+        if (table.firstColumnWidth == 0) {
+            table.firstColumnWidth = 4;
+        }
         table.firstColumnWidth = table.firstColumnWidth + 2;
         return table;
     }
 
-    static instance(workDir: string | undefined): GitForAll {
-        let o = new GitForAll();
+    static instance(workDir: string | undefined): GitForAll | null {
+        let o: GitForAll | null = new GitForAll();
         if (!o.init(workDir)) {
-            o = undefined;
+            o = null;
         }
         return o;
     }
@@ -132,8 +133,8 @@ export class GitForAll {
      */
     static forAll(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
         const o = GitForAll.instance('.');
-        if (!o.init(workDir)) {
-            return;
+        if (o == null || !o.init(workDir)) {
+            return false;
         }
 
         for (const proj of o.projects) {
@@ -210,14 +211,13 @@ export class GitForAll {
         return mainProjPath;
     }
 
-    private mainProjectPath: string;
+    private mainProjectPath!: string;
 
     /**
      * The projects. The first one is the main project.
      */
-    public projects: GitProject[];
-    public mainProject: GitProject;
-    public subprojects: GitProject[];
-    private workspaceDir: string;
-
+    public projects!: GitProject[];
+    public mainProject!: GitProject;
+    public subprojects!: GitProject[];
+    private workspaceDir!: string;
 }

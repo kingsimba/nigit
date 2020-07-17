@@ -7,15 +7,15 @@ export class GitInfo {
 
 
 /**
-    @biref Used to checkout projects to specific points, based on *.gitinfo file.
-    @remarks
-        *.gitinfo file looks like:
-
-            cq_stdlib (detached from origin/master) d1bfcf1
-            mapdal (detached from origin/master) 19be175
-            dalr (detached from origin/master) 44522e3
-            gtest (detached from origin/master) 3204ba3
-*/
+ *
+ * Used to checkout projects to specific points, based on *.gitinfo file.
+ * @remarks
+ *      *.gitinfo file looks like:
+ *      cq_stdlib (detached from origin/master) d1bfcf1
+ *      mapdal (detached from origin/master) 19be175
+ *      dalr (detached from origin/master) 44522e3
+ *      gtest (detached from origin/master) 3204ba3
+ */
 export class GitSwitcher {
 
     /**
@@ -46,12 +46,12 @@ export class GitSwitcher {
         try {
             return fs.readFileSync(fileName, 'utf8');
         } catch (error) {
-            return undefined;
-        } 
+            return '';
+        }
     }
 
     _parseGitInfo(fileText: string): GitInfo[] {
-        var lines = fileText.split('\n');
+        let lines = fileText.split('\n');
         lines = lines.filter(o => o.trim() !== '')
 
         const infos: GitInfo[] = [];
@@ -72,8 +72,7 @@ export class GitSwitcher {
 
             console.log(`$ '${cmd}'`);
             const cmdResult = CmdUtils.exec(cmd);
-            if (cmdResult.exitCode !== 0)
-            {
+            if (cmdResult.exitCode !== 0) {
                 console.log(cmdResult.stderr);
                 console.error("error: failed to run command");
             }

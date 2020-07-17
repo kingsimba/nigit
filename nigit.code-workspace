@@ -7,9 +7,12 @@
 	"settings": {
 		"cSpell.words": [
 			"Precompiled",
+			"dalr",
 			"deepdir",
 			"forall",
 			"gitinfo",
+			"gtest",
+			"mapdal",
 			"modularization",
 			"ncgeo",
 			"ncgit",
@@ -18,6 +21,8 @@
 			"pathspec",
 			"println",
 			"roadnet",
+			"stdlib",
+			"subfolder",
 			"succ",
 			"untracked"
 		]

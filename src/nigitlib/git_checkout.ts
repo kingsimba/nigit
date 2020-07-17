@@ -5,7 +5,7 @@ import colors from 'colors';
 import fs from 'fs';
 import { TablePrinter } from "./table-printer";
 
-function getCurrentBranch(projDir: string): string {
+function getCurrentBranch(projDir: string): string | null {
     const cmd = `cd ${projDir} & git branch`;
     const result = CmdUtils.exec(cmd);
     if (result.exitCode == 0) {
@@ -15,7 +15,7 @@ function getCurrentBranch(projDir: string): string {
         }
     }
 
-    return undefined;
+    return null;
 }
 
 function getBranchMessage(currentBranch: string, message: string) {
@@ -31,18 +31,18 @@ function getBranchWarning(currentBranch: string, missingBranch: string) {
 }
 
 export class GitCheckoutOptions {
-    force: boolean;
+    force: boolean = false;
 }
 
 class ProjectCheckoutResult {
-    succ: boolean;
+    succ: boolean = false;
     message?: string;
 }
 
 export class GitCheckout {
-    private branchName: string;
+    private branchName!: string;
     private options: GitCheckoutOptions = { force: false };
-    private mainProjectBranch: string;
+    private mainProjectBranch!: string;
 
     setOptions(options: GitCheckoutOptions) {
         this.options = options;
@@ -54,25 +54,27 @@ export class GitCheckout {
     cmdCheckout(branchName: string, options: GitCheckoutOptions): number {
         const forall = GitForAll.instance('.');
         if (forall == undefined) {
-            return;
+            return 1;
         }
 
         const table = forall.newTablePrinter();
+        if (table == undefined) {
+            return 1;
+        }
 
         table.printHeader('Project', 'Branches');
         this.branchName = branchName;
         this.options = options;
 
-        let exitCode = 0;
         try {
             this.mainProjectBranch = this._checkoutMainProject(forall.mainProject, table);
         } catch (error) {
             table.firstColumnWidth = forall.mainProject.name.length + 2;
             table.printLine(forall.mainProject.name, colors.red(error.message));
-            exitCode = 1;
-            return;
+            return 1;
         }
 
+        let exitCode = 0;
         for (const proj of forall.subprojects) {
             if (!this._checkoutSubproject(table, proj)) {
                 exitCode = 1;
@@ -84,18 +86,17 @@ export class GitCheckout {
 
     private _checkoutMainProject(proj: GitProject, table: TablePrinter): string {
         const projDir = proj.directory;
-        let mainProjectBranch: string;
         // checkout
         const coResult = this._checkout(projDir, this.branchName);
 
         // get current branch
-        mainProjectBranch = getCurrentBranch(projDir);
+        const mainProjectBranch = getCurrentBranch(projDir);
         if (mainProjectBranch == undefined) {
             throw new Error(`Failed to get the branch name of main project '${proj.name}'`);
         }
 
         if (coResult.succ) {
-            table.printLine(proj.name, getBranchMessage(mainProjectBranch, coResult.message));
+            table.printLine(proj.name, getBranchMessage(mainProjectBranch, coResult.message || ''));
         } else {
             table.printLine(proj.name, getBranchWarning(mainProjectBranch, this.branchName));
         }
@@ -108,12 +109,12 @@ export class GitCheckout {
             const projDir: string = proj.directory;
 
             if (!fs.existsSync(projDir) || !fs.statSync(projDir).isDirectory()) {
-                return;
+                return true;
             }
 
             if (!proj.isGitRepository()) {
                 table.printLine(proj.name, colors.grey('(not a git repository)'));
-                return;
+                return true;
             }
 
             // checkout to specified branch
@@ -125,9 +126,9 @@ export class GitCheckout {
 
             const branch = getCurrentBranch(projDir);
             if (coResult.succ) {
-                table.printLine(proj.name, getBranchMessage(branch, coResult.message));
+                table.printLine(proj.name, getBranchMessage(branch!, coResult.message || ''));
             } else {
-                table.printLine(proj.name, getBranchWarning(branch, this.branchName));
+                table.printLine(proj.name, getBranchWarning(branch!, this.branchName));
             }
 
             return true;

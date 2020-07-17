@@ -9,8 +9,8 @@ describe('GitProject', () => {
             "url": "git@gitlab.mapbar.com:nc/cq_stdlib.git",
         });
         expect(proj).not.null;
-        expect(proj.name).equals('cq_stdlib');
-        expect(proj.url).equals('git@gitlab.mapbar.com:nc/cq_stdlib.git');
+        expect(proj!.name).equals('cq_stdlib');
+        expect(proj!.url).equals('git@gitlab.mapbar.com:nc/cq_stdlib.git');
     });
 });
 

@@ -33,17 +33,8 @@ describe('CmdUtils', () => {
     });
 
     describe('execAsync', () => {
-        it('if should support callback', (done) => {
-            const result = CmdUtils.execAsync('git status', (r) => {
-                expect(r.stdout).not.empty;
-                expect(r.stderr).to.be.empty;
-                expect(r.exitCode).equals(0);
-                done();
-            });
-        });
-
         it('if should support "await"', async () => {
-            const result: CmdResult = await CmdUtils.execAsync('git status');
+            const result = await CmdUtils.execAsync('git status');
 
             expect(result.stdout).not.empty;
             expect(result.stderr).to.be.empty;

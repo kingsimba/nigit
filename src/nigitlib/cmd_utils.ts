@@ -24,7 +24,7 @@ export class CmdUtils {
      * @param cmd The command to run. Like "git status".
      */
     static exec(cmd: string): CmdResult {
-        var rtn = new CmdResult();
+        const rtn = new CmdResult();
 
         try {
             rtn.stdout = execSync(cmd, { encoding: 'utf8', stdio: 'pipe' });
@@ -42,32 +42,23 @@ export class CmdUtils {
     }
 
     /**
-     * Asynchronously execute command. It supports both callback and Promise.
+     * Asynchronously execute command.
      * @param cmd The command to run. Like 'git status'
-     * @param callback A optional callback function
      */
-    static execAsync(cmd: string, callback?: (result: CmdResult) => void): Promise<CmdResult> | null {
-        if (callback) {
+    static execAsync(cmd: string): Promise<CmdResult> {
+        return new Promise<CmdResult>((resolve) => {
             exec(cmd, (err, stdout, stderr) => {
                 const rtn = new CmdResult();
                 if (err) {
-                    rtn.exitCode = err.code;
+                    rtn.exitCode = err.code || 0;
                 } else {
                     rtn.exitCode = 0;
                 }
                 rtn.stdout = stdout;
                 rtn.stderr = stderr;
-                callback(rtn);
+                resolve(rtn);
             });
-
-            return null;
-        } else {
-            return new Promise<CmdResult>((resolve) => {
-                this.execAsync(cmd, (result) => {
-                    resolve(result);
-                })
-            });
-        }
+        });
     }
 
     /**
