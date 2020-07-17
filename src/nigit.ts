@@ -10,6 +10,7 @@ import { GitProject } from './nigitlib/git_config';
 import { GitCheckout, GitCheckoutOptions } from './nigitlib/git_checkout';
 import { gitBranch } from './nigitlib/git_branch';
 import { GitStart } from './nigitlib/git_start';
+import { GitTag } from './nigitlib/git_tag';
 
 program
     .command('clone <URL>')
@@ -53,6 +54,19 @@ program
     })
 
 program
+    .command('tag')
+    .description('management of tags')
+    .option('-l, --list <PATTERN>', 'show tags')
+    .option('-c, --create [NAME]>', 'create a tag')
+    .action((options: any) => {
+        if (options.list) {
+            GitTag.cmdListTags(options.list);
+        } else if (options.create) {
+            GitTag.cmdCreateTag(options.create);
+        }
+    })
+
+program
     .command('pull')
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
     .action(() => {
@@ -83,7 +97,6 @@ program
         const switcher = new GitSwitcher();
         switcher.switchWithGitInfoFile(file);
     })
-
 
 program
     .command('forall <COMMAND>')

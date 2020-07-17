@@ -112,6 +112,44 @@
             "outputCapture": "std"
         },
         {
+            "name": "nigit tag -l \"v1.0*\"",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "args": [
+                "tag",
+                "--list",
+                "v1.0*"
+            ],
+            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
+            "name": "nigit tag v1.0.2",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "args": [
+                "tag",
+                "-c",
+                "v1.0.8"
+            ],
+            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
             "name": "nigit list",
             "type": "node",
             "request": "launch",

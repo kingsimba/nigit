@@ -17,6 +17,7 @@
   - [Switch Branch](#switch-branch)
   - [Create Feature Branch](#create-feature-branch)
   - [Create Release Branch](#create-release-branch)
+  - [Create/List Tags](#createlist-tags)
 - [Using Precompiled Binaries](#using-precompiled-binaries)
 - [Changelog](#changelog)
 
@@ -239,6 +240,30 @@ Branch 'branches/1.0.x' set up to track local branch 'another_branch'.
 Not a git repository. skipped.
 ```
 
+### Create/List Tags
+
+Create a tag for all projects
+
+```
+$ nigit tag -c v1.0.8
+Project                          Message
+----------------------------------------
+nigit                            'v1.0.8' created
+json-script                      'v1.0.8' created
+express-typescript-mocha-vscode  'v1.0.8' created
+ncgeo                            'v1.0.8' created
+zlib                             (Not a git repository)
+```
+
+List all tags of the main project. The pattern is optional.
+
+```
+$nigit tag -l "v1.0*"
+v1.0.1
+v1.0.2
+v1.0.3
+```
+
 ## Using Precompiled Binaries
 
 If someone has no permission to some subprojects.
@@ -248,7 +273,8 @@ But they can use the pre-compiled binaries. Here is how to set it up.
 
 1. Let's assume we have a project with the following structure:
 
-   ```
+```
+
       ├── awesome-project
       │   └── nigit.json
       ├── module-a
@@ -263,17 +289,19 @@ But they can use the pre-compiled binaries. Here is how to set it up.
           │       └── module-b.h
           └── src
               └── some-src.cpp
-   ```
+
+```
 
 2. Setup a CI system to continuously build all projects.
 
-   The compiled binaries/libraries must be put in a ZIP file.
-   The zip file must contain a single folder which has the same name as the the file itself.
-   For example, **awesome-libs.zip** should have a single root folder 'awesome-libs/'.
+The compiled binaries/libraries must be put in a ZIP file.
+The zip file must contain a single folder which has the same name as the the file itself.
+For example, **awesome-libs.zip** should have a single root folder 'awesome-libs/'.
 
-   The content of `awesome-libs.zip` is:
+The content of `awesome-libs.zip` is:
 
-   ```
+```
+
       └── awesome-libs
           ├── include
           │   ├── module-a
@@ -283,47 +311,48 @@ But they can use the pre-compiled binaries. Here is how to set it up.
           └── lib
               ├── module-a.lib         // pre-compiled libraries
               └── module-b.lib         // pre-compiled libraries
-   ```
+
+```
 
 3. Modify the nigit.json to include the ZIP file
 
-   ```js
-   {
-      "projects": [
-         {
-            "url": "git@github.com:someone/module-a.git"
-         },
-         {
-            "url": "git@github.com:someone/module-b.git"
-         },
-         {
-            "url": "https://my-ci-system.com/awesome-libs.zip"
-         }
-      ]
-   }
-   ```
+```js
+{
+   "projects": [
+      {
+         "url": "git@github.com:someone/module-a.git"
+      },
+      {
+         "url": "git@github.com:someone/module-b.git"
+      },
+      {
+         "url": "https://my-ci-system.com/awesome-libs.zip"
+      }
+   ]
+}
+```
 
-   If someone don't have access to `module-b`, after running 'nigit pull', he will have a working tree like:
+If someone don't have access to `module-b`, after running 'nigit pull', he will have a working tree like:
 
-   ```
-      ├── awesome-project
-      │   └── nigit.json
-      ├── module-a
-      │   ├── include
-      │   │   └── module-a
-      │   │       └── module-a.h
-      │   └── src
-      │       └── some-src.cpp
-      └── awesome-libs
-          ├── include
-          │   ├── module-a
-          │   │   └── module-a.h
-          │   └── module-b
-          │       └── module-b.h
-          └── lib
-              ├── module-a.lib
-              └── module-b.lib
-   ```
+```
+   ├── awesome-project
+   │   └── nigit.json
+   ├── module-a
+   │   ├── include
+   │   │   └── module-a
+   │   │       └── module-a.h
+   │   └── src
+   │       └── some-src.cpp
+   └── awesome-libs
+       ├── include
+       │   ├── module-a
+       │   │   └── module-a.h
+       │   └── module-b
+       │       └── module-b.h
+       └── lib
+           ├── module-a.lib
+           └── module-b.lib
+```
 
 4. Modify project settings.
 
@@ -331,6 +360,10 @@ But they can use the pre-compiled binaries. Here is how to set it up.
    - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
 
 ## Changelog
+
+- 1.4.0 @2020-07-17
+
+  - Add 'tag' command.
 
 - 1.3.2 @2020-07-14
 
