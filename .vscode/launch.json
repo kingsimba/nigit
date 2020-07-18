@@ -16,7 +16,7 @@
                 "checkout",
                 "master"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -35,7 +35,7 @@
                 "clone",
                 "git@github.com:kingsimba/nigit.git"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -53,7 +53,7 @@
                 "forall",
                 "git status"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -70,7 +70,7 @@
             "args": [
                 "status"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -87,7 +87,7 @@
             "args": [
                 "branch"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -105,7 +105,7 @@
                 "branch",
                 "--all"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -124,7 +124,7 @@
                 "--list",
                 "v1.0*"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -143,7 +143,7 @@
                 "-c",
                 "v1.0.8"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -177,7 +177,7 @@
             "args": [
                 "pull"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -197,7 +197,7 @@
                 "nigit",
                 "ncgeo"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -217,7 +217,7 @@
                 "--info-file",
                 "abc.info"
             ],
-            "preLaunchTask": "tsc: watch - tsconfig.json",
+            "preLaunchTask": "tsc watch",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ]
