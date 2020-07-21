@@ -120,12 +120,24 @@ export class GitForAll {
         this.projects = config.projects;
         this.mainProject = this.projects[0];
         this.subprojects = this.projects.slice(1);
-
         for (const proj of this.projects) {
             proj.directory = `${workspaceDir}/${proj.name}`;
         }
+        this.exitingGitProjects = this.filterExistingGitProject(config.projects);
 
         return true;
+    }
+
+    filterExistingGitProject(projects: GitProject[]): GitProject[] {
+        const rtn: GitProject[] = [];
+        for (const proj of projects) {
+            if (proj.isGitRepository()) {
+                if (fs.existsSync(proj.directory)) {
+                    rtn.push(proj);
+                }
+            }
+        }
+        return rtn;
     }
 
     /**
@@ -217,6 +229,7 @@ export class GitForAll {
      * The projects. The first one is the main project.
      */
     public projects!: GitProject[];
+    public exitingGitProjects!: GitProject[];
     public mainProject!: GitProject;
     public subprojects!: GitProject[];
     private workspaceDir!: string;

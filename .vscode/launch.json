@@ -150,6 +150,25 @@
             "outputCapture": "std"
         },
         {
+            "name": "nigit clean --force -n",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "args": [
+                "clean",
+                "--force",
+                "-n"
+            ],
+            "preLaunchTask": "tsc watch",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
             "name": "nigit list",
             "type": "node",
             "request": "launch",

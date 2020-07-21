@@ -12,6 +12,7 @@
 - [List](#list)
 - [Pull](#pull)
 - [Status](#status)
+- [Clean](#clean)
 - [Branch or Tag](#branch-or-tag)
   - [Show Branches](#show-branches)
   - [Switch Branch](#switch-branch)
@@ -162,6 +163,20 @@ nigit                            + nigit-1.0.5.tgz
 express-typescript-mocha-vscode  M package-lock.json
                                  M package.json
                                  M src/users.spec.ts
+```
+
+## Clean
+
+Remove untracked files. 
+
+This is very dangerous. Please use '--dry' to preview the results first.
+And use '--force' to actually remove them.
+
+```
+$ nigit clean --dry
+Project                          Message
+----------------------------------------
+nigit                            Would remove a.cpp
 ```
 
 ## Branch or Tag
@@ -360,6 +375,10 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
    - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
 
 ## Changelog
+
+- 1.5.0 @2020-07-21
+
+  - Add 'clean' command.
 
 - 1.4.0 @2020-07-17
 

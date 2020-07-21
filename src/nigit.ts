@@ -11,6 +11,7 @@ import { GitCheckout, GitCheckoutOptions } from './nigitlib/git_checkout';
 import { gitBranch } from './nigitlib/git_branch';
 import { GitStart } from './nigitlib/git_start';
 import { GitTag } from './nigitlib/git_tag';
+import { GitClean, GitCleanOption } from './nigitlib/git_clean';
 
 program
     .command('clone <URL>')
@@ -25,7 +26,7 @@ program
         const proj = GitProject.instanceWithUrl(url);
         GitForAll.createWorkspaceFile('.', proj.name);
         GitPull.cmdGitPull({ skipMainProject: false });
-    })
+    });
 
 program
     .command('list')
@@ -35,14 +36,14 @@ program
             print(proj.name, MessageType.info);
             print(` => ${proj.url}\n`);
         });
-    })
+    });
 
 program
     .command('status')
     .description('Run "git status" for all projects')
     .action(() => {
         GitStatus.cmdStatus();
-    })
+    });
 
 program
     .command('branch')
@@ -51,7 +52,7 @@ program
     .option('-f, --features', 'Also show all feature branches.')
     .action((options: any) => {
         gitBranch.execute(options);
-    })
+    });
 
 program
     .command('tag')
@@ -64,27 +65,36 @@ program
         } else if (options.create) {
             GitTag.cmdCreateTag(options.create);
         }
-    })
+    });
 
 program
     .command('pull')
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
     .action(() => {
         GitPull.cmdGitPull();
-    })
+    });
 
 program
     .command('start <branch> [projects...]')
     .description('create branch for projects')
     .action((branch: string, projects: string[]) => {
         GitStart.cmdStart(branch, projects);
-    })
+    });
+
+program
+    .command('clean')
+    .description('remove untracked files')
+    .option('-f, --force', 'Use this option to confirm the cleaning')
+    .option('-n, --dry', 'Dry run')
+    .action((options: GitCleanOption) => {
+        GitClean.cmdClean(options);
+    });
 
 program
     .command('checkout <BRANCH_NAME>')
     .description('Run "git checkout BRANCH_NAME" for all projects.'
         + 'If a subproject doesn\'t have it, fallback to the same branch as the main project.')
-    .option('--force', '.')
+    .option('--force', 'Discard local modifications')
     .action((branchName: string, options: GitCheckoutOptions) => {
         const o = new GitCheckout();
         o.cmdCheckout(branchName, options);
