@@ -13,6 +13,11 @@ describe('GitForAll', () => {
         expect(names.join(' ')).equals('nigit json-script express-typescript-mocha-vscode ncgeo zlib');
     });
 
+    it('should return existing git projects', () => {
+        const o = GitForAll.instance('.');
+        const names: string[] = o!.exitingGitProjects.map(proj => proj.name);
+        expect(names.join(' ')).equals('nigit json-script express-typescript-mocha-vscode ncgeo');
+    });
 
     it('should find main project and sub-projects', () => {
         const o = GitForAll.instance('.');
