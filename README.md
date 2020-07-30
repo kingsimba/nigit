@@ -18,7 +18,7 @@
   - [Switch Branch](#switch-branch)
   - [Create Feature Branch](#create-feature-branch)
   - [Create Release Branch](#create-release-branch)
-  - [Create/List Tags](#createlist-tags)
+  - [Create / List Tags](#create--list-tags)
 - [Using Precompiled Binaries](#using-precompiled-binaries)
 - [Changelog](#changelog)
 
@@ -255,7 +255,7 @@ Branch 'branches/1.0.x' set up to track local branch 'another_branch'.
 Not a git repository. skipped.
 ```
 
-### Create/List Tags
+### Create / List Tags
 
 Create a tag for all projects
 
