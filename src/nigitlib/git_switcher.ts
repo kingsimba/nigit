@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { CmdUtils } from "./cmd_utils";
+import { CmdUtils, println } from "./cmd_utils";
 
 export class GitInfo {
     constructor(public name: string, public hashCode: string) { }
@@ -38,15 +38,19 @@ export class GitSwitcher {
 
         console.log('checking out project with info file: ' + fileName);
         const fileText = this._loadTextFile(fileName);
+        if (fileText == null) {
+            println(`error: failed to load file ${fileName}`);
+            return;
+        }
         const infos = this._parseGitInfo(fileText);
         this._checkoutWithGitInfos(infos);
     }
 
-    _loadTextFile(fileName: string): string {
+    _loadTextFile(fileName: string): string | null {
         try {
             return fs.readFileSync(fileName, 'utf8');
         } catch (error) {
-            return '';
+            return null;
         }
     }
 
@@ -68,7 +72,7 @@ export class GitSwitcher {
 
     _checkoutWithGitInfos(infos: GitInfo[]) {
         infos.forEach(info => {
-            const cmd = `cd ${info.name} & git checkout ${info.hashCode}`;
+            const cmd = `cd ${info.name} && git checkout ${info.hashCode}`;
 
             console.log(`$ '${cmd}'`);
             const cmdResult = CmdUtils.exec(cmd);

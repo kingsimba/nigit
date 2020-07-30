@@ -6,7 +6,7 @@ import fs from 'fs';
 import { TablePrinter } from "./table-printer";
 
 function getCurrentBranch(projDir: string): string | null {
-    const cmd = `cd ${projDir} & git branch`;
+    const cmd = `cd ${projDir} && git branch`;
     const result = CmdUtils.exec(cmd);
     if (result.exitCode == 0) {
         const m = result.stdout.match(/^\* (.*)$/m);
@@ -142,7 +142,7 @@ export class GitCheckout {
 
     _checkout(projDir: string, branchName: string): ProjectCheckoutResult {
         const checkoutSucc = false;
-        const cmd = `cd ${projDir} & git checkout ${branchName} ${this.options.force ? '--force' : ''}`;
+        const cmd = `cd ${projDir} && git checkout ${branchName} ${this.options.force ? '--force' : ''}`;
         const result = CmdUtils.exec(cmd);
         if (result.exitCode == 0) {
             let message;

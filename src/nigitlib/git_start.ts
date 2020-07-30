@@ -43,7 +43,7 @@ export class GitStart {
             // do it
             println(`=== ${proj.name} ===`);
             if (proj.isGitRepository()) {
-                CmdUtils.execInConsole(`cd ${projDir} & git checkout -b ${branchName} -t`);
+                CmdUtils.execInConsole(`cd ${projDir} && git checkout -b ${branchName} -t`);
             } else {
                 println('Not a git repository. skipped.');
             }

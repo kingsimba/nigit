@@ -43,7 +43,7 @@ export class GitClean {
         for (const proj of forall.exitingGitProjects) {
             const projDir = proj.directory;
 
-            const result = CmdUtils.exec(`cd ${projDir} & git clean ${args.join(' ')}`);
+            const result = CmdUtils.exec(`cd ${projDir} && git clean ${args.join(' ')}`);
             if (result.exitCode == 0) {
                 if (result.stdout.length != 0) {
                     table.printLines(proj.name, result.stdout.split('\n'));

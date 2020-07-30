@@ -10,6 +10,7 @@
         "baseUrl": ".",
         "incremental": true,
         "strict": true,
+        "newLine": "lf",
         "paths": {
             "*": [
                 "node_modules/*"

@@ -68,7 +68,7 @@ export class GitConfig {
 
     _loadMainProject(path: string) {
         // load main project
-        const result = CmdUtils.exec(`cd ${path} & git remote -v`);
+        const result = CmdUtils.exec(`cd ${path} && git remote -v`);
         if (result.exitCode != 0) {
             throw new Error(`failed to load the main project ${path}`);
         }

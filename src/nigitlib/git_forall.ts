@@ -22,7 +22,7 @@ export class GitForAll {
             println(`=== ${proj.name} ===`);
             if (proj.isGitRepository()) {
                 if (fs.existsSync(projDir)) {
-                    CmdUtils.execInConsole(`cd ${projDir} & ${command}`);
+                    CmdUtils.execInConsole(`cd ${projDir} && ${command}`);
                 } else {
                     println(`error: project doesn't exist: ${proj.name}. Please run 'nigit pull'?`);
                     return -1;

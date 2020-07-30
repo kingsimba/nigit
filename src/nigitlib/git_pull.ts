@@ -24,7 +24,7 @@ export class GitPull {
 
         if (options == undefined || !options.skipMainProject) {
             println(`=== ${mainProject.name} ===`);
-            const cmd = `cd "${mainProject.directory}" & git pull --ff-only`;
+            const cmd = `cd "${mainProject.directory}" && git pull --ff-only`;
             const result = CmdUtils.exec(cmd);
             if (result.exitCode == 0) {
                 print(result.stdout);
@@ -48,7 +48,7 @@ export class GitPull {
             const p = new Promise<number>(async (resolve) => {
                 if (fs.existsSync(`${projDir}/.git`)) {
                     // for git repository, run 'git pull'
-                    const cmd = `cd "${projDir}" & git pull --ff-only`;
+                    const cmd = `cd "${projDir}" && git pull --ff-only`;
                     const result = await CmdUtils.execAsync(cmd);
 
                     println(`=== ${proj.name} ===`);

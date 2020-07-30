@@ -29,7 +29,7 @@ export class GitStatus {
                 continue;
             }
 
-            const result = CmdUtils.exec(`cd ${projDir} & git status`);
+            const result = CmdUtils.exec(`cd ${projDir} && git status`);
             if (result.exitCode == 0) {
                 if (result.stdout.indexOf('nothing to commit, working tree clean') == -1) {
                     if (allIsClean) {

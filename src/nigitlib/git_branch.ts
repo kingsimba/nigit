@@ -80,7 +80,7 @@ class GitBranch {
         GitForAll.forAll('.', (projDir, proj) => {
             if (proj.isGitRepository()) {
                 if (fs.existsSync(projDir)) {
-                    const cmd = `cd ${projDir} & ${command}`;
+                    const cmd = `cd ${projDir} && ${command}`;
                     const result = CmdUtils.exec(cmd);
                     if (result.exitCode !== 0) {
                         println(`=== ${proj.name} ===`);
