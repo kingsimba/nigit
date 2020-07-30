@@ -167,7 +167,7 @@ express-typescript-mocha-vscode  M package-lock.json
 
 ## Clean
 
-Remove untracked files. 
+Remove untracked files.
 
 This is very dangerous. Please use '--dry' to preview the results first.
 And use '--force' to actually remove them.
@@ -375,6 +375,10 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
    - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
 
 ## Changelog
+
+- 1.5.2 @2020-07-21
+
+  - Bug fix: Make it work under Linux.
 
 - 1.5.0 @2020-07-21
 
