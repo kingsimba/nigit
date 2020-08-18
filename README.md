@@ -1,10 +1,4 @@
-.. image:: https://travis-ci.com/kingsimba/nigit.svg?branch=master
-  :target: https://travis-ci.com/kingsimba/nigit/
-  
-<style type="text/css">
-    ol ol { list-style-type: lower-alpha; }
-    ol ol ol { list-style-type: lower-roman; }
-</style>
+[<img src="https://travis-ci.com/kingsimba/nigit.svg?branch=master">](https://travis-ci.com/kingsimba/nigit/)
 
 # A Tool for Managing a Group of Git Projects <!-- omit in toc -->
 
