@@ -6,7 +6,8 @@
 		"dist/**/*.js"
 	],
 	"scripts": {
-		"build": "gulp"
+		"build": "gulp",
+		"test": "npx mocha src/**/*.spec.ts --require 'ts-node/register/transpile-only'"
 	},
 	"dependencies": {
 		"adm-zip": "^0.4.16",
