@@ -6,7 +6,7 @@
 		"dist/**/*.js"
 	],
 	"scripts": {
-		"my_build": "node bin/build.js"
+		"build": "gulp"
 	},
 	"dependencies": {
 		"adm-zip": "^0.4.16",
