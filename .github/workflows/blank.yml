@@ -20,17 +20,43 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout Main Project
+        uses: actions/checkout@v2
+        with:
+          # Relative path under $GITHUB_WORKSPACE to place the repository
+          path: "nigit"
+      - name: Checkout Other Projects 1
+        uses: actions/checkout@v2
+        with:
+          repository: "kingsimba/express-typescript-mocha-vscode"
+          path: "express-typescript-mocha-vscode"
+      - name: Checkout Other Projects 2
+        uses: actions/checkout@v2
+        with:
+          repository: "NavInfoNC/json-script"
+          path: "json-script"
+      - name: Checkout Other Projects 3
+        uses: actions/checkout@v2
+        with:
+          repository: "NavInfoNC/nc-geo"
+          path: "ncgeo"
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
           node-version: "12.x"
       - name: Install dependencies
-        run: npm ci
+        run: |
+          cd nigit
+          npm ci
+
       - name: Build
-        run: gulp
+        run: |
+          cd nigit
+          gulp
 
       - name: Test
-        run: npm test
+        run: |
+          cd nigit
+          npm test
         env:
           CI: true

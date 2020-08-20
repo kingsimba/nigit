@@ -15,11 +15,14 @@ export class GitProject {
     static instanceWithUrl(url: string): GitProject {
         const o = new GitProject();
         o.url = url;
-        const m = url.match(/\/([^\/]+)\.(zip|git)$/);
+        const m = url.match(/\/([^\/]+)$/);
         if (m == undefined) {
             throw new Error(`url ${url} is not valid`);
         }
         o.name = m![1];
+        if (o.name.endsWith('.zip') || o.name.endsWith('.git')) {
+            o.name = o.name.substr(0, o.name.length - 4);
+        }
         return o;
     }
 
