@@ -31,7 +31,7 @@ describe('GitConfig', () => {
                 },
                 {
                     "name": "zlib",
-                    "url": "https://www.zlib.net/zlib1211.zip"
+                    "url": "https://raw.githubusercontent.com/kingsimba/nigit/master/assets/zlib/zlib-1.2.11.zip"
                 }
             ]
         }
@@ -49,6 +49,10 @@ describe('GitConfig', () => {
         cfg._loadMainProject('.');
         expect(cfg.projects).have.lengthOf(1);
         expect(cfg.projects[0].name).equals('nigit');
-        expect(cfg.projects[0].url).equals('git@github.com:kingsimba/nigit.git');
+        if (cfg.projects[0].url.endsWith('.git')) {
+            expect(cfg.projects[0].url).equals('git@github.com:kingsimba/nigit.git');
+        } else {
+            expect(cfg.projects[0].url).equals('https://github.com/kingsimba/nigit');
+        }
     });
 });

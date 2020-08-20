@@ -6,7 +6,7 @@
     },
     "restructuredtext.confPath": "",
     "editor.formatOnSave": true,
-    "mochaExplorer.files": "src/**/*.spec.ts",
+    "mochaExplorer.files": "test/**/*.spec.ts",
     "mochaExplorer.require": [
         "ts-node/register/transpile-only"
     ]

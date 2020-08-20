@@ -2,11 +2,16 @@ import { GitCheckout } from '../src/nigitlib/git_checkout';
 import chai from 'chai';
 import { CmdUtils } from '../src/nigitlib/cmd_utils';
 import fs from 'fs';
+import { GitPull } from '../src/nigitlib/git_pull';
 
 const expect = chai.expect;
 
-describe('GitCheckout', () => {
-    before(() => {
+describe('GitCheckout', function () {
+    before(async () => {
+        if (process.env.GITHUB_WORKSPACE != undefined) {
+            // download dependent projects with GitHub CI
+            await GitPull.cmdGitPull({ skipMainProject: true });
+        }
         // delete test branch
         CmdUtils.exec('cd ../json-script && git checkout master --force && git branch -D test_branch');
         // create test branch from master
@@ -29,6 +34,11 @@ describe('GitCheckout', () => {
     });
 
     it('should throw if local changes will be discarded', () => {
+        if (process.env.GITHUB_WORKSPACE != undefined) {
+            // skip this test on GitHub CI
+            this.ctx.skip();
+        }
+
         const o = new GitCheckout();
         // create json-script/README.rst
         CmdUtils.exec('cd ../json-script && git checkout test_branch --force && echo abc>> ../json-script/README.rst');
