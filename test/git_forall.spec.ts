@@ -1,4 +1,4 @@
-import { GitForAll as GitForAll } from "./git_forall";
+import { GitForAll as GitForAll } from "../src/nigitlib/git_forall";
 import chai from 'chai';
 import chai_string from "chai-string";
 

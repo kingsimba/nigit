@@ -1,4 +1,4 @@
-import { GitStatus } from "./git_status";
+import { GitStatus } from "../src/nigitlib/git_status";
 import chai from 'chai';
 import colors from 'colors';
 

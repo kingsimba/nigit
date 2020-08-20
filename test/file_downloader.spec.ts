@@ -1,7 +1,7 @@
-import { FileDownloader } from "./file_downloader";
+import { FileDownloader } from "../src/nigitlib/file_downloader"
 import fs from 'fs';
 import chai from 'chai';
-import { CmdUtils } from "./cmd_utils";
+import { CmdUtils } from "../src/nigitlib/cmd_utils";
 
 const expect = chai.expect;
 

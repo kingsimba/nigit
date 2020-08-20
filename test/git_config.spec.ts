@@ -1,4 +1,4 @@
-import { GitConfig, GitProject } from "./git_config";
+import { GitConfig, GitProject } from "../src/nigitlib/git_config";
 import chai from 'chai';
 
 const expect = chai.expect;

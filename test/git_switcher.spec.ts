@@ -1,5 +1,5 @@
 import chai from "chai";
-import { GitSwitcher, GitInfo } from "./git_switcher";
+import { GitSwitcher, GitInfo } from "../src/nigitlib/git_switcher";
 
 const expect = chai.expect;
 

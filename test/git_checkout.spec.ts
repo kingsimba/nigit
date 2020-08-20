@@ -1,6 +1,6 @@
-import { GitCheckout } from './git_checkout';
+import { GitCheckout } from '../src/nigitlib/git_checkout';
 import chai from 'chai';
-import { CmdUtils } from './cmd_utils';
+import { CmdUtils } from '../src/nigitlib/cmd_utils';
 import fs from 'fs';
 
 const expect = chai.expect;

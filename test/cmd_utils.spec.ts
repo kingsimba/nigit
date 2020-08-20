@@ -1,5 +1,5 @@
 import chai from 'chai';
-import { CmdUtils, CmdResult } from "./cmd_utils";
+import { CmdUtils, CmdResult } from "../src/nigitlib/cmd_utils";
 import fs from 'fs'
 
 const expect = chai.expect;

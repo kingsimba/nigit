@@ -1,4 +1,4 @@
-import { TablePrinter } from "./table-printer";
+import { TablePrinter } from "../src/nigitlib/table-printer";
 import { expect } from "chai";
 
 describe('TablePrinter', () => {

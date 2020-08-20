@@ -4,6 +4,9 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>nigit</Name>
     <RootNamespace>nigit</RootNamespace>
+    <JavaScriptTestFramework>mocha</JavaScriptTestFramework>
+    <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
+    <JavaScriptTestRoot>test</JavaScriptTestRoot>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -21,7 +24,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <EnableTypeScript>true</EnableTypeScript>
-    <StartWebBrowser>false</StartWebBrowser>
+    <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,29 +45,46 @@
   <ItemGroup>
     <Folder Include="src\" />
     <Folder Include="src\nigitlib\" />
+    <Folder Include="test\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\nigit.ts" />
-    <TypeScriptCompile Include="src\nigitlib\cmd_utils.spec.ts" />
+    <TypeScriptCompile Include="test\cmd_utils.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\nigitlib\cmd_utils.ts" />
-    <TypeScriptCompile Include="src\nigitlib\file_downloader.spec.ts" />
     <TypeScriptCompile Include="src\nigitlib\file_downloader.ts" />
     <TypeScriptCompile Include="src\nigitlib\git_branch.ts" />
-    <TypeScriptCompile Include="src\nigitlib\git_checkout.spec.ts" />
+    <TypeScriptCompile Include="test\file_downloader.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="test\git_checkout.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\nigitlib\git_checkout.ts" />
     <TypeScriptCompile Include="src\nigitlib\git_clean.ts" />
-    <TypeScriptCompile Include="src\nigitlib\git_config.spec.ts" />
+    <TypeScriptCompile Include="test\git_config.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\nigitlib\git_config.ts" />
-    <TypeScriptCompile Include="src\nigitlib\git_forall.spec.ts" />
+    <TypeScriptCompile Include="test\git_forall.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\nigitlib\git_forall.ts" />
     <TypeScriptCompile Include="src\nigitlib\git_pull.ts" />
     <TypeScriptCompile Include="src\nigitlib\git_start.ts" />
-    <TypeScriptCompile Include="src\nigitlib\git_status.spec.ts" />
+    <TypeScriptCompile Include="test\git_status.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\nigitlib\git_status.ts" />
-    <TypeScriptCompile Include="src\nigitlib\git_switcher.spec.ts" />
+    <TypeScriptCompile Include="test\git_switcher.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\nigitlib\git_switcher.ts" />
     <TypeScriptCompile Include="src\nigitlib\git_tag.ts" />
-    <TypeScriptCompile Include="src\nigitlib\table-printer.spec.ts" />
+    <TypeScriptCompile Include="test\table-printer.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\nigitlib\table-printer.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
