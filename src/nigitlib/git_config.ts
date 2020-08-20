@@ -16,6 +16,9 @@ export class GitProject {
         const o = new GitProject();
         o.url = url;
         const m = url.match(/\/([^\/]+)\.(zip|git)$/);
+        if (m == undefined) {
+            throw new Error(`url ${url} is not valid`);
+        }
         o.name = m![1];
         return o;
     }
