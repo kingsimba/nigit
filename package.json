@@ -33,7 +33,7 @@
 		"ts-node": "^8.10.2",
 		"typescript": "^3.9.3"
 	},
-	"main": "dist/nigit.js",
+	"main": "dist/src/nigit.js",
 	"directories": {
 		"test": "test"
 	},
@@ -53,6 +53,6 @@
 	"homepage": "https://github.com/kingsimba/nigit#readme",
 	"preferGlobal": true,
 	"bin": {
-		"nigit": "dist/nigit.js"
+		"nigit": "dist/src/nigit.js"
 	}
 }
