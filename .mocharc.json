@@ -1,0 +1,21 @@
+{
+    "diff": true,
+    "extension": [
+        "ts"
+    ],
+    "package": "./package.json",
+    "reporter": "spec",
+    "slow": 75,
+    "timeout": 10000,
+    "ui": "bdd",
+    "reporter-option": [
+        "junit_report_stack=true",
+        "junit_report_path=report.xml"
+    ],
+    "watch-files": [
+        "src/**/*.ts"
+    ],
+    "watch-ignore": [
+        "lib/vendor"
+    ]
+}
