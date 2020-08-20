@@ -14,8 +14,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>dc97c4a8-95bd-4c6a-9431-8fdb71e85755</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>
-    </StartupFile>
+    <StartupFile>src/nigit.ts</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
