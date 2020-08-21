@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd nigit
-          npm ci
+          npm install
 
       - name: Build
         run: |
