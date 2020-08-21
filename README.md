@@ -1,4 +1,4 @@
-[<img src="https://travis-ci.com/kingsimba/nigit.svg?branch=master">](https://travis-ci.com/kingsimba/nigit/)
+[![Actions Status](https://github.com/kingsimba/nigit/workflows/CI/badge.svg)](https://github.com/kingsimba/nigit/actions)
 
 # A Tool for Managing a Group of Git Projects <!-- omit in toc -->
 
