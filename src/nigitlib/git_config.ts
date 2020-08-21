@@ -4,7 +4,7 @@ import { CmdUtils, println } from './cmd_utils';
 interface GitProjectJsonNode {
     name?: string;
     projectName?: string;   // compatible with old ncgit.json
-    url: string;
+    url: string ;
 }
 
 export class GitProject {
