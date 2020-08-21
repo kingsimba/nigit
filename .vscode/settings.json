@@ -2,7 +2,11 @@
     "files.exclude": {
         "node_modules": true,
         "dist": true,
-        ".gitignore": true
+        ".gitignore": true,
+        "src/**/*.js": true,
+        "src/**/*.js.map": true,
+        "test/**/*.js": true,
+        "test/**/*.js.map": true
     },
     "restructuredtext.confPath": "",
     "editor.formatOnSave": true,
