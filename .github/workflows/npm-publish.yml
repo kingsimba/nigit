@@ -54,6 +54,9 @@ jobs:
         env:
           CI: true
 
-      - run: npm publish
+      - name: Publish Npm Package
+        run: |
+          cd nigit
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
