@@ -25,7 +25,7 @@ program
 
         const proj = GitProject.instanceWithUrl(url);
         GitForAll.createWorkspaceFile('.', proj.name);
-        GitPull.cmdGitPull({ skipMainProject: false });
+        GitPull.cmdGitPull([], { skipMainProject: false });
     });
 
 program
@@ -68,10 +68,10 @@ program
     });
 
 program
-    .command('pull')
+    .command('pull [projects...]')
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
-    .action(() => {
-        GitPull.cmdGitPull();
+    .action((projects: string[]) => {
+        GitPull.cmdGitPull(projects, undefined);
     });
 
 program

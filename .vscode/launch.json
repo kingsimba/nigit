@@ -192,13 +192,13 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}\\src\\nigit.js",
             "args": [
-                "pull"
+                "pull",
             ],
             "preLaunchTask": "tsc watch",
             "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
+                "${workspaceFolder}/src/**/*.js"
             ],
             "outputCapture": "std"
         },

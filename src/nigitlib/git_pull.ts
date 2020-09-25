@@ -9,7 +9,11 @@ export class GitPullOptions {
 }
 
 export class GitPull {
-    static async cmdGitPull(options?: GitPullOptions): Promise<number> {
+
+    /**
+     * @param projects If it's empty, pull all projects.
+     */
+    static async cmdGitPull(projects: string[], options?: GitPullOptions): Promise<number> {
         let forall = GitForAll.instance('.');
         if (forall == undefined) {
             return 1;
@@ -22,7 +26,8 @@ export class GitPull {
         // write .nigit.workspace if not exist
         GitForAll.createWorkspaceFile(`${mainProject.directory}/..`, mainProject.name);
 
-        if (options == undefined || !options.skipMainProject) {
+        if ((options == undefined || !options.skipMainProject)
+            && (projects == undefined || projects.indexOf(mainProject.name) != -1)) {
             println(`=== ${mainProject.name} ===`);
             const cmd = `cd "${mainProject.directory}" && git pull --ff-only`;
             const result = CmdUtils.exec(cmd);
@@ -44,6 +49,12 @@ export class GitPull {
         // we'd like to run them in parallel for all projects.
         const promises: Promise<number>[] = [];
         for (const [i, proj] of forall.subprojects.entries()) {
+
+            // skip unwanted projects
+            if (projects != undefined && projects.indexOf(proj.name) == -1) {
+                continue;
+            }
+
             const projDir = proj.directory;
             const p = new Promise<number>(async (resolve) => {
                 if (fs.existsSync(`${projDir}/.git`)) {

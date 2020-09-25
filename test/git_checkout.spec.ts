@@ -10,7 +10,7 @@ describe('GitCheckout', function () {
     before(async () => {
         if (process.env.GITHUB_WORKSPACE != undefined) {
             // download dependent projects with GitHub CI
-            await GitPull.cmdGitPull({ skipMainProject: true });
+            await GitPull.cmdGitPull([], { skipMainProject: true });
         }
         // delete test branch
         CmdUtils.exec('cd ../json-script && git checkout master --force && git branch -D test_branch');
