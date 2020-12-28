@@ -3,7 +3,7 @@
 	"version": "1.5.8",
 	"description": "A tool to manage large projects which consists of a group of GIT repositories",
 	"files": [
-		"src/**/*.js"
+		"dist/**/*.js"
 	],
 	"scripts": {
 		"build": "npx tsc",
@@ -35,7 +35,7 @@
 		"ts-node": "^8.10.2",
 		"typescript": "^3.9.3"
 	},
-	"main": "src/nigit.js",
+	"main": "dist/src/nigit.js",
 	"directories": {
 		"test": "test"
 	},
@@ -55,6 +55,6 @@
 	"homepage": "https://github.com/kingsimba/nigit#readme",
 	"preferGlobal": true,
 	"bin": {
-		"nigit": "src/nigit.js"
+		"nigit": "dist/src/nigit.js"
 	}
 }
