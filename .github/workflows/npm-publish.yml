@@ -38,8 +38,6 @@ jobs:
         with:
           node-version: "12.x"
           registry-url: 'https://registry.npmjs.org'
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       - name: Install dependencies
         run: |
           cd nigit
@@ -61,4 +59,6 @@ jobs:
         run: |
           cd nigit
           npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
