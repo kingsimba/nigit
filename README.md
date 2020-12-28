@@ -373,6 +373,11 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
 
 ## Changelog
 
+- 1.5.3 @2020-12-28
+
+  - Use at most 5 concurrent tasks for 'nigit pull'. Because some servers may
+    reject SSH connections with "error: kex_exchange_identification: Connection closed by remote host"
+
 - 1.5.2 @2020-07-21
 
   - Bug fix: Make it work under Linux.

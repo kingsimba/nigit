@@ -3,7 +3,7 @@
 	"version": "1.5.7",
 	"description": "A tool to manage large projects which consists of a group of GIT repositories",
 	"files": [
-		"dist/**/*.js"
+		"src/**/*.js"
 	],
 	"scripts": {
 		"build": "npx tsc",
@@ -11,12 +11,14 @@
 	},
 	"dependencies": {
 		"adm-zip": "^0.4.16",
+		"async": "^3.2.0",
 		"axios": "^0.19.2",
 		"colors": "^1.4.0",
 		"commander": "^5.1.0"
 	},
 	"devDependencies": {
 		"@types/adm-zip": "^0.4.33",
+		"@types/async": "^3.2.5",
 		"@types/axios": "^0.14.0",
 		"@types/chai": "^4.2.11",
 		"@types/chai-string": "^1.4.2",
@@ -33,7 +35,7 @@
 		"ts-node": "^8.10.2",
 		"typescript": "^3.9.3"
 	},
-	"main": "dist/src/nigit.js",
+	"main": "src/nigit.js",
 	"directories": {
 		"test": "test"
 	},
@@ -53,6 +55,6 @@
 	"homepage": "https://github.com/kingsimba/nigit#readme",
 	"preferGlobal": true,
 	"bin": {
-		"nigit": "dist/src/nigit.js"
+		"nigit": "src/nigit.js"
 	}
 }
