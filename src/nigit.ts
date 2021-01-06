@@ -70,8 +70,9 @@ program
 program
     .command('pull [projects...]')
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
-    .action((projects: string[]) => {
-        GitPull.cmdGitPull(projects, undefined);
+    .option('--skip-main', 'Skip the main project', false)
+    .action((projects: string[], options: any) => {
+        GitPull.cmdGitPull(projects, { skipMainProject: options.skipMain });
     });
 
 program
