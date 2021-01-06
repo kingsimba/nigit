@@ -194,7 +194,7 @@
             ],
             "program": "${workspaceFolder}\\src\\nigit.js",
             "args": [
-                "pull",
+                "pull"
             ],
             "preLaunchTask": "tsc watch",
             "outFiles": [

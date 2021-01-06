@@ -373,6 +373,10 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
 
 ## Changelog
 
+- 1.5.9 @2021-01-06
+
+  Support --skip-main for 'pull' command.
+
 - 1.5.8 @2020-12-28
 
   - Use at most 5 concurrent tasks for 'nigit pull'. Because some servers may
