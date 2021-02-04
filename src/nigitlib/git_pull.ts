@@ -28,7 +28,7 @@ export class GitPull {
         GitForAll.createWorkspaceFile(`${mainProject.directory}/..`, mainProject.name);
 
         if ((options == undefined || !options.skipMainProject)
-            && (projects == undefined || projects.indexOf(mainProject.name) != -1)) {
+            && (projects.length == 0 || projects.indexOf(mainProject.name) != -1)) {
             println(`=== ${mainProject.name} ===`);
             const cmd = `cd "${mainProject.directory}" && git pull --ff-only`;
             const result = CmdUtils.exec(cmd);

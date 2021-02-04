@@ -373,6 +373,10 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
 
 ## Changelog
 
+- 1.5.11 @2021-02-04
+
+  Fixed nigit pull. It should not skip the main project.
+
 - 1.5.10 @2021-01-06
 
   Support --skip-main for 'pull' command.
