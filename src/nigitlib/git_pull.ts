@@ -7,6 +7,7 @@ import { GitProject } from "./git_config";
 
 export class GitPullOptions {
     skipMainProject = false;
+    prune = false;
 }
 
 export class GitPull {
@@ -14,7 +15,7 @@ export class GitPull {
     /**
      * @param projects If it's empty, pull all projects.
      */
-    static async cmdGitPull(projects: string[], options?: GitPullOptions): Promise<number> {
+    static async cmdGitPullOrFetch(projects: string[], action: "pull" | "fetch", options?: GitPullOptions): Promise<number> {
         let forall = GitForAll.instance('.');
         if (forall == undefined) {
             return 1;
@@ -55,13 +56,23 @@ export class GitPull {
         let allResults = await async.mapLimit<GitProject, number>(targetProjects, 5, async.asyncify(async (proj: GitProject) => {
             const projDir = proj.directory;
             if (fs.existsSync(`${projDir}/.git`)) {
-                // for git repository, run 'git pull'
-                const cmd = `cd "${projDir}" && git pull --ff-only`;
+                // for git repository, run 'git pull/fetch'
+                let cmd = `cd "${projDir}"`;
+                if (action == "pull") {
+                    cmd += `&& git pull --ff-only`;
+                }
+                else {
+                    cmd += `&& git fetch ${options?.prune ? "--prune" : ""}`
+                }
                 const result = await CmdUtils.execAsync(cmd);
 
                 println(`=== ${proj.name} ===`);
                 if (result.exitCode == 0) {
                     print(result.stdout);
+                    if (action == "fetch") {
+                        // stderr has something like "From github.com:kingsimba/express-typescript-mocha-vscode\n - [deleted]         (none)     -> origin/try\n"
+                        print(result.stderr);
+                    }
                 } else {
                     CmdUtils.printCommandError(cmd, result.stderr);
                 }

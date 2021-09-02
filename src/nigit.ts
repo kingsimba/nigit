@@ -25,7 +25,7 @@ program
 
         const proj = GitProject.instanceWithUrl(url);
         GitForAll.createWorkspaceFile('.', proj.name);
-        GitPull.cmdGitPull([], { skipMainProject: false });
+        GitPull.cmdGitPullOrFetch([], "pull", { skipMainProject: false, prune: false });
     });
 
 program
@@ -72,7 +72,16 @@ program
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
     .option('--skip-main', 'Skip the main project', false)
     .action((projects: string[], options: any) => {
-        GitPull.cmdGitPull(projects, { skipMainProject: options.skipMain });
+        GitPull.cmdGitPullOrFetch(projects, "pull", { skipMainProject: options.skipMain, prune: false });
+    });
+
+program
+    .command('fetch [projects...]')
+    .description('run "git fetch" for all projects')
+    .option('--skip-main', 'Skip the main project', false)
+    .option('-p --prune', 'Same as "git fetch --prune"', false)
+    .action((projects: string[], options: any) => {
+        GitPull.cmdGitPullOrFetch(projects, "fetch", { skipMainProject: options.skipMain, prune: options.prune });
     });
 
 program
@@ -102,6 +111,14 @@ program
     })
 
 program
+    .command('checkout-info <FILE>')
+    .description('Checkout to branches specified in a .gitinfo file')
+    .action((file: string) => {
+        const switcher = new GitSwitcher();
+        switcher.switchWithGitInfoFile(file);
+    })
+
+    program
     .command('checkout-info <FILE>')
     .description('Checkout to branches specified in a .gitinfo file')
     .action((file: string) => {

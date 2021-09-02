@@ -17,6 +17,9 @@
   - [Create Release Branch](#create-release-branch)
   - [Create / List Tags](#create--list-tags)
 - [Using Precompiled Binaries](#using-precompiled-binaries)
+- [Contribute](#contribute)
+  - [Compile](#compile)
+  - [Code & Debug](#code--debug)
 - [Changelog](#changelog)
 
 ## What is it?
@@ -371,7 +374,36 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
    - Use **awesome-libs/include/** before **module-a/include** and **module-b/include**.
    - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
 
+## Contribute
+
+### Compile
+
+Make sure gulp is installed:
+
+```
+npm install --global gulp-cli
+```
+
+Build & Try:
+
+```
+gulp     # Build
+npm link # Apply build result. It should overwrite other versions.
+nigit --help # Try out newly built version.
+```
+
+### Code & Debug
+
+1. Open with VSCode
+2. Install "Mocha Test Explorer plugin"
+3. Use test explorer to run all tests. Must call "nigit pull" to download sample projects to pass all tests.
+4. Edit code. Press F7 to compile TS to JS. Run tests again.
+
 ## Changelog
+
+- 1.6.0 @2021-09-02
+
+  - Add 'nigit fetch --prune'.
 
 - 1.5.11 @2021-02-04
 

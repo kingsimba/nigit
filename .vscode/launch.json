@@ -186,15 +186,17 @@
             "outputCapture": "std"
         },
         {
-            "name": "nigit pull",
+            "name": "nigit fetch express-typescript-mocha-vscode --prune",
             "type": "node",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\src\\nigit.js",
+            "program": "${workspaceFolder}/src/nigit.js",
             "args": [
-                "pull"
+                "fetch",
+                "express-typescript-mocha-vscode",
+                "--prune"
             ],
             "preLaunchTask": "tsc watch",
             "outFiles": [
