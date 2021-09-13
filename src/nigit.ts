@@ -120,12 +120,11 @@ program
     })
 
 program
-    .command('dump-info')
-    .description('Dump branch information')
-    .option('-O, --output <NAME>', 'optional output file name')
-    .action((options: any) => {
+    .command('dump-info [FILE]')
+    .description('Dump branch information into a .gitinfo file')
+    .action((file: string) => {
         const dumper = new InfoDumper();
-        dumper.dump(options.output);
+        dumper.dump(file);
     })
 
 program

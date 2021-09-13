@@ -15,8 +15,8 @@ ncgeo [master|9597110] Merge pull request #4 from ZhujinLi/issue#3`);
         expect(infos).to.be.an('Array');
         expect(infos.length).equals(4);
         expect(infos)
-            .deep.contains(new GitInfo('ncgeo', '9597110'))
-            .and.deep.contains(new GitInfo('json-script', '59046b9'));
+            .deep.contains(new GitInfo('ncgeo', '9597110', 'Merge pull request #4 from ZhujinLi/issue#3'))
+            .and.deep.contains(new GitInfo('json-script', '59046b9', 'Update syntax-highlight-in-sphinx.rst'));
     });
 
     it('should return null if file does not exist', () => {

@@ -1,9 +1,10 @@
 import fs from 'fs';
 import { CmdUtils, println } from "./cmd_utils";
 import { GitStatus } from './git_status';
+import { TablePrinter } from './table-printer';
 
 export class GitInfo {
-    constructor(public name: string, public hashCode: string) { }
+    constructor(public name: string, public hashCode: string, public log: string) { }
 };
 
 
@@ -71,7 +72,7 @@ export class GitSwitcher {
         lines.forEach(line => {
             const m = line.match(/([^\s]+) \[(.*)\|(.*)\] (.*)/);
             if (m) {
-                infos.push(new GitInfo(m[1], m[3]));
+                infos.push(new GitInfo(m[1], m[3], m[4]));
             }
         });
 
@@ -79,15 +80,27 @@ export class GitSwitcher {
     }
 
     _checkoutWithGitInfos(infos: GitInfo[]) {
-        infos.forEach(info => {
-            const cmd = `cd ${info.name} && git checkout ${info.hashCode}`;
+        const table = new TablePrinter();
 
-            console.log(`$ '${cmd}'`);
+        // print table header
+        let maxWidth = 0;
+        for (const info of infos) {
+            maxWidth = Math.max(info.name.length, maxWidth);
+        }
+        table.firstColumnWidth = maxWidth + 1;
+        table.printHeader("Project", "Hash");
+
+        // Switch projects
+        for (const info of infos) {
+            const cmd = `cd ${info.name} && git checkout ${info.hashCode}`;
             const cmdResult = CmdUtils.exec(cmd);
-            if (cmdResult.exitCode !== 0) {
+            if (cmdResult.exitCode == 0) {
+                table.printLine(info.name, `${info.hashCode} ${info.log}`);
+            }
+            else {
                 console.log(cmdResult.stderr);
                 console.error("error: failed to run command");
             }
-        });
+        }
     }
 }
