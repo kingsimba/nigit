@@ -67,7 +67,7 @@ export class CmdUtils {
      * @return The exit code of the command
      */
     static execInConsole(cmd: string): number {
-        const result = this.exec(cmd);
+        const result = CmdUtils.exec(cmd);
         if (result.exitCode == 0) {
             print(result.stdout);
         } else {
@@ -77,7 +77,7 @@ export class CmdUtils {
     }
 
     static println(text: string, type = MessageType.auto) {
-        this.print(text + '\n', type);
+        CmdUtils.print(text + '\n', type);
     }
 
     static print(text: string, type = MessageType.auto) {

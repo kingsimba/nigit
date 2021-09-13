@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "checkout",
                 "master"
@@ -29,8 +29,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "cwd": "C:\\Users\\simba\\Desktop\\a",
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "cwd": "C:/Users/simba/Desktop/a",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "clone",
                 "git@github.com:kingsimba/nigit.git"
@@ -48,7 +48,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "forall",
                 "git status"
@@ -66,7 +66,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/src/nigit.js",
             "args": [
                 "status"
             ],
@@ -77,15 +77,35 @@
             "outputCapture": "std"
         },
         {
-            "name": "nigit branch",
+            "name": "nigit dump-info",
             "type": "node",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/src/nigit.js",
             "args": [
-                "branch"
+                "dump-info",
+                "--output",
+                "a.txt"
+            ],
+            "preLaunchTask": "tsc watch",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std"
+        },
+        {
+            "name": "nigit branch -v",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/src/nigit.js",
+            "args": [
+                "branch",
+                "-v"
             ],
             "preLaunchTask": "tsc watch",
             "outFiles": [
@@ -100,7 +120,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "branch",
                 "--all"
@@ -118,7 +138,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "tag",
                 "--list",
@@ -137,7 +157,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "tag",
                 "-c",
@@ -156,7 +176,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "clean",
                 "--force",
@@ -175,7 +195,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "list"
             ],
@@ -211,7 +231,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "start",
                 "sample_branch",
@@ -231,7 +251,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\dist\\nigit.js",
+            "program": "${workspaceFolder}/dist/nigit.js",
             "args": [
                 "checkout",
                 "assets/sample_git.info",
