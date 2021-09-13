@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { CmdUtils, println } from "./cmd_utils";
+import { GitStatus } from './git_status';
 
 export class GitInfo {
     constructor(public name: string, public hashCode: string) { }
@@ -22,28 +23,35 @@ export class GitSwitcher {
      * Switch projects to point specified by a .gitinfo file
      * @param fileName A gitinfo file which contains project names and hash codes
      */
-    switchWithGitInfoFile(fileName: string) {
+    switchWithGitInfoFile(fileName: string): number {
+        if (!GitStatus.allIsClean()) {
+            println("error: working copy is not clean");
+            return 1;
+        }
+
         const cmdResult = CmdUtils.exec('git status');
         const isGitDirectory = cmdResult.exitCode === 0;
 
         if (isGitDirectory) {
             console.error('error: This command must be run outside of git directory');
-            return;
+            return 1;
         }
 
         if (!fs.existsSync(fileName)) {
             console.error(`error: file not exist: ${fileName}`);
-            return;
+            return 1;
         }
 
         console.log('checking out project with info file: ' + fileName);
         const fileText = this._loadTextFile(fileName);
         if (fileText == null) {
             println(`error: failed to load file ${fileName}`);
-            return;
+            return 1;
         }
         const infos = this._parseGitInfo(fileText);
         this._checkoutWithGitInfos(infos);
+
+        return 0;
     }
 
     _loadTextFile(fileName: string): string | null {

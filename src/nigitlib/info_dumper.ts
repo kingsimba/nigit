@@ -1,6 +1,7 @@
 import fs, { write } from 'fs';
 import { CmdUtils, MessageType, println } from "./cmd_utils";
 import { GitForAll } from './git_forall';
+import { GitStatus } from './git_status';
 
 export class ProjectGitInfo {
     constructor(public projectName: string, public branchName: string, public hashCode: string, public log: string) { }
@@ -26,6 +27,11 @@ export class InfoDumper {
      * @param fileName A gitinfo file which contains project names and hash codes
      */
     dump(fileName: string): boolean {
+        if (!GitStatus.allIsClean()) {
+            println("error: working copy is not clean");
+            return false;
+        }
+
         let hasError = false;
         const infos: ProjectGitInfo[] = [];
         GitForAll.forAll('.', (projDir, proj) => {

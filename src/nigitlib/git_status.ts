@@ -3,19 +3,20 @@ import { GitForAll as GitForAll } from "./git_forall";
 import fs from 'fs';
 import colors from 'colors';
 
+export class GitStatusInfo {
+    constructor(public projName: string, public messages: string[]) { }
+}
+
 export class GitStatus {
 
     /**
      * Print the status of projects. In current directory.
      */
-    static cmdStatus(): number {
-        const forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return 1;
-        }
+    static getInfos(forall: GitForAll): GitStatusInfo[] {
+
+        const infos: GitStatusInfo[] = [];
 
         let allIsClean = true;
-        const table = forall.newTablePrinter();
 
         for (const proj of forall.projects) {
             const projDir = proj.directory;
@@ -32,24 +33,45 @@ export class GitStatus {
             const result = CmdUtils.exec(`cd ${projDir} && git status`);
             if (result.exitCode == 0) {
                 if (result.stdout.indexOf('nothing to commit, working tree clean') == -1) {
-                    if (allIsClean) {
-                        allIsClean = false;
-                        table.printHeader('Project', 'Changes');
-                    }
-                    table.printLines(proj.name, this._filterOutput(result.stdout));
+                    infos.push(new GitStatusInfo(proj.name, this._filterOutput(result.stdout)));
                 }
             } else {
-                if (allIsClean) {
-                    allIsClean = false;
-                    table.printHeader('Project', 'Changes');
-                }
-                println(`=== ${proj.name} ===`);
-                table.printLine(proj.name, result.stderr);
+                infos.push(new GitStatusInfo(proj.name, [result.stderr]));
             }
         }
 
-        if (allIsClean) {
+        return infos;
+    }
+
+    static allIsClean(): boolean {
+        const forall = GitForAll.instance('.');
+        if (forall == undefined) {
+            return false;
+        }
+        const infos = GitStatus.getInfos(forall);
+        return infos.length == 0;
+    }
+
+    /**
+     * Print the status of projects. In current directory.
+     */
+    static cmdStatus(): number {
+        const forall = GitForAll.instance('.');
+        if (forall == undefined) {
+            return 1;
+        }
+
+        const infos = GitStatus.getInfos(forall);
+
+        if (infos.length == 0) {
             println('Nothing to commit, all working trees are clean');
+            return 0;
+        }
+
+        const table = forall.newTablePrinter();
+        table.printHeader('Project', 'Changes');
+        for (const info of infos) {
+            table.printLines(info.projName, info.messages);
         }
 
         return 0;
