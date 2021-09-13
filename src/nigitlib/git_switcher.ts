@@ -19,7 +19,7 @@ export class GitInfo {
 export class GitSwitcher {
 
     /**
-     * Switch projects to point specified by a git.info file
+     * Switch projects to point specified by a .gitinfo file
      * @param fileName A gitinfo file which contains project names and hash codes
      */
     switchWithGitInfoFile(fileName: string) {
@@ -61,9 +61,9 @@ export class GitSwitcher {
         const infos: GitInfo[] = [];
 
         lines.forEach(line => {
-            const m = line.match(/([^\s]+) \(.*\) ([^\s]+)/);
+            const m = line.match(/([^\s]+) \[(.*)\|(.*)\] (.*)/);
             if (m) {
-                infos.push(new GitInfo(m[1], m[2]));
+                infos.push(new GitInfo(m[1], m[3]));
             }
         });
 

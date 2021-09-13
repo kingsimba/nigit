@@ -14,9 +14,9 @@ export class ProjectGitInfo {
  *   *.gitinfo file looks like:
  *     
  *   ```
- *   cq_stdlib (detached from origin/master) d1bfcf1 Merge remote-tracking branch 'origin/dependabot/npm_and_yarn/lodash-4.17.21'
- *   mapdal (detached from origin/master) 19be175 [gone] remove unused dependency
- *   nc-runtime (detached from origin/master) 44522e3 remove catkin_make related commits
+ *   cq_stdlib [master|d1bfcf1] Merge remote-tracking branch 'origin/dependabot/npm_and_yarn/lodash-4.17.21'
+ *   mapdal [master|19be175] remove unused dependency
+ *   nc-runtime [master|44522e3] remove catkin_make related commits
  *   ```
  */
 export class InfoDumper {
@@ -55,20 +55,23 @@ export class InfoDumper {
             return false;
         }
 
-        if (fileName == null) {
-            for (const info of infos) {
-                console.log(`${info.projectName} ${info.branchName} ${info.hashCode} ${info.log}`);
-            }
-        } else {
-            if (!fileName.endsWith(".gitinfo")) {
-                fileName += ".gitinfo";
-            }
-            let writeStream = fs.createWriteStream(fileName);
-            for (const info of infos) {
-                writeStream.write(`${info.projectName} ${info.branchName} ${info.hashCode} ${info.log}\n`, "utf8");
-            }
-            writeStream.close();
+        let writeStream = null;
+        if (fileName != null) {
+            writeStream = fs.createWriteStream(fileName);
         }
+
+        for (const info of infos) {
+            const log = `${info.projectName} [${info.branchName}|${info.hashCode}] ${info.log}`;
+            if (writeStream == null) {
+                console.log(log);
+            }
+            else {
+                writeStream.write(log);
+                writeStream.write('\n');
+            }
+        }
+
+        writeStream?.close();
 
         return true;
     }
@@ -77,7 +80,7 @@ export class InfoDumper {
         const lines = text.split("\n");
         for (const line of lines) {
             if (line.startsWith("* ")) {
-                const m = line.match(/\* (\w+)\s+([0-9a-f]+)\s+(.*)/);
+                const m = line.match(/\* (\w+|\(.*\))\s+([0-9a-f]+)\s+(.*)/);
                 if (m != null) {
                     const branch = m[1];
                     const hash = m[2];
