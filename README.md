@@ -16,6 +16,7 @@
   - [Create Feature Branch](#create-feature-branch)
   - [Create Release Branch](#create-release-branch)
   - [Create / List Tags](#create--list-tags)
+  - [Take Snapshot and Restore](#take-snapshot-and-restore)
 - [Using Precompiled Binaries](#using-precompiled-binaries)
 - [Contribute](#contribute)
   - [Compile](#compile)
@@ -279,6 +280,33 @@ v1.0.2
 v1.0.3
 ```
 
+### Take Snapshot and Restore
+
+Save hash code of all projects into a `.gitinfo` file.
+
+```
+$ nigit dump-info
+nigit [(HEAD detached at a62d25c)|a62d25c] must be clean befor dump-info or checkout-info
+json-script [(HEAD detached at 59046b9)|59046b9] Update syntax-highlight-in-sphinx.rst
+express-typescript-mocha-vscode [(HEAD detached at 279163b)|279163b] Merge pull request #8 from kingsimba/dependabot/npm_and_yarn/lodash-4.17.21
+ncgeo [(HEAD detached at 9597110)|9597110] Merge pull request #4 from ZhujinLi/issue#3
+
+$ nigit dump-info snapshot.gitinfo
+```
+
+Restore projects with a `.gitinfo` file.
+
+```
+$ nigit checkout-info snapshot.gitinfo
+checking out project with info file: a.gitinfo
+Project                         Hash
+------------------------------------
+nigit                           a62d25c must be clean befor dump-info or checkout-info
+json-script                     59046b9 Update syntax-highlight-in-sphinx.rst
+express-typescript-mocha-vscode 279163b Merge pull request #8 from kingsimba/dependabot/npm_and_yarn/lodash-4.17.21
+ncgeo                           9597110 Merge pull request #4 from ZhujinLi/issue#3
+```
+
 ## Using Precompiled Binaries
 
 If someone has no permission to some subprojects.
@@ -404,6 +432,7 @@ nigit --help # Try out newly built version.
 - 1.7.0 @2021-09-13
 
   - Add 'nigit dump-info'.
+  - Improve output of 'nigit checkout-info'.
 
 - 1.6.0 @2021-09-02
 
