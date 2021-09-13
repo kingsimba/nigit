@@ -401,6 +401,10 @@ nigit --help # Try out newly built version.
 
 ## Changelog
 
+- 1.7.0 @2021-09-13
+
+  - Add 'nigit dump-info'.
+
 - 1.6.0 @2021-09-02
 
   - Add 'nigit fetch --prune'.

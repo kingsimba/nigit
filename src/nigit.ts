@@ -12,6 +12,7 @@ import { gitBranch } from './nigitlib/git_branch';
 import { GitStart } from './nigitlib/git_start';
 import { GitTag } from './nigitlib/git_tag';
 import { GitClean, GitCleanOption } from './nigitlib/git_clean';
+import { InfoDumper } from './nigitlib/info_dumper';
 
 program
     .command('clone <URL>')
@@ -118,12 +119,13 @@ program
         switcher.switchWithGitInfoFile(file);
     })
 
-    program
-    .command('checkout-info <FILE>')
-    .description('Checkout to branches specified in a .gitinfo file')
-    .action((file: string) => {
-        const switcher = new GitSwitcher();
-        switcher.switchWithGitInfoFile(file);
+program
+    .command('dump-info')
+    .description('Dump branch information')
+    .option('-O, --output <NAME>', 'optional output file name')
+    .action((options: any) => {
+        const dumper = new InfoDumper();
+        dumper.dump(options.output);
     })
 
 program
