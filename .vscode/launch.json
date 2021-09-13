@@ -86,8 +86,7 @@
             "program": "${workspaceFolder}/src/nigit.js",
             "args": [
                 "dump-info",
-                "--output",
-                "a.txt"
+                "a.gitinfo"
             ],
             "preLaunchTask": "tsc watch",
             "outFiles": [

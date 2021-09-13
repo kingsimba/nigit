@@ -1,6 +1,6 @@
 import { GitProject, GitConfig } from "./git_config";
 import fs from 'fs';
-import { CmdUtils, println, print } from "./cmd_utils";
+import { CmdUtils, println } from "./cmd_utils";
 import { normalize, relative } from "path";
 import { resolve } from "path";
 import { TablePrinter } from "./table-printer";
