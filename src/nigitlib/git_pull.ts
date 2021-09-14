@@ -28,10 +28,15 @@ export class GitPull {
         // write .nigit.workspace if not exist
         GitForAll.createWorkspaceFile(`${mainProject.directory}/..`, mainProject.name);
 
+        const pruneArg = options?.prune ? "--prune" : "";
+        const gitCmd =
+            (action == "pull") ?
+                `git pull --ff-only` : `git fetch ${pruneArg}`
+
         if ((options == undefined || !options.skipMainProject)
             && (projects.length == 0 || projects.indexOf(mainProject.name) != -1)) {
             println(`=== ${mainProject.name} ===`);
-            const cmd = `cd "${mainProject.directory}" && git pull --ff-only`;
+            let cmd = `cd "${mainProject.directory}" && ${gitCmd}`;
             const result = CmdUtils.exec(cmd);
             if (result.exitCode == 0) {
                 print(result.stdout);
@@ -57,13 +62,7 @@ export class GitPull {
             const projDir = proj.directory;
             if (fs.existsSync(`${projDir}/.git`)) {
                 // for git repository, run 'git pull/fetch'
-                let cmd = `cd "${projDir}"`;
-                if (action == "pull") {
-                    cmd += `&& git pull --ff-only`;
-                }
-                else {
-                    cmd += `&& git fetch ${options?.prune ? "--prune" : ""}`
-                }
+                let cmd = `cd "${projDir}" && ${gitCmd}`;
                 const result = await CmdUtils.execAsync(cmd);
 
                 println(`=== ${proj.name} ===`);
