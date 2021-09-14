@@ -432,7 +432,7 @@ nigit --help # Try out newly built version.
 - 1.7.2 @2021-09-14
 
   - Fix 'nigit checkout origin/xxxx'.
-  - Fix 'nigit prune' when the current branch is origin/xxx.
+  - Fix 'nigit fetch --prune' when the current branch is origin/xxx.
 
 - 1.7.0 @2021-09-13
 
