@@ -429,6 +429,10 @@ nigit --help # Try out newly built version.
 
 ## Changelog
 
+- 1.7.1 @2021-09-14
+
+  - Fix 'nigit checkout origin/xxxx'.
+
 - 1.7.0 @2021-09-13
 
   - Add 'nigit dump-info'.

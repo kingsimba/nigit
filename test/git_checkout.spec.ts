@@ -1,4 +1,4 @@
-import { GitCheckout } from '../src/nigitlib/git_checkout';
+import { GitCheckout, getCurrentBranchFromOutput } from '../src/nigitlib/git_checkout';
 import chai from 'chai';
 import { CmdUtils } from '../src/nigitlib/cmd_utils';
 import fs from 'fs';
@@ -21,6 +21,14 @@ describe('GitCheckout', function () {
         CmdUtils.exec('cd ../json-script && git add README.rst && git commit -m"delete README.rst"');
     });
 
+    it('getCurrentBranchFromOutput() works', () => {
+        let result = getCurrentBranchFromOutput(`* (HEAD detached at origin/dev)\n  branches/1.0.x\n  branches/stable\n  dev  \n  master`);
+        expect(result).equals("origin/dev");
+
+        result = getCurrentBranchFromOutput(`  branches/1.0.x\n  branches/stable\n  dev  \n* master`);
+        expect(result).equals("master");
+    });
+
     it('should be able to checkout to specific branch', () => {
         const o = new GitCheckout();
         const result = o._checkout('../json-script', 'test_branch');
@@ -29,7 +37,7 @@ describe('GitCheckout', function () {
 
     it('should fail if branch does not exist', () => {
         const o = new GitCheckout();
-        const result = o._checkout('../json-script', 'nonExistBranch');
+        const result = o._checkout('../json-script', 'origin/nonExistBranch');
         expect(result.succ).is.false;
     });
 

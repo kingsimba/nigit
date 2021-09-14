@@ -5,14 +5,24 @@ import colors from 'colors';
 import fs from 'fs';
 import { TablePrinter } from "./table-printer";
 
+export function getCurrentBranchFromOutput(output: string): string | null {
+    let m = output.match(/^\* \(.* detached at (.*)\)$/m);
+    if (m) {
+        return m[1];
+    }
+    m = output.match(/^\* (.*)$/m);
+    if (m) {
+        return m[1];
+    }
+
+    return null;
+}
+
 function getCurrentBranch(projDir: string): string | null {
     const cmd = `cd ${projDir} && git branch`;
     const result = CmdUtils.exec(cmd);
     if (result.exitCode == 0) {
-        const m = result.stdout.match(/^\* (.*)$/m);
-        if (m) {
-            return m[1];
-        }
+        return getCurrentBranchFromOutput(result.stdout);
     }
 
     return null;
