@@ -1,6 +1,6 @@
 {
 	"name": "nigit",
-	"version": "1.7.0",
+	"version": "1.7.1",
 	"description": "A tool to manage large projects which consists of a group of GIT repositories",
 	"files": [
 		"dist/**/*.js"
