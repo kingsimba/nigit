@@ -1,19 +1,18 @@
 import fs, { write } from 'fs';
-import { CmdUtils, MessageType, println } from "./cmd_utils";
+import { CmdUtils, MessageType, println } from './cmd_utils';
 import { GitForAll } from './git_forall';
 import { GitStatus } from './git_status';
 
 export class ProjectGitInfo {
-    constructor(public projectName: string, public branchName: string, public hashCode: string, public log: string) { }
-};
-
+    constructor(public projectName: string, public branchName: string, public hashCode: string, public log: string) {}
+}
 
 /**
  *
  * Dump information into a .gitinfo file.
  * @remarks
  *   *.gitinfo file looks like:
- *     
+ *
  *   ```
  *   cq_stdlib [master|d1bfcf1] Merge remote-tracking branch 'origin/dependabot/npm_and_yarn/lodash-4.17.21'
  *   mapdal [master|19be175] remove unused dependency
@@ -21,14 +20,13 @@ export class ProjectGitInfo {
  *   ```
  */
 export class InfoDumper {
-
     /**
      * Switch projects to point specified by a git.info file
      * @param fileName A gitinfo file which contains project names and hash codes
      */
     dump(fileName: string): boolean {
         if (!GitStatus.allIsClean()) {
-            println("error: working copy is not clean");
+            println('error: working copy is not clean');
             return false;
         }
 
@@ -70,8 +68,7 @@ export class InfoDumper {
             const log = `${info.projectName} [${info.branchName}|${info.hashCode}] ${info.log}`;
             if (writeStream == null) {
                 console.log(log);
-            }
-            else {
+            } else {
                 writeStream.write(log);
                 writeStream.write('\n');
             }
@@ -83,9 +80,9 @@ export class InfoDumper {
     }
 
     _parseGitInfo(text: string, projectName: string): ProjectGitInfo | null {
-        const lines = text.split("\n");
+        const lines = text.split('\n');
         for (const line of lines) {
-            if (line.startsWith("* ")) {
+            if (line.startsWith('* ')) {
                 const m = line.match(/\* (\w+|\(.*\))\s+([0-9a-f]+)\s+(.*)/);
                 if (m != null) {
                     const branch = m[1];

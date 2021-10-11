@@ -1,12 +1,11 @@
-import { GitProject, GitConfig } from "./git_config";
+import { GitProject, GitConfig } from './git_config';
 import fs from 'fs';
-import { CmdUtils, println } from "./cmd_utils";
-import { normalize, relative } from "path";
-import { resolve } from "path";
-import { TablePrinter } from "./table-printer";
+import { CmdUtils, println } from './cmd_utils';
+import { normalize, relative } from 'path';
+import { resolve } from 'path';
+import { TablePrinter } from './table-printer';
 
 export class GitForAll {
-
     static createWorkspaceFile(workspacePath: string, projName: string) {
         const filename = `${workspacePath}/.nigit.workspace`;
         if (!fs.existsSync(filename)) {
@@ -30,7 +29,7 @@ export class GitForAll {
             } else {
                 println('Not a git repository. skipped.');
             }
-        })
+        });
 
         return 0;
     }
@@ -49,7 +48,7 @@ export class GitForAll {
     }
 
     projectNames(): string[] {
-        return this.projects.map(proj => proj.name);
+        return this.projects.map((proj) => proj.name);
     }
 
     projectWithName(name: string): GitProject | null {
@@ -166,11 +165,9 @@ export class GitForAll {
         let path = rootDir;
         let lastCheckedPath;
         while (fs.existsSync(path)) {
-
             // prevent dead loop over root path like 'C:\'
             const fullPath = resolve(path);
-            if (fullPath === lastCheckedPath)
-                break;
+            if (fullPath === lastCheckedPath) break;
             lastCheckedPath = fullPath;
 
             // try nigit.json
@@ -196,7 +193,7 @@ export class GitForAll {
                     const text = fs.readFileSync(workspaceFile, 'utf8');
                     const node = JSON.parse(text);
                     if (node.master_project == undefined) {
-                        throw new Error('"master_project" is not found.')
+                        throw new Error('"master_project" is not found.');
                     }
 
                     mainProjPath = `${path}/${node.master_project}`;

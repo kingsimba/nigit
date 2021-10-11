@@ -1,6 +1,6 @@
-import { exec, execSync, spawnSync } from 'child_process'
-import colors from "colors";
-import fs from 'fs'
+import { exec, execSync, spawnSync } from 'child_process';
+import colors from 'colors';
+import fs from 'fs';
 
 export class CmdResult {
     stdout = '';
@@ -14,11 +14,10 @@ export enum MessageType {
     text,
     info,
     warning,
-    error
+    error,
 }
 
 export class CmdUtils {
-
     /**
      * Run command and get the stdout/stderr/exitCode
      * @param cmd The command to run. Like "git status".
@@ -140,18 +139,20 @@ export class CmdUtils {
     static deleteFolderRecursive(path: string) {
         if (fs.existsSync(path) && fs.lstatSync(path).isDirectory()) {
             fs.readdirSync(path).forEach((file, index) => {
-                const curPath = path + "/" + file;
+                const curPath = path + '/' + file;
 
-                if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                if (fs.lstatSync(curPath).isDirectory()) {
+                    // recurse
                     CmdUtils.deleteFolderRecursive(curPath);
-                } else { // delete file
+                } else {
+                    // delete file
                     fs.unlinkSync(curPath);
                 }
             });
 
             fs.rmdirSync(path);
         }
-    };
+    }
 }
 
 export const print = CmdUtils.print;

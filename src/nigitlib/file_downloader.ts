@@ -1,11 +1,10 @@
 import fs from 'fs';
-import axios from "axios";
-import { println, CmdUtils } from "./cmd_utils";
+import axios from 'axios';
+import { println, CmdUtils } from './cmd_utils';
 import AdmZip from 'adm-zip';
 import path from 'path';
 
 export class FileDownloader {
-
     /**
      * Download a file
      * @param url URL like http://path/to/file.zip
@@ -35,19 +34,19 @@ export class FileDownloader {
             });
         }
 
-        const writer = fs.createWriteStream(fileName)
+        const writer = fs.createWriteStream(fileName);
 
         const response = await axios.get(url, {
             method: 'GET',
-            responseType: 'stream'
+            responseType: 'stream',
         });
 
         response.data.pipe(writer);
 
         return new Promise((resolve, reject) => {
-            writer.on('finish', resolve)
-            writer.on('error', reject)
-        })
+            writer.on('finish', resolve);
+            writer.on('error', reject);
+        });
     }
 
     static extractZipInPlace(zipFile: string, folder: string): boolean {

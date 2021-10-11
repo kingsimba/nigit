@@ -1,19 +1,17 @@
-import { CmdUtils, println } from "./cmd_utils";
-import { GitForAll as GitForAll } from "./git_forall";
+import { CmdUtils, println } from './cmd_utils';
+import { GitForAll as GitForAll } from './git_forall';
 import fs from 'fs';
 import colors from 'colors';
 
 export class GitStatusInfo {
-    constructor(public projName: string, public messages: string[]) { }
+    constructor(public projName: string, public messages: string[]) {}
 }
 
 export class GitStatus {
-
     /**
      * Print the status of projects. In current directory.
      */
     static getInfos(forall: GitForAll): GitStatusInfo[] {
-
         const infos: GitStatusInfo[] = [];
 
         let allIsClean = true;
@@ -83,15 +81,15 @@ export class GitStatus {
     static _filterOutput(text: string): string[] {
         const rtn: string[] = [];
         const lines = text.split('\n');
-        lines.forEach(line => {
+        lines.forEach((line) => {
             if ((line.startsWith(' ') || line.startsWith('\t')) && !line.trim().startsWith('(')) {
                 line = line.trim();
                 if (line.startsWith('modified:')) {
-                    line = line.replace(/^modified:\s*/, 'M ')
+                    line = line.replace(/^modified:\s*/, 'M ');
                 } else if (line.startsWith('new file:')) {
-                    line = colors.green(line.replace(/^new file:\s*/, '+ '))
+                    line = colors.green(line.replace(/^new file:\s*/, '+ '));
                 } else if (line.startsWith('deleted:')) {
-                    line = colors.red(line.replace(/^deleted:\s*/, '- '))
+                    line = colors.red(line.replace(/^deleted:\s*/, '- '));
                 } else {
                     line = colors.grey('? ' + line); // untracked file
                 }

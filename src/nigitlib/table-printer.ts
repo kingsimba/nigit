@@ -15,7 +15,7 @@ export class TablePrinter {
 
     printHeader(col1: string, col2: string) {
         this.log(colors.green(col1.padEnd(this.firstColumnWidth)) + colors.green(col2));
-        this.log(colors.green('-'.repeat(this.firstColumnWidth + col2.length)))
+        this.log(colors.green('-'.repeat(this.firstColumnWidth + col2.length)));
     }
 
     printLine(col1: string, col2: string) {

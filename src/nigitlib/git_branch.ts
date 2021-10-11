@@ -1,9 +1,9 @@
-import { GitForAll } from "./git_forall";
-import { println, CmdUtils } from "./cmd_utils";
+import { GitForAll } from './git_forall';
+import { println, CmdUtils } from './cmd_utils';
 import fs from 'fs';
-import { GitProject } from "./git_config";
-import colors from "colors";
-import { TablePrinter } from "./table-printer";
+import { GitProject } from './git_config';
+import colors from 'colors';
+import { TablePrinter } from './table-printer';
 
 class GitBranch {
     options: any;
@@ -16,8 +16,7 @@ class GitBranch {
         }
 
         const table = forall.newTablePrinter();
-        if (table == undefined)
-            return;
+        if (table == undefined) return;
 
         this.options = options;
         this.showCurrentBranch = options.all == undefined && options.features == undefined;
@@ -36,10 +35,10 @@ class GitBranch {
             } else {
                 if (options.features) {
                     // remove master and branches/*
-                    branches = branches.filter(o => !o.match(/\*? ?(branches\/.*|master)$/));
+                    branches = branches.filter((o) => !o.match(/\*? ?(branches\/.*|master)$/));
                 }
 
-                branches = branches.map(b => b.startsWith('* ') ? colors.yellow(b.substr(2) + '(*)') : b);
+                branches = branches.map((b) => (b.startsWith('* ') ? colors.yellow(b.substr(2) + '(*)') : b));
                 table.printLines(proj.name, branches);
             }
         });
@@ -49,7 +48,7 @@ class GitBranch {
         let firstProject = true;
         let firstProjectBranch = '';
         this.cmdGitForAllWithOutputHandler('git branch', (proj: GitProject, branches: string[]) => {
-            let branch = branches.find(o => o.startsWith('* '));
+            let branch = branches.find((o) => o.startsWith('* '));
             if (!proj.isGitRepository()) {
                 table.printLine(proj.name, colors.grey('(not git repo)'));
             } else if (branch) {
@@ -72,11 +71,13 @@ class GitBranch {
         });
     }
 
-
     /**
      * Execute the same command for all projects. If succeeded, handle the output.
      */
-    private cmdGitForAllWithOutputHandler(command: string, handler: (proj: GitProject, branches: string[]) => void): number {
+    private cmdGitForAllWithOutputHandler(
+        command: string,
+        handler: (proj: GitProject, branches: string[]) => void
+    ): number {
         GitForAll.forAll('.', (projDir, proj) => {
             if (proj.isGitRepository()) {
                 if (fs.existsSync(projDir)) {
@@ -86,14 +87,17 @@ class GitBranch {
                         println(`=== ${proj.name} ===`);
                         CmdUtils.printCommandError(cmd, result.stdout);
                     } else {
-                        const branches = result.stdout.split('\n').map(o => o.trim()).filter(o => o.length !== 0);
+                        const branches = result.stdout
+                            .split('\n')
+                            .map((o) => o.trim())
+                            .filter((o) => o.length !== 0);
                         handler(proj, branches);
                     }
                 }
             } else {
                 handler(proj, []);
             }
-        })
+        });
 
         return 0;
     }

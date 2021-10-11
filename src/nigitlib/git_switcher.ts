@@ -1,12 +1,11 @@
 import fs from 'fs';
-import { CmdUtils, println } from "./cmd_utils";
+import { CmdUtils, println } from './cmd_utils';
 import { GitStatus } from './git_status';
 import { TablePrinter } from './table-printer';
 
 export class GitInfo {
-    constructor(public name: string, public hashCode: string, public log: string) { }
-};
-
+    constructor(public name: string, public hashCode: string, public log: string) {}
+}
 
 /**
  *
@@ -19,14 +18,13 @@ export class GitInfo {
  *      gtest (detached from origin/master) 3204ba3
  */
 export class GitSwitcher {
-
     /**
      * Switch projects to point specified by a .gitinfo file
      * @param fileName A gitinfo file which contains project names and hash codes
      */
     switchWithGitInfoFile(fileName: string): number {
         if (!GitStatus.allIsClean()) {
-            println("error: working copy is not clean");
+            println('error: working copy is not clean');
             return 1;
         }
 
@@ -65,11 +63,11 @@ export class GitSwitcher {
 
     _parseGitInfo(fileText: string): GitInfo[] {
         let lines = fileText.split('\n');
-        lines = lines.filter(o => o.trim() !== '')
+        lines = lines.filter((o) => o.trim() !== '');
 
         const infos: GitInfo[] = [];
 
-        lines.forEach(line => {
+        lines.forEach((line) => {
             const m = line.match(/([^\s]+) \[(.*)\|(.*)\] (.*)/);
             if (m) {
                 infos.push(new GitInfo(m[1], m[3], m[4]));
@@ -88,7 +86,7 @@ export class GitSwitcher {
             maxWidth = Math.max(info.name.length, maxWidth);
         }
         table.firstColumnWidth = maxWidth + 1;
-        table.printHeader("Project", "Hash");
+        table.printHeader('Project', 'Hash');
 
         // Switch projects
         for (const info of infos) {
@@ -96,10 +94,9 @@ export class GitSwitcher {
             const cmdResult = CmdUtils.exec(cmd);
             if (cmdResult.exitCode == 0) {
                 table.printLine(info.name, `${info.hashCode} ${info.log}`);
-            }
-            else {
+            } else {
                 console.log(cmdResult.stderr);
-                console.error("error: failed to run command");
+                console.error('error: failed to run command');
             }
         }
     }

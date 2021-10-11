@@ -3,7 +3,7 @@ import { CmdUtils, println } from './cmd_utils';
 
 interface GitProjectJsonNode {
     name?: string;
-    projectName?: string;   // compatible with old ncgit.json
+    projectName?: string; // compatible with old ncgit.json
     url: string;
 }
 
@@ -60,7 +60,7 @@ export class GitConfig {
     public projects: GitProject[] = [];
 
     static instanceWithMainProjectPath(path: string): GitConfig | null {
-        const o = new GitConfig()
+        const o = new GitConfig();
         try {
             o._loadMainProject(path);
             o._loadSubprojects(path);
@@ -88,7 +88,7 @@ export class GitConfig {
 
     _loadSubprojects(path: string) {
         // load subprojects
-        let text: string = "";
+        let text: string = '';
         let nigitFileName;
         if (fs.existsSync(`${path}/nigit.json`)) {
             nigitFileName = `${path}/nigit.json`;
@@ -114,7 +114,7 @@ export class GitConfig {
 
     _parseSubprojects(rootNode: any) {
         if (rootNode == null) {
-            throw new Error('rootNode is null')
+            throw new Error('rootNode is null');
         }
 
         // load json file for sub-projects

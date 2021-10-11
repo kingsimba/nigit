@@ -1,9 +1,8 @@
-import { println, CmdUtils } from "./cmd_utils";
-import { GitForAll } from "./git_forall";
+import { println, CmdUtils } from './cmd_utils';
+import { GitForAll } from './git_forall';
 import colors from 'colors';
 
 export class GitTag {
-
     /**
      * push a branch to remote repository
      */
@@ -46,7 +45,7 @@ export class GitTag {
             }
 
             const result = CmdUtils.exec(`cd ${projDir} && git tag -l \"${tagName}\"`);
-            if (result.stdout.split('\n').find(o => o == tagName)) {
+            if (result.stdout.split('\n').find((o) => o == tagName)) {
                 table.printLine(proj.name, colors.red(`tag '${tagName}' already exist`));
                 failed = true;
             } else if (result.exitCode != 0) {

@@ -1,5 +1,5 @@
-import { println, CmdUtils } from "./cmd_utils";
-import { GitForAll } from "./git_forall";
+import { println, CmdUtils } from './cmd_utils';
+import { GitForAll } from './git_forall';
 import colors from 'colors';
 
 export interface GitCleanOption {

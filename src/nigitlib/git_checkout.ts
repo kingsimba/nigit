@@ -1,9 +1,9 @@
-import { CmdUtils, print, MessageType } from "./cmd_utils";
-import { GitForAll } from "./git_forall";
-import { GitProject } from "./git_config";
+import { CmdUtils, print, MessageType } from './cmd_utils';
+import { GitForAll } from './git_forall';
+import { GitProject } from './git_config';
 import colors from 'colors';
 import fs from 'fs';
-import { TablePrinter } from "./table-printer";
+import { TablePrinter } from './table-printer';
 
 export function getCurrentBranchFromOutput(output: string): string | null {
     let m = output.match(/^\* \(.* detached at (.*)\)$/m);
@@ -142,10 +142,12 @@ export class GitCheckout {
             }
 
             return true;
-
         } catch (error) {
             const messages: string[] = error.message.split(/\r?\n/);
-            table.printLines(proj.name, messages.map(s => colors.red(s)));
+            table.printLines(
+                proj.name,
+                messages.map((s) => colors.red(s))
+            );
             return false;
         }
     }
@@ -158,10 +160,10 @@ export class GitCheckout {
             let message;
             let m;
             // tslint:disable-next-line: no-conditional-assignment
-            if (m = result.stdout.match(/Your branch is behind '.*' by \d+ commits, and can be fast-forwarded/m)) {
+            if ((m = result.stdout.match(/Your branch is behind '.*' by \d+ commits, and can be fast-forwarded/m))) {
                 message = m[0];
                 // tslint:disable-next-line: no-conditional-assignment
-            } else if (m = result.stdout.match(/Your branch and '.*' have diverged/m)) {
+            } else if ((m = result.stdout.match(/Your branch and '.*' have diverged/m))) {
                 message = m[0];
             }
             return { succ: true, message };

@@ -1,9 +1,8 @@
-import { println, CmdUtils } from "./cmd_utils";
-import { GitForAll } from "./git_forall";
+import { println, CmdUtils } from './cmd_utils';
+import { GitForAll } from './git_forall';
 import fs from 'fs';
 
 export class GitStart {
-
     /**
      * push a branch to remote repository
      */
@@ -48,7 +47,6 @@ export class GitStart {
                 println('Not a git repository. skipped.');
             }
         }
-
 
         return 0;
     }

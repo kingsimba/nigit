@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import program from 'commander';
 import process from 'process';
-import { GitSwitcher } from "./nigitlib/git_switcher";
+import { GitSwitcher } from './nigitlib/git_switcher';
 import { GitForAll } from './nigitlib/git_forall';
 import { println, print, MessageType, CmdUtils } from './nigitlib/cmd_utils';
 import { GitStatus } from './nigitlib/git_status';
@@ -26,7 +26,10 @@ program
 
         const proj = GitProject.instanceWithUrl(url);
         GitForAll.createWorkspaceFile('.', proj.name);
-        GitPull.cmdGitPullOrFetch([], "pull", { skipMainProject: false, prune: false });
+        GitPull.cmdGitPullOrFetch([], 'pull', {
+            skipMainProject: false,
+            prune: false,
+        });
     });
 
 program
@@ -73,7 +76,10 @@ program
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
     .option('--skip-main', 'Skip the main project', false)
     .action((projects: string[], options: any) => {
-        GitPull.cmdGitPullOrFetch(projects, "pull", { skipMainProject: options.skipMain, prune: false });
+        GitPull.cmdGitPullOrFetch(projects, 'pull', {
+            skipMainProject: options.skipMain,
+            prune: false,
+        });
     });
 
 program
@@ -82,7 +88,10 @@ program
     .option('--skip-main', 'Skip the main project', false)
     .option('-p --prune', 'Same as "git fetch --prune"', false)
     .action((projects: string[], options: any) => {
-        GitPull.cmdGitPullOrFetch(projects, "fetch", { skipMainProject: options.skipMain, prune: options.prune });
+        GitPull.cmdGitPullOrFetch(projects, 'fetch', {
+            skipMainProject: options.skipMain,
+            prune: options.prune,
+        });
     });
 
 program
@@ -103,13 +112,15 @@ program
 
 program
     .command('checkout <BRANCH_NAME>')
-    .description('Run "git checkout BRANCH_NAME" for all projects.'
-        + 'If a subproject doesn\'t have it, fallback to the same branch as the main project.')
+    .description(
+        'Run "git checkout BRANCH_NAME" for all projects.' +
+            "If a subproject doesn't have it, fallback to the same branch as the main project."
+    )
     .option('--force', 'Discard local modifications')
     .action((branchName: string, options: GitCheckoutOptions) => {
         const o = new GitCheckout();
         o.cmdCheckout(branchName, options);
-    })
+    });
 
 program
     .command('checkout-info <FILE>')
@@ -117,7 +128,7 @@ program
     .action((file: string) => {
         const switcher = new GitSwitcher();
         switcher.switchWithGitInfoFile(file);
-    })
+    });
 
 program
     .command('dump-info [FILE]')
@@ -125,14 +136,13 @@ program
     .action((file: string) => {
         const dumper = new InfoDumper();
         dumper.dump(file);
-    })
+    });
 
 program
     .command('forall <COMMAND>')
     .description('Run a command on all projects')
     .action((command: string) => {
         GitForAll.cmdGitForAll(command);
-    })
+    });
 
 program.parse(process.argv);
-
