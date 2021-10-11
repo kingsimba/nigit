@@ -83,7 +83,7 @@ export class InfoDumper {
         const lines = text.split('\n');
         for (const line of lines) {
             if (line.startsWith('* ')) {
-                const m = line.match(/\* (\w+|\(.*\))\s+([0-9a-f]+)\s+(.*)/);
+                const m = line.match(/\* ([\w\-_\/\.]+|\(.*\))\s+([0-9a-f]+)\s+(.*)/);
                 if (m != null) {
                     const branch = m[1];
                     const hash = m[2];
