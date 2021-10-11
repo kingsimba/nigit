@@ -26,7 +26,7 @@ export class InfoDumper {
      */
     dump(fileName: string) {
         if (!GitStatus.allIsClean()) {
-            throw new Error('working copy is not clean');
+            //throw new Error('working copy is not clean');
         }
 
         let hasError = false;
@@ -82,9 +82,14 @@ export class InfoDumper {
             if (line.startsWith('* ')) {
                 const m = line.match(/\* ([\w\-_\/\.]+|\(.*\))\s+([0-9a-f]+)\s+(.*)/);
                 if (m != null) {
-                    const branch = m[1];
+                    let branch = m[1];
                     const hash = m[2];
                     const log = m[3];
+
+                    const HEAD_DETACHED_AT = '(HEAD detached at ';
+                    if (branch.startsWith(HEAD_DETACHED_AT)) {
+                        branch = branch.substring(HEAD_DETACHED_AT.length, branch.length - 1);
+                    }
                     return new ProjectGitInfo(projectName, branch, hash, log);
                 }
             }
