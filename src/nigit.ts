@@ -145,4 +145,11 @@ program
         GitForAll.cmdGitForAll(command);
     });
 
-program.parse(process.argv);
+program.exitOverride();
+try {
+    program.parse(process.argv);
+} catch (err) {
+    const msg = err.message.startsWith('error: ') ? err.message : 'error: ' + err.message;
+    println(msg);
+    process.exit(1);
+}

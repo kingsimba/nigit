@@ -6,7 +6,7 @@
 		"dist/**/*.js"
 	],
 	"scripts": {
-		"build": "npx tsc",
+		"build": "gulp",
 		"test": "npx mocha test/**/*.spec.ts --require 'ts-node/register/transpile-only'"
 	},
 	"dependencies": {

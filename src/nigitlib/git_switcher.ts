@@ -22,35 +22,29 @@ export class GitSwitcher {
      * Switch projects to point specified by a .gitinfo file
      * @param fileName A gitinfo file which contains project names and hash codes
      */
-    switchWithGitInfoFile(fileName: string): number {
+    switchWithGitInfoFile(fileName: string) {
         if (!GitStatus.allIsClean()) {
-            println('error: working copy is not clean');
-            return 1;
+            throw new Error('error: working copy is not clean');
         }
 
         const cmdResult = CmdUtils.exec('git status');
         const isGitDirectory = cmdResult.exitCode === 0;
 
         if (isGitDirectory) {
-            console.error('error: This command must be run outside of git directory');
-            return 1;
+            throw new Error('error: This command must be run outside of git directory');
         }
 
         if (!fs.existsSync(fileName)) {
-            console.error(`error: file not exist: ${fileName}`);
-            return 1;
+            throw new Error(`error: file not exist: ${fileName}`);
         }
 
         console.log('checking out project with info file: ' + fileName);
         const fileText = this._loadTextFile(fileName);
         if (fileText == null) {
-            println(`error: failed to load file ${fileName}`);
-            return 1;
+            throw new Error(`error: failed to load file ${fileName}`);
         }
         const infos = this._parseGitInfo(fileText);
         this._checkoutWithGitInfos(infos);
-
-        return 0;
     }
 
     _loadTextFile(fileName: string): string | null {
@@ -89,15 +83,21 @@ export class GitSwitcher {
         table.printHeader('Project', 'Hash');
 
         // Switch projects
+        let somethingIsWrong = false;
         for (const info of infos) {
             const cmd = `cd ${info.name} && git checkout ${info.hashCode}`;
             const cmdResult = CmdUtils.exec(cmd);
             if (cmdResult.exitCode == 0) {
                 table.printLine(info.name, `${info.hashCode} ${info.log}`);
             } else {
-                console.log(cmdResult.stderr);
-                console.error('error: failed to run command');
+                println(cmdResult.stderr);
+                println('error: failed to run command');
+                somethingIsWrong = true;
             }
+        }
+
+        if (somethingIsWrong) {
+            throw new Error('Failed to run some commands');
         }
     }
 }

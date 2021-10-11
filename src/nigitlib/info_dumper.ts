@@ -24,10 +24,9 @@ export class InfoDumper {
      * Switch projects to point specified by a git.info file
      * @param fileName A gitinfo file which contains project names and hash codes
      */
-    dump(fileName: string): boolean {
+    dump(fileName: string) {
         if (!GitStatus.allIsClean()) {
-            println('error: working copy is not clean');
-            return false;
+            throw new Error('working copy is not clean');
         }
 
         let hasError = false;
@@ -56,7 +55,7 @@ export class InfoDumper {
         });
 
         if (hasError) {
-            return false;
+            throw new Error('Some projects has error');
         }
 
         let writeStream = null;
@@ -75,8 +74,6 @@ export class InfoDumper {
         }
 
         writeStream?.close();
-
-        return true;
     }
 
     _parseGitInfo(text: string, projectName: string): ProjectGitInfo | null {

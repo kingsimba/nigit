@@ -1,6 +1,6 @@
 import { GitProject, GitConfig } from './git_config';
 import fs from 'fs';
-import { CmdUtils, println } from './cmd_utils';
+import { CmdUtils, println, MessageType } from './cmd_utils';
 import { normalize, relative } from 'path';
 import { resolve } from 'path';
 import { TablePrinter } from './table-printer';
@@ -16,22 +16,28 @@ export class GitForAll {
     /**
      * Execute the same command for all projects. in current directory
      */
-    static cmdGitForAll(command: string): number {
+    static cmdGitForAll(command: string) {
+        let someThingIsWrong = false;
+
         this.forAll('.', (projDir, proj) => {
             println(`=== ${proj.name} ===`);
             if (proj.isGitRepository()) {
                 if (fs.existsSync(projDir)) {
-                    CmdUtils.execInConsole(`cd ${projDir} && ${command}`);
+                    const code = CmdUtils.execInConsole(`cd ${projDir} && ${command}`);
+                    if (code != 0) {
+                        someThingIsWrong = true;
+                    }
                 } else {
-                    println(`error: project doesn't exist: ${proj.name}. Please run 'nigit pull'?`);
-                    return -1;
+                    println(`warning: project doesn't exist: ${proj.name}.`);
                 }
             } else {
-                println('Not a git repository. skipped.');
+                println('Not a git repository. skipped.', MessageType.weakText);
             }
         });
 
-        return 0;
+        if (someThingIsWrong) {
+            throw new Error('Something is wrong while executing commands');
+        }
     }
 
     /**
@@ -89,16 +95,7 @@ export class GitForAll {
         }
 
         let mainProject;
-        try {
-            mainProject = this.findMainProject(workDir);
-        } catch (error) {
-            println('error: ' + error);
-            return false;
-        }
-        if (mainProject == undefined) {
-            println('error: no nigit.json is found');
-            return false;
-        }
+        mainProject = this.findMainProject(workDir);
 
         const config = GitConfig.instanceWithMainProjectPath(mainProject);
         if (config == undefined) {
@@ -160,7 +157,7 @@ export class GitForAll {
      * @param rootDir the root directory to search for `nigit.json`
      * @return the path of the main project
      */
-    findMainProject(rootDir: string): string | undefined {
+    findMainProject(rootDir: string): string {
         let mainProjPath;
         let path = rootDir;
         let lastCheckedPath;
@@ -215,6 +212,10 @@ export class GitForAll {
                 mainProjPath = rootDir;
             }
             mainProjPath = normalize(mainProjPath).replace(/\\/g, '/');
+        }
+
+        if (mainProjPath == undefined) {
+            throw new Error('Failed to find a main project');
         }
 
         return mainProjPath;
