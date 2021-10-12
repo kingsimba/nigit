@@ -26,7 +26,7 @@ export class InfoDumper {
      */
     dump(fileName: string) {
         if (!GitStatus.allIsClean()) {
-            //throw new Error('working copy is not clean');
+            throw new Error('working copy is not clean');
         }
 
         let hasError = false;

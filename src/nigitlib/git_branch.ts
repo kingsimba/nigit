@@ -11,9 +11,6 @@ class GitBranch {
 
     execute(options: any) {
         const forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return;
-        }
 
         const table = forall.newTablePrinter();
         if (table == undefined) return;

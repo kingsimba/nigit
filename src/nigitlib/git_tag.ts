@@ -8,9 +8,6 @@ export class GitTag {
      */
     static cmdListTags(pattern: string): number {
         const forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return 1;
-        }
 
         const proj = forall.mainProject;
         const projDir = proj.directory;
@@ -20,9 +17,6 @@ export class GitTag {
 
     static cmdCreateTag(tagName: string): number {
         const forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return 1;
-        }
 
         // verify tag name
         if (!tagName.match(/^v?\d+(\.\d+)?(\.\d+)?$/)) {

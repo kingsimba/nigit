@@ -14,9 +14,6 @@ export class GitClean {
      */
     static cmdClean(options: GitCleanOption): number {
         const forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return 1;
-        }
 
         if (!options.force && !options.dry) {
             println('error: either --force or --force must be given');

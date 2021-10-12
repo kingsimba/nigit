@@ -43,9 +43,6 @@ export class GitStatus {
 
     static allIsClean(): boolean {
         const forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return false;
-        }
         const infos = GitStatus.getInfos(forall);
         return infos.length == 0;
     }
@@ -55,10 +52,6 @@ export class GitStatus {
      */
     static cmdStatus(): number {
         const forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return 1;
-        }
-
         const infos = GitStatus.getInfos(forall);
 
         if (infos.length == 0) {

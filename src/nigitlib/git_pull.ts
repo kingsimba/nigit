@@ -20,9 +20,6 @@ export class GitPull {
         options?: GitPullOptions
     ): Promise<number> {
         let forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return 1;
-        }
 
         // We need to update the main project first before all others.
         // So that nigit.json is update-to-date
@@ -51,9 +48,6 @@ export class GitPull {
 
         // reload the config file. Because the main project may be updated
         forall = GitForAll.instance('.');
-        if (forall === null) {
-            return 1;
-        }
 
         // filter unwanted projects
         const targetProjects = forall.subprojects.filter(

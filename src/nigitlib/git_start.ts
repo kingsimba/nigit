@@ -8,9 +8,6 @@ export class GitStart {
      */
     static cmdStart(branchName: string, projectNames: string[]): number {
         const forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return 1;
-        }
 
         // Verify projectNames. All specified projects must exist.
         if (projectNames != undefined) {

@@ -62,27 +62,25 @@ export class GitCheckout {
      * Checkout to branch
      */
     cmdCheckout(branchName: string, options: GitCheckoutOptions): number {
-        const forall = GitForAll.instance('.');
-        if (forall == undefined) {
-            return 1;
-        }
-
+        let forall = GitForAll.instance('.');
         const table = forall.newTablePrinter();
-        if (table == undefined) {
-            return 1;
-        }
-
         table.printHeader('Project', 'Branches');
+
         this.branchName = branchName;
         this.options = options;
 
+        // checkout main project first
         try {
             this.mainProjectBranch = this._checkoutMainProject(forall.mainProject, table);
         } catch (error) {
+            table.printHeader('Project', 'Branches');
             table.firstColumnWidth = forall.mainProject.name.length + 2;
             table.printLine(forall.mainProject.name, colors.red(error.message));
             return 1;
         }
+
+        // reload forall
+        forall = GitForAll.instance('.');
 
         let exitCode = 0;
         for (const proj of forall.subprojects) {

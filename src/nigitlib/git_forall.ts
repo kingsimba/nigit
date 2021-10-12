@@ -81,15 +81,13 @@ export class GitForAll {
         return table;
     }
 
-    static instance(workDir: string | undefined): GitForAll | null {
+    static instance(workDir: string | undefined): GitForAll {
         let o: GitForAll | null = new GitForAll();
-        if (!o.init(workDir)) {
-            o = null;
-        }
+        o.init(workDir);
         return o;
     }
 
-    private init(workDir: string | undefined): boolean {
+    private init(workDir: string | undefined) {
         if (workDir == undefined) {
             workDir = '.';
         }
@@ -99,7 +97,7 @@ export class GitForAll {
 
         const config = GitConfig.instanceWithMainProjectPath(mainProject);
         if (config == undefined) {
-            return false;
+            throw new Error('Failed to load nigit config');
         }
 
         let workspaceDir;
@@ -120,8 +118,6 @@ export class GitForAll {
             proj.directory = `${workspaceDir}/${proj.name}`;
         }
         this.exitingGitProjects = this.filterExistingGitProject(config.projects);
-
-        return true;
     }
 
     filterExistingGitProject(projects: GitProject[]): GitProject[] {
@@ -140,10 +136,7 @@ export class GitForAll {
      * Execute the same command for all projects. It will try to find nigit.json in |workDir| directory.
      */
     static forAll(workDir: string, callback: (projDir: string, proj: GitProject) => void): boolean {
-        const o = GitForAll.instance('.');
-        if (o == null || !o.init(workDir)) {
-            return false;
-        }
+        const o = GitForAll.instance(workDir);
 
         for (const proj of o.projects) {
             callback(proj.directory, proj);
