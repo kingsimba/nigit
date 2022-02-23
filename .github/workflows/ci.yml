@@ -5,64 +5,64 @@ name: CI
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    # This workflow contains a single job called "build"
+    build:
+        # The type of runner that the job will run on
+        runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout Main Project
-        uses: actions/checkout@v2
-        with:
-          # Relative path under $GITHUB_WORKSPACE to place the repository
-          path: "nigit"
-      - name: Checkout Other Projects 1
-        uses: actions/checkout@v2
-        with:
-          repository: "kingsimba/express-typescript-mocha-vscode"
-          path: "express-typescript-mocha-vscode"
-      - name: Checkout Other Projects 2
-        uses: actions/checkout@v2
-        with:
-          repository: "NavInfoNC/json-script"
-          path: "json-script"
-      - name: Checkout Other Projects 3
-        uses: actions/checkout@v2
-        with:
-          repository: "NavInfoNC/nc-geo"
-          path: "ncgeo"
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
-      - name: Cache NPM Packages
-        id: cache-npm
-        uses: actions/cache@v2
-        with:
-          path: nigit/node_modules
-          key: cache-npm
-      - name: Install dependencies
-        run: |
-          cd nigit
-          npm install
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - name: Checkout Main Project
+              uses: actions/checkout@v2
+              with:
+                  # Relative path under $GITHUB_WORKSPACE to place the repository
+                  path: 'nigit'
+            - name: Checkout Other Projects 1
+              uses: actions/checkout@v2
+              with:
+                  repository: 'kingsimba/express-typescript-mocha-vscode'
+                  path: 'express-typescript-mocha-vscode'
+            - name: Checkout Other Projects 2
+              uses: actions/checkout@v2
+              with:
+                  repository: 'kingsimba/json-script'
+                  path: 'json-script'
+            - name: Checkout Other Projects 3
+              uses: actions/checkout@v2
+              with:
+                  repository: 'kingsimba/nc-geo'
+                  path: 'ncgeo'
+            - name: Use Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: '12.x'
+            - name: Cache NPM Packages
+              id: cache-npm
+              uses: actions/cache@v2
+              with:
+                  path: nigit/node_modules
+                  key: cache-npm
+            - name: Install dependencies
+              run: |
+                  cd nigit
+                  npm install
 
-      - name: Build
-        run: |
-          cd nigit
-          gulp
+            - name: Build
+              run: |
+                  cd nigit
+                  gulp
 
-      - name: Test
-        run: |
-          cd nigit
-          npm test
-        env:
-          CI: true
+            - name: Test
+              run: |
+                  cd nigit
+                  npm test
+              env:
+                  CI: true

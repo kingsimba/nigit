@@ -4,61 +4,60 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+    release:
+        types: [created]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  publish-npm:
-    runs-on: ubuntu-latest
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout Main Project
-        uses: actions/checkout@v2
-        with:
-          # Relative path under $GITHUB_WORKSPACE to place the repository
-          path: "nigit"
-      - name: Checkout Other Projects 1
-        uses: actions/checkout@v2
-        with:
-          repository: "kingsimba/express-typescript-mocha-vscode"
-          path: "express-typescript-mocha-vscode"
-      - name: Checkout Other Projects 2
-        uses: actions/checkout@v2
-        with:
-          repository: "NavInfoNC/json-script"
-          path: "json-script"
-      - name: Checkout Other Projects 3
-        uses: actions/checkout@v2
-        with:
-          repository: "NavInfoNC/nc-geo"
-          path: "ncgeo"
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
-          registry-url: 'https://registry.npmjs.org'
-      - name: Install dependencies
-        run: |
-          cd nigit
-          npm ci
+    publish-npm:
+        runs-on: ubuntu-latest
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - name: Checkout Main Project
+              uses: actions/checkout@v2
+              with:
+                  # Relative path under $GITHUB_WORKSPACE to place the repository
+                  path: 'nigit'
+            - name: Checkout Other Projects 1
+              uses: actions/checkout@v2
+              with:
+                  repository: 'kingsimba/express-typescript-mocha-vscode'
+                  path: 'express-typescript-mocha-vscode'
+            - name: Checkout Other Projects 2
+              uses: actions/checkout@v2
+              with:
+                  repository: 'kingsimba/json-script'
+                  path: 'json-script'
+            - name: Checkout Other Projects 3
+              uses: actions/checkout@v2
+              with:
+                  repository: 'kingsimba/nc-geo'
+                  path: 'ncgeo'
+            - name: Use Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: '12.x'
+                  registry-url: 'https://registry.npmjs.org'
+            - name: Install dependencies
+              run: |
+                  cd nigit
+                  npm ci
 
-      - name: Build
-        run: |
-          cd nigit
-          gulp
+            - name: Build
+              run: |
+                  cd nigit
+                  gulp
 
-      - name: Test
-        run: |
-          cd nigit
-          npm test
-        env:
-          CI: true
+            - name: Test
+              run: |
+                  cd nigit
+                  npm test
+              env:
+                  CI: true
 
-      - name: Publish Npm Package
-        run: |
-          cd nigit
-          npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
+            - name: Publish Npm Package
+              run: |
+                  cd nigit
+                  npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

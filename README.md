@@ -2,27 +2,27 @@
 
 # A Tool for Managing a Group of Git Projects <!-- omit in toc -->
 
-- [What is it?](#what-is-it)
-- [Installation](#installation)
-- [Prerequisites](#prerequisites)
-- [Initialization](#initialization)
-- [List](#list)
-- [Pull](#pull)
-- [Push](#push)
-- [Status](#status)
-- [Clean](#clean)
-- [Branch or Tag](#branch-or-tag)
-  - [Show Branches](#show-branches)
-  - [Switch Branch](#switch-branch)
-  - [Create Feature Branch](#create-feature-branch)
-  - [Create Release Branch](#create-release-branch)
-  - [Create / List Tags](#create--list-tags)
-  - [Take Snapshot and Restore](#take-snapshot-and-restore)
-- [Using Precompiled Binaries](#using-precompiled-binaries)
-- [Contribute](#contribute)
-  - [Compile](#compile)
-  - [Code & Debug](#code--debug)
-- [Changelog](#changelog)
+-   [What is it?](#what-is-it)
+-   [Installation](#installation)
+-   [Prerequisites](#prerequisites)
+-   [Initialization](#initialization)
+-   [List](#list)
+-   [Pull](#pull)
+-   [Push](#push)
+-   [Status](#status)
+-   [Clean](#clean)
+-   [Branch or Tag](#branch-or-tag)
+    -   [Show Branches](#show-branches)
+    -   [Switch Branch](#switch-branch)
+    -   [Create Feature Branch](#create-feature-branch)
+    -   [Create Release Branch](#create-release-branch)
+    -   [Create / List Tags](#create--list-tags)
+    -   [Take Snapshot and Restore](#take-snapshot-and-restore)
+-   [Using Precompiled Binaries](#using-precompiled-binaries)
+-   [Contribute](#contribute)
+    -   [Compile](#compile)
+    -   [Code & Debug](#code--debug)
+-   [Changelog](#changelog)
 
 ## What is it?
 
@@ -60,14 +60,14 @@ It lists its subprojects.
 {
    "projects": [
       {
-         "url": "git@github.com:NavInfoNC/json-script.git"
+         "url": "git@github.com:kingsimba/json-script.git"
       },
       {
          "url": "git@github.com:kingsimba/express-typescript-mocha-vscode.git"
       },
       {
          "name": "ncgeo",
-         "url": "git@github.com:NavInfoNC/nc-geo.git"
+         "url": "git@github.com:kingsimba/nc-geo.git"
       }
    ]
 }
@@ -90,11 +90,11 @@ remote: Total 99 (delta 51), reused 76 (delta 31), pack-reused 0
 Receiving objects: 100% (99/99), 28.98 KiB | 39.00 KiB/s, done.
 Resolving deltas: 100% (51/51), done.
 === json-script ===
-cloning git@github.com:NavInfoNC/json-script.git
+cloning git@github.com:kingsimba/json-script.git
 === express-typescript-mocha-vscode ===
 cloning git@github.com:kingsimba/express-typescript-mocha-vscode.git
 === ncgeo ===
-cloning git@github.com:NavInfoNC/nc-geo.git
+cloning git@github.com:kingsimba/nc-geo.git
 ```
 
 After cloning, all the projects will be ready, side-by-side.
@@ -115,9 +115,9 @@ The first project is the main project.
 ```bash
 $ nigit list
 nigit => git@github.com:kingsimba/nigit.git
-json-script => git@github.com:NavInfoNC/json-script.git
+json-script => git@github.com:kingsimba/json-script.git
 express-typescript-mocha-vscode => git@github.com:kingsimba/express-typescript-mocha-vscode.git
-ncgeo => git@github.com:NavInfoNC/nc-geo.git
+ncgeo => git@github.com:kingsimba/nc-geo.git
 ```
 
 ## Pull

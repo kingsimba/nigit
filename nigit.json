@@ -1,14 +1,14 @@
 {
     "projects": [
         {
-            "url": "git@github.com:NavInfoNC/json-script.git"
+            "url": "git@github.com:kingsimba/json-script.git"
         },
         {
             "url": "git@github.com:kingsimba/express-typescript-mocha-vscode.git"
         },
         {
             "name": "ncgeo",
-            "url": "git@github.com:NavInfoNC/nc-geo.git"
+            "url": "git@github.com:kingsimba/nc-geo.git"
         },
         {
             "name": "zlib",
