@@ -6,6 +6,7 @@ import { GitForAll } from './nigitlib/git_forall';
 import { println, print, MessageType, CmdUtils } from './nigitlib/cmd_utils';
 import { GitStatus } from './nigitlib/git_status';
 import { GitPull } from './nigitlib/git_pull';
+import { GitPush } from './nigitlib/git_push';
 import { GitProject } from './nigitlib/git_config';
 import { GitCheckout, GitCheckoutOptions } from './nigitlib/git_checkout';
 import { gitBranch } from './nigitlib/git_branch';
@@ -80,6 +81,13 @@ program
             skipMainProject: options.skipMain,
             prune: false,
         });
+    });
+
+program
+    .command('push [projects...]')
+    .description('Push all projects to remote and set up tracking, with "git push origin -u BRANCH_NAME"')
+    .action((projects: string[], options: any) => {
+        GitPush.cmdGitPush(projects);
     });
 
 program

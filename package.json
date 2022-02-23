@@ -12,7 +12,7 @@
 	"dependencies": {
 		"adm-zip": "^0.4.16",
 		"async": "^3.2.0",
-		"axios": "^0.21.1",
+		"axios": "^0.26.0",
 		"colors": "^1.4.0",
 		"commander": "^5.1.0"
 	},
@@ -26,7 +26,7 @@
 		"@types/commander": "^2.12.2",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^13.13.9",
-		"chai": "^4.2.0",
+		"chai": "^4.3.6",
 		"chai-string": "^1.5.0",
 		"del": "^5.1.0",
 		"gulp": "^4.0.2",

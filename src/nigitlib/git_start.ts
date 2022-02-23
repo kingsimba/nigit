@@ -27,7 +27,7 @@ export class GitStart {
             }
         }
 
-        // run 'git checkout -b BRANCH_NAME -t'
+        // run 'git checkout -b BRANCH_NAME'
         for (const proj of forall.projects) {
             const projDir = proj.directory;
 
@@ -39,7 +39,7 @@ export class GitStart {
             // do it
             println(`=== ${proj.name} ===`);
             if (proj.isGitRepository()) {
-                CmdUtils.execInConsole(`cd ${projDir} && git checkout -b ${branchName} -t`);
+                CmdUtils.execInConsole(`cd ${projDir} && git checkout -b ${branchName}`);
             } else {
                 println('Not a git repository. skipped.');
             }
