@@ -8,6 +8,7 @@
 - [Initialization](#initialization)
 - [List](#list)
 - [Pull](#pull)
+- [Push](#push)
 - [Status](#status)
 - [Clean](#clean)
 - [Branch or Tag](#branch-or-tag)
@@ -33,10 +34,10 @@ by syncing them together, switching branch together, etc.
 
 The benefits of this approach are:
 
-- Help cutting clear lines between subprojects. Subprojects can be compiled and tested individually.
-  This will foster stable public APIs and better modularization.
-- Each subproject can have different collaborators and permissions.
-  This is very important in corporations in which different people have different access permissions.
+-   Help cutting clear lines between subprojects. Subprojects can be compiled and tested individually.
+    This will foster stable public APIs and better modularization.
+-   Each subproject can have different collaborators and permissions.
+    This is very important in corporations in which different people have different access permissions.
 
 If you are familiar with 'git', you will find it easy to learn.
 
@@ -123,9 +124,9 @@ ncgeo => git@github.com:NavInfoNC/nc-geo.git
 
 The `pull` command will make sure all subprojects are properly cloned/download and up-to-date.
 
-- If a project is missing, it will clone/download it.
-- If a project is a git repository it will run `git pull --ff-only`.
-- If a project is a zip file, it will check if it's update-to-date and download it if not.
+-   If a project is missing, it will clone/download it.
+-   If a project is a git repository it will run `git pull --ff-only`.
+-   If a project is a zip file, it will check if it's update-to-date and download it if not.
 
 ```
 $ nigit pull
@@ -147,6 +148,20 @@ src/the_app.cpp | 62 ++++++++++++++++----------
 ```
 
 As shown above, if you have no access to a project, it will be skipped.
+
+## Push
+
+The `push` command will push current branch to remote, and set up upstream.
+
+```
+$ nigit push
+=== main_project ===
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+=== subproject_A ===
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+=== subproject_B ===
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+```
 
 ## Status
 
@@ -218,9 +233,9 @@ subproject_B   data-driver
 subproject_C   master (Cannot find 'data-driver')
 ```
 
-- 'main_project' has no such branch, so it will remain on **master**.
-- 'subproject_A' and 'subproject_B' has **data-driver** branch, so they will switched.
-- 'subproject_C' has no such branch, so it will follow 'main_project'.
+-   'main_project' has no such branch, so it will remain on **master**.
+-   'subproject_A' and 'subproject_B' has **data-driver** branch, so they will switched.
+-   'subproject_C' has no such branch, so it will follow 'main_project'.
 
 --force
 : Discard all local changes. Checkout to specified branch forcefully.
@@ -233,9 +248,9 @@ They should have the same branch name.
 ```
 $ nigit start another_branch nigit ncgeo
 === nigit ===
-Branch 'another_branch' set up to track local branch 'sample_branch'.
+Switched to a new branch 'another_branch'
 === ncgeo ===
-Branch 'another_branch' set up to track local branch 'master'.
+Switched to a new branch 'another_branch'
 ```
 
 ### Create Release Branch
@@ -245,13 +260,13 @@ Only the ones who have access to all the subprojects can create a release branch
 ```
 $ nigit start branches/1.0.x
 === nigit ===
-Branch 'branches/1.0.x' set up to track local branch 'another_branch'.
+Switched to a new branch 'branches/1.0.x'
 === json-script ===
-Branch 'branches/1.0.x' set up to track local branch 'master'.
+Switched to a new branch 'branches/1.0.x'
 === express-typescript-mocha-vscode ===
-Branch 'branches/1.0.x' set up to track local branch 'master'.
+Switched to a new branch 'branches/1.0.x'
 === ncgeo ===
-Branch 'branches/1.0.x' set up to track local branch 'another_branch'.
+Switched to a new branch 'branches/1.0.x'
 === zlib ===
 Not a git repository. skipped.
 ```
@@ -399,8 +414,8 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
 
 4. Modify project settings.
 
-   - Use **awesome-libs/include/** before **module-a/include** and **module-b/include**.
-   - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
+    - Use **awesome-libs/include/** before **module-a/include** and **module-b/include**.
+    - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
 
 ## Contribute
 
@@ -429,57 +444,64 @@ nigit --help # Try out newly built version.
 
 ## Changelog
 
-- 1.7.2 @2021-09-14
+-   1.8.0 @2022-02-23
 
-  - Fix 'nigit checkout origin/xxxx'.
-  - Fix 'nigit fetch --prune' when the current branch is origin/xxx.
+    -   Add 'nigit push' command.
+    -   Fix 'nigit start'. It should not use '-t' in 'git checkout -b XXX -t'.
+        Upstream should be set with 'git push -u', later when 'nigit push'.
+    -   Fix output of 'nigit start'. It should print 'Switched to a new branch xxx'
 
-- 1.7.0 @2021-09-13
+-   1.7.2 @2021-09-14
 
-  - Add 'nigit dump-info'.
-  - Improve output of 'nigit checkout-info'.
+    -   Fix 'nigit checkout origin/xxxx'.
+    -   Fix 'nigit fetch --prune' when the current branch is origin/xxx.
 
-- 1.6.0 @2021-09-02
+-   1.7.0 @2021-09-13
 
-  - Add 'nigit fetch --prune'.
+    -   Add 'nigit dump-info'.
+    -   Improve output of 'nigit checkout-info'.
 
-- 1.5.11 @2021-02-04
+-   1.6.0 @2021-09-02
 
-  Fixed nigit pull. It should not skip the main project.
+    -   Add 'nigit fetch --prune'.
 
-- 1.5.10 @2021-01-06
+-   1.5.11 @2021-02-04
 
-  Support --skip-main for 'pull' command.
+    Fixed nigit pull. It should not skip the main project.
 
-- 1.5.8 @2020-12-28
+-   1.5.10 @2021-01-06
 
-  - Use at most 5 concurrent tasks for 'nigit pull'. Because some servers may
-    reject SSH connections with "error: kex_exchange_identification: Connection closed by remote host"
+    Support --skip-main for 'pull' command.
 
-- 1.5.2 @2020-07-21
+-   1.5.8 @2020-12-28
 
-  - Bug fix: Make it work under Linux.
+    -   Use at most 5 concurrent tasks for 'nigit pull'. Because some servers may
+        reject SSH connections with "error: kex_exchange_identification: Connection closed by remote host"
 
-- 1.5.0 @2020-07-21
+-   1.5.2 @2020-07-21
 
-  - Add 'clean' command.
+    -   Bug fix: Make it work under Linux.
 
-- 1.4.0 @2020-07-17
+-   1.5.0 @2020-07-21
 
-  - Add 'tag' command.
+    -   Add 'clean' command.
 
-- 1.3.2 @2020-07-14
+-   1.4.0 @2020-07-17
 
-  - Fixed bug #2: Field "name" doesn't work properly for .zip project
+    -   Add 'tag' command.
 
-- 1.3.0 @2020-07-01
+-   1.3.2 @2020-07-14
 
-  - Support "nigit start" to create branches.
+    -   Fixed bug #2: Field "name" doesn't work properly for .zip project
 
-- 1.1.0 @2020-06-18
+-   1.3.0 @2020-07-01
 
-  - Make the output of 'branch' and 'checkout' command more readable.
+    -   Support "nigit start" to create branches.
 
-- 1.0.1 @2020-04-23
+-   1.1.0 @2020-06-18
 
-  - Support '--force' in 'nigit checkout'. It will discard local changes.
+    -   Make the output of 'branch' and 'checkout' command more readable.
+
+-   1.0.1 @2020-04-23
+
+    -   Support '--force' in 'nigit checkout'. It will discard local changes.

@@ -25,17 +25,14 @@ export class CmdUtils {
     static exec(cmd: string): CmdResult {
         const rtn = new CmdResult();
 
-        try {
-            rtn.stdout = execSync(cmd, { encoding: 'utf8', stdio: 'pipe' });
-        } catch (error) {
-            if (error.stdout) {
-                rtn.stdout = error.stdout.toString();
-            }
-            if (error.stderr) {
-                rtn.stderr = error.stderr.toString();
-            }
-            rtn.exitCode = error.status;
+        const result = spawnSync(cmd, [], { shell: true, encoding: 'utf8', stdio: 'pipe' });
+        if (result.status == null) {
+            rtn.exitCode = -1;
+        } else {
+            rtn.exitCode = result.status as number;
         }
+        rtn.stdout = result.stdout;
+        rtn.stderr = result.stderr;
 
         return rtn;
     }
@@ -68,7 +65,11 @@ export class CmdUtils {
     static execInConsole(cmd: string): number {
         const result = CmdUtils.exec(cmd);
         if (result.exitCode == 0) {
-            print(result.stdout);
+            if (result.stdout.trim().length != 0) {
+                print(result.stdout);
+            } else {
+                print(result.stderr);
+            }
         } else {
             print(result.stderr, MessageType.error);
         }
