@@ -64,7 +64,7 @@ export class InfoDumper {
         }
 
         for (const info of infos) {
-            const log = `${info.projectName} [${info.branchName}|${info.hashCode}] ${info.log}`;
+            const log = `${info.projectName} [${info.hashCode}] ${info.log}`;
             if (writeStream == null) {
                 console.log(log);
             } else {
