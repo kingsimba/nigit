@@ -18,12 +18,6 @@ export class GitTag {
     static cmdCreateTag(tagName: string): number {
         const forall = GitForAll.instance('.');
 
-        // verify tag name
-        if (!tagName.match(/^v?\d+(\.\d+)?(\.\d+)?$/)) {
-            println('error: Tag name must match format v1, v1.1, v1.1.1 or without the "v"');
-            return 1;
-        }
-
         // Check existing tag. make sure no project has this tag.
         const table = forall.newTablePrinter();
         if (table == undefined) {
