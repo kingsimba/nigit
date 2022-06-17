@@ -2,27 +2,27 @@
 
 # A Tool for Managing a Group of Git Projects <!-- omit in toc -->
 
--   [What is it?](#what-is-it)
--   [Installation](#installation)
--   [Prerequisites](#prerequisites)
--   [Initialization](#initialization)
--   [List](#list)
--   [Pull](#pull)
--   [Push](#push)
--   [Status](#status)
--   [Clean](#clean)
--   [Branch or Tag](#branch-or-tag)
-    -   [Show Branches](#show-branches)
-    -   [Switch Branch](#switch-branch)
-    -   [Create Feature Branch](#create-feature-branch)
-    -   [Create Release Branch](#create-release-branch)
-    -   [Create / List Tags](#create--list-tags)
-    -   [Take Snapshot and Restore](#take-snapshot-and-restore)
--   [Using Precompiled Binaries](#using-precompiled-binaries)
--   [Contribute](#contribute)
-    -   [Compile](#compile)
-    -   [Code & Debug](#code--debug)
--   [Changelog](#changelog)
+- [What is it?](#what-is-it)
+- [Installation](#installation)
+- [Prerequisites](#prerequisites)
+- [Initialization](#initialization)
+- [List](#list)
+- [Pull](#pull)
+- [Push](#push)
+- [Status](#status)
+- [Clean](#clean)
+- [Branch or Tag](#branch-or-tag)
+  - [Show Branches](#show-branches)
+  - [Switch Branch](#switch-branch)
+  - [Create Feature Branch](#create-feature-branch)
+  - [Create Release Branch](#create-release-branch)
+  - [Create / List Tags](#create--list-tags)
+  - [Take Snapshot and Restore](#take-snapshot-and-restore)
+- [Using Precompiled Binaries](#using-precompiled-binaries)
+- [Contribute](#contribute)
+  - [Compile](#compile)
+  - [Code & Debug](#code--debug)
+- [Changelog](#changelog)
 
 ## What is it?
 
@@ -443,6 +443,10 @@ nigit --help # Try out newly built version.
 4. Edit code. Press F7 to compile TS to JS. Run tests again.
 
 ## Changelog
+
+-   1.8.1 @2022-06-17
+
+    -   Allow any tag name. Remove format validation.
 
 -   1.8.0 @2022-02-23
 
