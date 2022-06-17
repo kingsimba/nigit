@@ -444,9 +444,13 @@ nigit --help # Try out newly built version.
 
 ## Changelog
 
--   1.8.1 @2022-06-17
+-   1.8.2 @2022-06-17
 
     -   Allow any tag name. Remove format validation.
+
+-   1.8.1 @2022-05-09
+
+    -   Remove branch name in `dump-info` command.
 
 -   1.8.0 @2022-02-23
 
