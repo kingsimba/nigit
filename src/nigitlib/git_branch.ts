@@ -49,7 +49,7 @@ class GitBranch {
             if (!proj.isGitRepository()) {
                 table.printLine(proj.name, colors.grey('(not git repo)'));
             } else if (branch) {
-                branch = branch.substr(2);
+                branch = branch.substring(2);
                 if (firstProject) {
                     firstProjectBranch = branch;
                 }

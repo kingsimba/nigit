@@ -44,11 +44,11 @@ function getBranchWarning(currentBranch: string, missingBranch: string) {
 }
 
 export class GitCheckoutOptions {
-    force: boolean = false;
+    force = false;
 }
 
 class ProjectCheckoutResult {
-    succ: boolean = false;
+    succ = false;
     message?: string;
 }
 
@@ -168,9 +168,7 @@ export class GitCheckout {
     }
 
     _checkout(projDir: string, branchName: string): ProjectCheckoutResult {
-        const checkoutSucc = false;
-        const cmd = `cd ${projDir} && git checkout ${branchName} ${this.options.force ? '--force' : ''
-            }`;
+        const cmd = `cd ${projDir} && git checkout ${branchName} ${this.options.force ? '--force' : ''}`;
         const result = CmdUtils.exec(cmd);
         if (result.exitCode == 0) {
             let message;

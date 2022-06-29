@@ -1,4 +1,4 @@
-import { println, CmdUtils } from './cmd_utils';
+import { CmdUtils } from './cmd_utils';
 import { GitForAll } from './git_forall';
 import colors from 'colors';
 
@@ -32,7 +32,7 @@ export class GitTag {
                 continue;
             }
 
-            const result = CmdUtils.exec(`cd ${projDir} && git tag -l \"${tagName}\"`);
+            const result = CmdUtils.exec(`cd ${projDir} && git tag -l "${tagName}"`);
             if (result.stdout.split('\n').find((o) => o == tagName)) {
                 table.printLine(proj.name, colors.red(`tag '${tagName}' already exist`));
                 failed = true;
@@ -51,7 +51,7 @@ export class GitTag {
                     continue;
                 }
 
-                const result = CmdUtils.exec(`cd ${projDir} && git tag \"${tagName}\"`);
+                const result = CmdUtils.exec(`cd ${projDir} && git tag "${tagName}"`);
                 if (result.exitCode != 0) {
                     table.printLine(proj.name, colors.red(`error: ${result.stdout}`));
                 } else {

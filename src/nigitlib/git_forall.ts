@@ -82,7 +82,7 @@ export class GitForAll {
     }
 
     static instance(workDir: string | undefined): GitForAll {
-        let o: GitForAll | null = new GitForAll();
+        const o: GitForAll | null = new GitForAll();
         o.init(workDir);
         return o;
     }
@@ -92,8 +92,7 @@ export class GitForAll {
             workDir = '.';
         }
 
-        let mainProject;
-        mainProject = this.findMainProject(workDir);
+        const mainProject = this.findMainProject(workDir);
 
         const config = GitConfig.instanceWithMainProjectPath(mainProject);
         if (config == undefined) {
