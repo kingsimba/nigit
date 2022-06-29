@@ -4,8 +4,12 @@
         "dist": true
     },
     "editor.formatOnSave": true,
+    "testExplorer.useNativeTesting": false,
     "mochaExplorer.files": "test/**/*.spec.ts",
     "mochaExplorer.require": [
         "ts-node/register/transpile-only"
-    ]
+    ],
+    "typescript.implementationsCodeLens.enabled": true,
+    "typescript.referencesCodeLens.enabled": true,
+    "typescript.referencesCodeLens.showOnAllFunctions": false
 }
