@@ -12,7 +12,7 @@ export class GitTag {
         const proj = forall.mainProject;
         const projDir = proj.directory;
 
-        return CmdUtils.execInConsole(`cd ${projDir} && git tag -l \"${pattern}\"`);
+        return CmdUtils.execInConsole(`cd ${projDir} && git tag -l "${pattern}"`);
     }
 
     static cmdCreateTag(tagName: string): number {

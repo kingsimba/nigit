@@ -1,4 +1,4 @@
-import { CmdUtils, print, MessageType } from './cmd_utils';
+import { CmdUtils } from './cmd_utils';
 import { GitForAll } from './git_forall';
 import { GitProject } from './git_config';
 import colors from 'colors';
@@ -37,7 +37,10 @@ function getBranchMessage(currentBranch: string, message: string) {
 }
 
 function getBranchWarning(currentBranch: string, missingBranch: string) {
-    return colors.yellow(`* ${currentBranch} `) + colors.grey(`(Cannot find '${missingBranch}')`);
+    return (
+        colors.yellow(`* ${currentBranch} `) +
+        colors.grey(`(Cannot find '${missingBranch}')`)
+    );
 }
 
 export class GitCheckoutOptions {
@@ -71,7 +74,10 @@ export class GitCheckout {
 
         // checkout main project first
         try {
-            this.mainProjectBranch = this._checkoutMainProject(forall.mainProject, table);
+            this.mainProjectBranch = this._checkoutMainProject(
+                forall.mainProject,
+                table
+            );
         } catch (error) {
             table.printHeader('Project', 'Branches');
             table.firstColumnWidth = forall.mainProject.name.length + 2;
@@ -100,13 +106,21 @@ export class GitCheckout {
         // get current branch
         const mainProjectBranch = getCurrentBranch(projDir);
         if (mainProjectBranch == undefined) {
-            throw new Error(`Failed to get the branch name of main project '${proj.name}'`);
+            throw new Error(
+                `Failed to get the branch name of main project '${proj.name}'`
+            );
         }
 
         if (coResult.succ) {
-            table.printLine(proj.name, getBranchMessage(mainProjectBranch, coResult.message || ''));
+            table.printLine(
+                proj.name,
+                getBranchMessage(mainProjectBranch, coResult.message || '')
+            );
         } else {
-            table.printLine(proj.name, getBranchWarning(mainProjectBranch, this.branchName));
+            table.printLine(
+                proj.name,
+                getBranchWarning(mainProjectBranch, this.branchName)
+            );
         }
 
         return mainProjectBranch;
@@ -134,7 +148,10 @@ export class GitCheckout {
 
             const branch = getCurrentBranch(projDir);
             if (coResult.succ) {
-                table.printLine(proj.name, getBranchMessage(branch!, coResult.message || ''));
+                table.printLine(
+                    proj.name,
+                    getBranchMessage(branch!, coResult.message || '')
+                );
             } else {
                 table.printLine(proj.name, getBranchWarning(branch!, this.branchName));
             }
@@ -152,20 +169,31 @@ export class GitCheckout {
 
     _checkout(projDir: string, branchName: string): ProjectCheckoutResult {
         const checkoutSucc = false;
-        const cmd = `cd ${projDir} && git checkout ${branchName} ${this.options.force ? '--force' : ''}`;
+        const cmd = `cd ${projDir} && git checkout ${branchName} ${this.options.force ? '--force' : ''
+            }`;
         const result = CmdUtils.exec(cmd);
         if (result.exitCode == 0) {
             let message;
             let m;
             // tslint:disable-next-line: no-conditional-assignment
-            if ((m = result.stdout.match(/Your branch is behind '.*' by \d+ commits, and can be fast-forwarded/m))) {
+            if (
+                (m = result.stdout.match(
+                    /Your branch is behind '.*' by \d+ commits, and can be fast-forwarded/m
+                ))
+            ) {
                 message = m[0];
                 // tslint:disable-next-line: no-conditional-assignment
-            } else if ((m = result.stdout.match(/Your branch and '.*' have diverged/m))) {
+            } else if (
+                (m = result.stdout.match(/Your branch and '.*' have diverged/m))
+            ) {
                 message = m[0];
             }
             return { succ: true, message };
-        } else if (!result.stderr.match(/error: pathspec '.*' did not match any file\(s\) known to git/)) {
+        } else if (
+            !result.stderr.match(
+                /error: pathspec '.*' did not match any file\(s\) known to git/
+            )
+        ) {
             throw new Error(result.stderr);
         }
 

@@ -15,7 +15,7 @@ export class GitPush {
      * @param projects If it's empty, pull all projects.
      */
     static async cmdGitPush(projects: string[]): Promise<number> {
-        let forall = GitForAll.instance('.');
+        const forall = GitForAll.instance('.');
 
         // filter unwanted projects
         const targetProjects = forall.projects.filter(
@@ -25,7 +25,7 @@ export class GitPush {
         // Because "git push" is a slow operation,
         // we'd like to run them in parallel for all projects.
         // "asyncify" must be used in TypeScript. See https://stackoverflow.com/questions/45572743/how-to-enable-async-maplimit-to-work-with-typescript-async-await
-        let allResults = await async.mapLimit<GitProject, number>(
+        const allResults = await async.mapLimit<GitProject, number>(
             targetProjects,
             5,
             async.asyncify(async (proj: GitProject) => {
@@ -54,7 +54,7 @@ export class GitPush {
         );
 
         // all results must be 0
-        let allIsZero: boolean = allResults.find((v) => v != 0) == undefined;
+        const allIsZero: boolean = allResults.find((v) => v != 0) == undefined;
         return allIsZero ? 0 : 1;
     }
 }

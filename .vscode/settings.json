@@ -11,5 +11,11 @@
     ],
     "typescript.implementationsCodeLens.enabled": true,
     "typescript.referencesCodeLens.enabled": true,
-    "typescript.referencesCodeLens.showOnAllFunctions": false
+    "typescript.referencesCodeLens.showOnAllFunctions": false,
+    "eslint.validate": [
+        "typescript"
+    ],
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
 }

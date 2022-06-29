@@ -4,7 +4,7 @@ import fs from 'fs';
 import colors from 'colors';
 
 export class GitStatusInfo {
-    constructor(public projName: string, public messages: string[]) {}
+    constructor(public projName: string, public messages: string[]) { }
 }
 
 export class GitStatus {
@@ -13,8 +13,6 @@ export class GitStatus {
      */
     static getInfos(forall: GitForAll): GitStatusInfo[] {
         const infos: GitStatusInfo[] = [];
-
-        let allIsClean = true;
 
         for (const proj of forall.projects) {
             const projDir = proj.directory;

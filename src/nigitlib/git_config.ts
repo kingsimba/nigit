@@ -15,7 +15,7 @@ export class GitProject {
     static instanceWithUrl(url: string): GitProject {
         const o = new GitProject();
         o.url = url;
-        const m = url.match(/\/([^\/]+)$/);
+        const m = url.match(/\/([^/]+)$/);
         if (m == undefined) {
             throw new Error(`url ${url} is not valid`);
         }
@@ -88,7 +88,7 @@ export class GitConfig {
 
     _loadSubprojects(path: string) {
         // load subprojects
-        let text: string = '';
+        let text = '';
         let nigitFileName;
         if (fs.existsSync(`${path}/nigit.json`)) {
             nigitFileName = `${path}/nigit.json`;

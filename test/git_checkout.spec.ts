@@ -21,13 +21,17 @@ describe('GitCheckout', function () {
         CmdUtils.exec('cd ../json-script && git add README.rst && git commit -m"delete README.rst"');
     });
 
+
+
     it('getCurrentBranchFromOutput() works', () => {
+
+
         let result = getCurrentBranchFromOutput(
-            `* (HEAD detached at origin/dev)\n  branches/1.0.x\n  branches/stable\n  dev  \n  master`
+            '* (HEAD detached at origin/dev)\n  branches/1.0.x\n  branches/stable\n  dev  \n  master'
         );
         expect(result).equals('origin/dev');
 
-        result = getCurrentBranchFromOutput(`  branches/1.0.x\n  branches/stable\n  dev  \n* master`);
+        result = getCurrentBranchFromOutput('  branches/1.0.x\n  branches/stable\n  dev  \n* master');
         expect(result).equals('master');
     });
 

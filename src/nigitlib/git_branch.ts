@@ -7,7 +7,7 @@ import { TablePrinter } from './table-printer';
 
 class GitBranch {
     options: any;
-    private showCurrentBranch: boolean = false;
+    private showCurrentBranch = false;
 
     execute(options: any) {
         const forall = GitForAll.instance('.');

@@ -1,4 +1,4 @@
-import { exec, execSync, spawnSync } from 'child_process';
+import { exec, spawnSync } from 'child_process';
 import colors from 'colors';
 import fs from 'fs';
 
@@ -25,7 +25,11 @@ export class CmdUtils {
     static exec(cmd: string): CmdResult {
         const rtn = new CmdResult();
 
-        const result = spawnSync(cmd, [], { shell: true, encoding: 'utf8', stdio: 'pipe' });
+        const result = spawnSync(cmd, [], {
+            shell: true,
+            encoding: 'utf8',
+            stdio: 'pipe',
+        });
         if (result.status == null) {
             rtn.exitCode = -1;
         } else {

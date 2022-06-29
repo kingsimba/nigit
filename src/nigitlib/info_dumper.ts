@@ -1,10 +1,10 @@
-import fs, { write } from 'fs';
+import fs from 'fs';
 import { CmdUtils, MessageType, println } from './cmd_utils';
 import { GitForAll } from './git_forall';
 import { GitStatus } from './git_status';
 
 export class ProjectGitInfo {
-    constructor(public projectName: string, public branchName: string, public hashCode: string, public log: string) {}
+    constructor(public projectName: string, public branchName: string, public hashCode: string, public log: string) { }
 }
 
 /**

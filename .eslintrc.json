@@ -1,0 +1,62 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module",
+        "project": "tsconfig.json"
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "no-floating-promise",
+        "prefer-arrow"
+    ],
+    "rules": {
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "require-await": [
+            "error"
+        ],
+        "no-floating-promise/no-floating-promise": 2,
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "@typescript-eslint/no-misused-promises": [
+            "error",
+            {
+                "checksConditionals": true,
+                "checksVoidReturn": true
+            }
+        ],
+        "prefer-arrow/prefer-arrow-functions": [
+            "error",
+            {
+                "disallowPrototype": true,
+                "singleReturnOnly": false,
+                "classPropertiesAllowed": false,
+                "allowStandaloneDeclarations": true
+            }
+        ]
+    }
+}

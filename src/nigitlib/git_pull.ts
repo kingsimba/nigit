@@ -6,7 +6,7 @@ import async from 'async';
 import { GitProject } from './git_config';
 
 export class GitPullOptions {
-    constructor(public skipMainProject = false, public prune = false, public tags = false, public force = false) {}
+    constructor(public skipMainProject = false, public prune = false, public tags = false, public force = false) { }
 }
 
 export class GitPull {
@@ -37,14 +37,14 @@ export class GitPull {
         if (options.force) {
             moreArgs.push('--force');
         }
-        const gitCmd = action == 'pull' ? `git pull --ff-only` : `git fetch ${moreArgs.join(' ')}`;
+        const gitCmd = action == 'pull' ? 'git pull --ff-only' : `git fetch ${moreArgs.join(' ')}`;
 
         if (
             (options == undefined || !options.skipMainProject) &&
             (projects.length == 0 || projects.indexOf(mainProject.name) != -1)
         ) {
             println(`=== ${mainProject.name} ===`);
-            let cmd = `cd "${mainProject.directory}" && ${gitCmd}`;
+            const cmd = `cd "${mainProject.directory}" && ${gitCmd}`;
             const result = CmdUtils.exec(cmd);
             if (result.exitCode == 0) {
                 print(result.stdout);
@@ -65,14 +65,14 @@ export class GitPull {
         // Because "git pull --ff-only" is a slow operation,
         // we'd like to run them in parallel for all projects.
         // "asyncify" must be used in TypeScript. See https://stackoverflow.com/questions/45572743/how-to-enable-async-maplimit-to-work-with-typescript-async-await
-        let allResults = await async.mapLimit<GitProject, number>(
+        const allResults = await async.mapLimit<GitProject, number>(
             targetProjects,
             5,
             async.asyncify(async (proj: GitProject) => {
                 const projDir = proj.directory;
                 if (fs.existsSync(`${projDir}/.git`)) {
                     // for git repository, run 'git pull/fetch'
-                    let cmd = `cd "${projDir}" && ${gitCmd}`;
+                    const cmd = `cd "${projDir}" && ${gitCmd}`;
                     const result = await CmdUtils.execAsync(cmd);
 
                     println(`=== ${proj.name} ===`);
@@ -136,7 +136,7 @@ export class GitPull {
         );
 
         // all results must be 0
-        let allIsZero: boolean = allResults.find((v) => v != 0) == undefined;
+        const allIsZero: boolean = allResults.find((v) => v != 0) == undefined;
         return allIsZero ? 0 : 1;
     }
 }

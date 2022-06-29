@@ -4,7 +4,7 @@ import { GitStatus } from './git_status';
 import { TablePrinter } from './table-printer';
 
 export class GitInfo {
-    constructor(public name: string, public hashCode: string, public log: string) {}
+    constructor(public name: string, public hashCode: string, public log: string) { }
 }
 
 /**
