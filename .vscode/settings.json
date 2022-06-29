@@ -1,18 +1,11 @@
 {
     "files.exclude": {
         "node_modules": true,
-        "dist": true,
-        ".gitignore": true,
-        "src/**/*.js": true,
-        "src/**/*.js.map": true,
-        "test/**/*.js": true,
-        "test/**/*.js.map": true
+        "dist": true
     },
-    "restructuredtext.confPath": "",
     "editor.formatOnSave": true,
     "mochaExplorer.files": "test/**/*.spec.ts",
     "mochaExplorer.require": [
         "ts-node/register/transpile-only"
-    ],
-    "restructuredtext.languageServer.disabled": true
+    ]
 }

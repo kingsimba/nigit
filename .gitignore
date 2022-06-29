@@ -6,8 +6,4 @@
 /assets/zlib
 /obj
 /bin
-src/**/*.js
-src/**/*.map
-test/**/*.js
-test/**/*.map
 *.tsbuildinfo
