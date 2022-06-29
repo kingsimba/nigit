@@ -5,7 +5,7 @@ import { GitSwitcher } from './nigitlib/git_switcher';
 import { GitForAll } from './nigitlib/git_forall';
 import { println, print, MessageType, CmdUtils } from './nigitlib/cmd_utils';
 import { GitStatus } from './nigitlib/git_status';
-import { GitPull } from './nigitlib/git_pull';
+import { GitPull, GitPullOptions } from './nigitlib/git_pull';
 import { GitPush } from './nigitlib/git_push';
 import { GitProject } from './nigitlib/git_config';
 import { GitCheckout, GitCheckoutOptions } from './nigitlib/git_checkout';
@@ -27,10 +27,7 @@ program
 
         const proj = GitProject.instanceWithUrl(url);
         GitForAll.createWorkspaceFile('.', proj.name);
-        GitPull.cmdGitPullOrFetch([], 'pull', {
-            skipMainProject: false,
-            prune: false,
-        });
+        GitPull.cmdGitPullOrFetch([], 'pull');
     });
 
 program
@@ -77,10 +74,7 @@ program
     .description('Update all projects to the latest status. Similar with "git pull --ff-only"')
     .option('--skip-main', 'Skip the main project', false)
     .action((projects: string[], options: any) => {
-        GitPull.cmdGitPullOrFetch(projects, 'pull', {
-            skipMainProject: options.skipMain,
-            prune: false,
-        });
+        GitPull.cmdGitPullOrFetch(projects, 'pull', new GitPullOptions(options.skipMain));
     });
 
 program
@@ -95,11 +89,14 @@ program
     .description('run "git fetch" for all projects')
     .option('--skip-main', 'Skip the main project', false)
     .option('-p --prune', 'Same as "git fetch --prune"', false)
+    .option('-t --tags', 'Same as "git fetch --tags"', false)
+    .option('-f --force', 'Same as "git fetch --force"', false)
     .action((projects: string[], options: any) => {
-        GitPull.cmdGitPullOrFetch(projects, 'fetch', {
-            skipMainProject: options.skipMain,
-            prune: options.prune,
-        });
+        const opts = new GitPullOptions();
+        opts.skipMainProject = options.skipMain;
+        opts.tags = options.tags;
+        opts.force = options.force;
+        GitPull.cmdGitPullOrFetch(projects, 'fetch', opts);
     });
 
 program

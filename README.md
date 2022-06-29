@@ -430,9 +430,9 @@ npm install --global gulp-cli
 Build & Try:
 
 ```
-gulp     # Build
-npm link # Apply build result. It should overwrite other versions.
-nigit --help # Try out newly built version.
+gulp          # Build
+sudo npm link # Apply build result. It should overwrite other versions.
+nigit --help  # Try out newly built version.
 ```
 
 ### Code & Debug
@@ -443,6 +443,10 @@ nigit --help # Try out newly built version.
 4. Edit code. Press F7 to compile TS to JS. Run tests again.
 
 ## Changelog
+
+-   1.8.3 @2022-06-29
+
+    -   Add `-t --tags, -f --force` to `nigit fetch`. For example, use `nigit fetch -t -f` to update all local tags.
 
 -   1.8.2 @2022-06-17
 

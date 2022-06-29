@@ -6,8 +6,7 @@ import async from 'async';
 import { GitProject } from './git_config';
 
 export class GitPullOptions {
-    skipMainProject = false;
-    prune = false;
+    constructor(public skipMainProject = false, public prune = false, public tags = false, public force = false) {}
 }
 
 export class GitPull {
@@ -17,7 +16,7 @@ export class GitPull {
     static async cmdGitPullOrFetch(
         projects: string[],
         action: 'pull' | 'fetch',
-        options?: GitPullOptions
+        options: GitPullOptions = new GitPullOptions()
     ): Promise<number> {
         let forall = GitForAll.instance('.');
 
@@ -28,8 +27,17 @@ export class GitPull {
         // write .nigit.workspace if not exist
         GitForAll.createWorkspaceFile(`${mainProject.directory}/..`, mainProject.name);
 
-        const pruneArg = options?.prune ? '--prune' : '';
-        const gitCmd = action == 'pull' ? `git pull --ff-only` : `git fetch ${pruneArg}`;
+        const moreArgs = [];
+        if (options.prune) {
+            moreArgs.push('--prune');
+        }
+        if (options.tags) {
+            moreArgs.push('--tags');
+        }
+        if (options.force) {
+            moreArgs.push('--force');
+        }
+        const gitCmd = action == 'pull' ? `git pull --ff-only` : `git fetch ${moreArgs.join(' ')}`;
 
         if (
             (options == undefined || !options.skipMainProject) &&

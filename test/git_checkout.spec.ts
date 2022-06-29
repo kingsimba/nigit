@@ -2,7 +2,7 @@ import { GitCheckout, getCurrentBranchFromOutput } from '../src/nigitlib/git_che
 import chai from 'chai';
 import { CmdUtils } from '../src/nigitlib/cmd_utils';
 import fs from 'fs';
-import { GitPull } from '../src/nigitlib/git_pull';
+import { GitPull, GitPullOptions } from '../src/nigitlib/git_pull';
 
 const expect = chai.expect;
 
@@ -10,7 +10,7 @@ describe('GitCheckout', function () {
     before(async () => {
         if (process.env.GITHUB_WORKSPACE != undefined) {
             // download dependent projects with GitHub CI
-            await GitPull.cmdGitPullOrFetch([], "pull", { skipMainProject: true, prune: false });
+            await GitPull.cmdGitPullOrFetch([], 'pull', new GitPullOptions(true));
         }
         // delete test branch
         CmdUtils.exec('cd ../json-script && git checkout master --force && git branch -D test_branch');
@@ -22,11 +22,13 @@ describe('GitCheckout', function () {
     });
 
     it('getCurrentBranchFromOutput() works', () => {
-        let result = getCurrentBranchFromOutput(`* (HEAD detached at origin/dev)\n  branches/1.0.x\n  branches/stable\n  dev  \n  master`);
-        expect(result).equals("origin/dev");
+        let result = getCurrentBranchFromOutput(
+            `* (HEAD detached at origin/dev)\n  branches/1.0.x\n  branches/stable\n  dev  \n  master`
+        );
+        expect(result).equals('origin/dev');
 
         result = getCurrentBranchFromOutput(`  branches/1.0.x\n  branches/stable\n  dev  \n* master`);
-        expect(result).equals("master");
+        expect(result).equals('master');
     });
 
     it('should be able to checkout to specific branch', () => {
@@ -53,7 +55,9 @@ describe('GitCheckout', function () {
         expect(fs.readFileSync('../json-script/README.rst', 'utf8').trim()).endsWith('abc');
 
         // checkout to master will overwrite README.rst. So it will fail
-        expect(() => { o._checkout('../json-script', 'master') }).to.throw('untracked working tree files would be overwritten');
+        expect(() => {
+            o._checkout('../json-script', 'master');
+        }).to.throw('untracked working tree files would be overwritten');
     });
 
     it('should succ if forced checkout', () => {
