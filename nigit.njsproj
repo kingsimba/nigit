@@ -34,7 +34,6 @@
   <ItemGroup>
     <Content Include=".mocharc.json" />
     <Content Include=".travis.yml" />
-    <Content Include="gulpfile.js" />
     <Content Include="LICENSE.rst" />
     <Content Include="package.json" />
     <Content Include="README.md" />

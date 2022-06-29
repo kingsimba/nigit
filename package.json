@@ -6,6 +6,7 @@
 		"dist/**/*.js"
 	],
 	"scripts": {
+		"clean": "rm -rf dist",
 		"build": "npx tsc",
 		"test": "npx mocha test/**/*.spec.ts --require 'ts-node/register/transpile-only'"
 	},

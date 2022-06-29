@@ -58,7 +58,8 @@ jobs:
             - name: Build
               run: |
                   cd nigit
-                  gulp
+                  npm run clean
+                  npm run build
 
             - name: Test
               run: |

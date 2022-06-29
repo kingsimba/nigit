@@ -421,16 +421,10 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
 
 ### Compile
 
-Make sure gulp is installed:
-
-```
-npm install --global gulp-cli
-```
-
 Build & Try:
 
 ```
-gulp          # Build
+npm run build   # Build
 sudo npm link # Apply build result. It should overwrite other versions.
 nigit --help  # Try out newly built version.
 ```
