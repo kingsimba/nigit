@@ -1,8 +1,7 @@
 {
     "files.exclude": {
         "node_modules": true,
-        "dist": true,
-        ".gitignore": true
+        "dist": true
     },
     "editor.formatOnSave": true,
     "mochaExplorer.files": "test/**/*.spec.ts",
