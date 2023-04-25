@@ -62,9 +62,9 @@ export class GitSwitcher {
         const infos: GitInfo[] = [];
 
         lines.forEach((line) => {
-            const m = line.match(/([^\s]+) \[(.*)\|(.*)\] (.*)/);
+            const m = line.match(/([^\s]+) \[((.*)\|)?(.*)\] (.*)/);
             if (m) {
-                infos.push(new GitInfo(m[1], m[3], m[4]));
+                infos.push(new GitInfo(m[1], m[4], m[5]));
             }
         });
 
