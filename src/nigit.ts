@@ -14,6 +14,7 @@ import { GitStart } from './nigitlib/git_start';
 import { GitTag } from './nigitlib/git_tag';
 import { GitClean, GitCleanOption } from './nigitlib/git_clean';
 import { InfoDumper } from './nigitlib/info_dumper';
+import { CompletionScript } from './nigitlib/completion';
 
 program
     .command('clone <URL>')
@@ -151,6 +152,19 @@ program
     .description('Run a command on all projects')
     .action((command: string) => {
         GitForAll.cmdGitForAll(command);
+    });
+
+program
+    .command('completion')
+    .description('Print a shell completion script, or install it into your shell config with --install.')
+    .option('--zsh', 'Print/install a zsh-compatible script (uses bashcompinit)')
+    .option('--install', 'Append the "source" line to your shell config (~/.bashrc or ~/.zshrc)')
+    .action((options: any) => {
+        if (options.install) {
+            println(CompletionScript.install(options.zsh));
+        } else {
+            process.stdout.write(CompletionScript.generate(options.zsh));
+        }
     });
 
 program.exitOverride();

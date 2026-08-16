@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- 2026-08-16 nigit: Add tab completion via the 'completion' command
+
 ## 1.8.5
 
 - 2026-08-16 nigit: Support pushing a tag with 'nigit push <tag>'

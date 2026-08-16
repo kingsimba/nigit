@@ -4,6 +4,7 @@
 
 - [What is it?](#what-is-it)
 - [Installation](#installation)
+- [Tab Completion](#tab-completion)
 - [Prerequisites](#prerequisites)
 - [Initialization](#initialization)
 - [List](#list)
@@ -49,6 +50,37 @@ Please use npm package manager to install it:
 
 ```bash
 npm install nigit -g
+```
+
+## Tab Completion
+
+`nigit` ships with a `completion` command that prints a shell completion
+script. It completes subcommands, their options, subproject names (from
+`nigit.json`) and branch names.
+
+The easiest way to enable it is to install the script into your shell config:
+
+```bash
+nigit completion --install
+```
+
+It detects whether you're on bash or zsh automatically and appends the needed
+`source` line to `~/.bashrc` or `~/.zshrc` (skipped if already present), then
+restart your shell (or run `source ~/.bashrc` / `source ~/.zshrc`) and tab
+completion will be active. Pass `--zsh` explicitly to force the zsh variant.
+
+Alternatively, you can source the printed script manually:
+
+For bash:
+
+```bash
+echo "source <(nigit completion)" >> ~/.bashrc
+```
+
+For zsh:
+
+```zsh
+echo "source <(nigit completion --zsh)" >> ~/.zshrc
 ```
 
 ## Prerequisites
