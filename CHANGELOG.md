@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.8.6
 
 - 2026-08-16 nigit: Add tab completion via the 'completion' command
 
