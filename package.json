@@ -14,7 +14,7 @@
 	"dependencies": {
 		"adm-zip": "^0.4.16",
 		"async": "^3.2.0",
-		"axios": "^0.26.0",
+		"axios": "^0.33.0",
 		"colors": "^1.4.0",
 		"commander": "^5.1.0"
 	},
