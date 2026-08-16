@@ -272,7 +272,7 @@ If no such branch exist for a subproject, fallback
 to a branch which is the same as the main project.
 
 ```
-$ nigit checkout data-driver
+$ nigit checkout data-driver # (or `co` for short)
 Project        Branch
 ---------------------
 main_project   master (Cannot find 'data-driver')

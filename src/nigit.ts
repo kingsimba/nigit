@@ -121,6 +121,7 @@ program
 
 program
     .command('checkout <BRANCH_NAME>')
+    .alias('co')
     .description(
         'Run "git checkout BRANCH_NAME" for all projects.' +
         "If a subproject doesn't have it, fallback to the same branch as the main project."

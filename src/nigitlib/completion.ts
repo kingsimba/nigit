@@ -38,7 +38,7 @@ _nigit_completions() {
     local cur
     cur="\${COMP_WORDS[COMP_CWORD]}"
 
-    local commands="clone list status branch tag pull push fetch start clean checkout checkout-info dump-info forall completion"
+    local commands="clone list status branch tag pull push fetch start clean checkout checkout-info dump-info forall"
     local cmd
 
     if [ "$COMP_CWORD" -eq 1 ]; then
@@ -76,7 +76,7 @@ _nigit_completions() {
         clean)
             COMPREPLY=( \$(compgen -W "--force --dry -f -n" -- "\$cur") )
             ;;
-        checkout)
+        checkout|co)
             COMPREPLY=( \$(compgen -W "\$(__nigit_branches)" -- "\$cur") )
             ;;
         checkout-info|dump-info)
@@ -88,7 +88,7 @@ _nigit_completions() {
     return 0
 }
 
-complete -F _nigit_completions nigit
+complete -o nosort -F _nigit_completions nigit
 `;
     }
 
