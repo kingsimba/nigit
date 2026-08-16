@@ -78,8 +78,11 @@ program
     });
 
 program
-    .command('push [projects...]')
-    .description('Push all projects to remote and set up tracking, with "git push origin -u BRANCH_NAME"')
+    .command('push [projects-or-tags...]')
+    .description(
+        'Push all projects to remote and set up tracking, with "git push origin -u BRANCH_NAME". ' +
+        'Pass a tag name (e.g. v1.2.14) to push that tag to all projects.'
+    )
     .action((projects: string[], options: any) => {
         GitPush.cmdGitPush(projects);
     });
@@ -119,7 +122,7 @@ program
     .command('checkout <BRANCH_NAME>')
     .description(
         'Run "git checkout BRANCH_NAME" for all projects.' +
-            "If a subproject doesn't have it, fallback to the same branch as the main project."
+        "If a subproject doesn't have it, fallback to the same branch as the main project."
     )
     .option('--force', 'Discard local modifications')
     .action((branchName: string, options: GitCheckoutOptions) => {

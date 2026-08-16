@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-16 nigit: Support pushing a tag with 'nigit push <tag>'
 - 2026-08-16 nigit: Fix 'checkout-info' parsing of commit messages containing brackets
 - 2026-08-16 nigit: Switch package manager to pnpm
 
