@@ -12,7 +12,7 @@
 		"test": "mocha test/**/*.spec.ts --require 'ts-node/register/transpile-only'"
 	},
 	"dependencies": {
-		"adm-zip": "^0.4.16",
+		"adm-zip": "^0.6.0",
 		"async": "^3.2.0",
 		"axios": "^0.26.0",
 		"colors": "^1.4.0",
