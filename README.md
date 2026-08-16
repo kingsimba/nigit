@@ -151,7 +151,11 @@ As shown above, if you have no access to a project, it will be skipped.
 
 ## Push
 
-The `push` command will push current branch to remote, and set up upstream.
+The `push` command pushes branches or tags to remote for all projects.
+
+### Push Branch
+
+Push current branch to remote, and set up upstream.
 
 ```
 $ nigit push
@@ -161,6 +165,18 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 Branch 'master' set up to track remote branch 'master' from 'origin'.
 === subproject_B ===
 Branch 'master' set up to track remote branch 'master' from 'origin'.
+```
+
+### Push Tag
+
+To push a tag to all projects, pass the tag name instead of a project name. It verifies every project has the tag before pushing anything.
+
+```
+$ nigit push v1.4.5
+=== main_project ===
+ * [new tag]         v1.4.5 -> v1.4.5
+=== subproject_A ===
+ * [new tag]         v1.4.5 -> v1.4.5
 ```
 
 ## Status
@@ -434,4 +450,3 @@ nigit --help  # Try out newly built version.
 2. Install "Mocha Test Explorer plugin"
 3. Use test explorer to run all tests. Must call "nigit pull" to download sample projects to pass all tests.
 4. Edit code. Press F7 to compile TS to JS. Run tests again.
-
