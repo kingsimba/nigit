@@ -19,6 +19,12 @@ ncgeo [master|9597110] Merge pull request #4 from ZhujinLi/issue#3`);
             .and.deep.contains(new GitInfo('json-script', '59046b9', 'Update syntax-highlight-in-sphinx.rst'));
     });
 
+    it('should parse log containing brackets', () => {
+        const infos = o._parseGitInfo('auto-mapping [a061399] Fixed [RCSS-1234] xxxx');
+        expect(infos.length).equals(1);
+        expect(infos[0]).deep.equals(new GitInfo('auto-mapping', 'a061399', 'Fixed [RCSS-1234] xxxx'));
+    });
+
     it('should return null if file does not exist', () => {
         expect(o._loadTextFile('none-exist.info')).is.null;
     });

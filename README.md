@@ -22,7 +22,7 @@
 - [Contribute](#contribute)
   - [Compile](#compile)
   - [Code & Debug](#code--debug)
-- [Changelog](#changelog)
+- [Changelog](CHANGELOG.md)
 
 ## What is it?
 
@@ -34,10 +34,10 @@ by syncing them together, switching branch together, etc.
 
 The benefits of this approach are:
 
--   Help cutting clear lines between subprojects. Subprojects can be compiled and tested individually.
-    This will foster stable public APIs and better modularization.
--   Each subproject can have different collaborators and permissions.
-    This is very important in corporations in which different people have different access permissions.
+- Help cutting clear lines between subprojects. Subprojects can be compiled and tested individually.
+  This will foster stable public APIs and better modularization.
+- Each subproject can have different collaborators and permissions.
+  This is very important in corporations in which different people have different access permissions.
 
 If you are familiar with 'git', you will find it easy to learn.
 
@@ -124,9 +124,9 @@ ncgeo => git@github.com:kingsimba/nc-geo.git
 
 The `pull` command will make sure all subprojects are properly cloned/download and up-to-date.
 
--   If a project is missing, it will clone/download it.
--   If a project is a git repository it will run `git pull --ff-only`.
--   If a project is a zip file, it will check if it's update-to-date and download it if not.
+- If a project is missing, it will clone/download it.
+- If a project is a git repository it will run `git pull --ff-only`.
+- If a project is a zip file, it will check if it's update-to-date and download it if not.
 
 ```
 $ nigit pull
@@ -233,9 +233,9 @@ subproject_B   data-driver
 subproject_C   master (Cannot find 'data-driver')
 ```
 
--   'main_project' has no such branch, so it will remain on **master**.
--   'subproject_A' and 'subproject_B' has **data-driver** branch, so they will switched.
--   'subproject_C' has no such branch, so it will follow 'main_project'.
+- 'main_project' has no such branch, so it will remain on **master**.
+- 'subproject_A' and 'subproject_B' has **data-driver** branch, so they will switched.
+- 'subproject_C' has no such branch, so it will follow 'main_project'.
 
 --force
 : Discard all local changes. Checkout to specified branch forcefully.
@@ -413,9 +413,8 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
 ```
 
 4. Modify project settings.
-
-    - Use **awesome-libs/include/** before **module-a/include** and **module-b/include**.
-    - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
+   - Use **awesome-libs/include/** before **module-a/include** and **module-b/include**.
+   - Link to **awesome-libs/lib/** before **module-a/lib/** and **module-b/lib/**.
 
 ## Contribute
 
@@ -424,8 +423,8 @@ If someone don't have access to `module-b`, after running 'nigit pull', he will 
 Build & Try:
 
 ```
-npm run build   # Build
-sudo npm link # Apply build result. It should overwrite other versions.
+pnpm run build   # Build
+sudo pnpm link --global # Apply build result. It should overwrite other versions.
 nigit --help  # Try out newly built version.
 ```
 
@@ -436,78 +435,3 @@ nigit --help  # Try out newly built version.
 3. Use test explorer to run all tests. Must call "nigit pull" to download sample projects to pass all tests.
 4. Edit code. Press F7 to compile TS to JS. Run tests again.
 
-## Changelog
-
--   1.8.3 @2022-06-29
-
-    -   Add `-t --tags, -f --force` to `nigit fetch`. For example, use `nigit fetch -t -f` to update all local tags.
-
--   1.8.2 @2022-06-17
-
-    -   Allow any tag name. Remove format validation.
-
--   1.8.1 @2022-05-09
-
-    -   Remove branch name in `dump-info` command.
-
--   1.8.0 @2022-02-23
-
-    -   Add 'nigit push' command.
-    -   Fix 'nigit start'. It should not use '-t' in 'git checkout -b XXX -t'.
-        Upstream should be set with 'git push -u', later when 'nigit push'.
-    -   Fix output of 'nigit start'. It should print 'Switched to a new branch xxx'
-
--   1.7.2 @2021-09-14
-
-    -   Fix 'nigit checkout origin/xxxx'.
-    -   Fix 'nigit fetch --prune' when the current branch is origin/xxx.
-
--   1.7.0 @2021-09-13
-
-    -   Add 'nigit dump-info'.
-    -   Improve output of 'nigit checkout-info'.
-
--   1.6.0 @2021-09-02
-
-    -   Add 'nigit fetch --prune'.
-
--   1.5.11 @2021-02-04
-
-    Fixed nigit pull. It should not skip the main project.
-
--   1.5.10 @2021-01-06
-
-    Support --skip-main for 'pull' command.
-
--   1.5.8 @2020-12-28
-
-    -   Use at most 5 concurrent tasks for 'nigit pull'. Because some servers may
-        reject SSH connections with "error: kex_exchange_identification: Connection closed by remote host"
-
--   1.5.2 @2020-07-21
-
-    -   Bug fix: Make it work under Linux.
-
--   1.5.0 @2020-07-21
-
-    -   Add 'clean' command.
-
--   1.4.0 @2020-07-17
-
-    -   Add 'tag' command.
-
--   1.3.2 @2020-07-14
-
-    -   Fixed bug #2: Field "name" doesn't work properly for .zip project
-
--   1.3.0 @2020-07-01
-
-    -   Support "nigit start" to create branches.
-
--   1.1.0 @2020-06-18
-
-    -   Make the output of 'branch' and 'checkout' command more readable.
-
--   1.0.1 @2020-04-23
-
-    -   Support '--force' in 'nigit checkout'. It will discard local changes.

@@ -5,10 +5,11 @@
 	"files": [
 		"dist/**/*.js"
 	],
+	"packageManager": "pnpm@10.33.0",
 	"scripts": {
 		"clean": "rm -rf dist",
-		"build": "npx tsc",
-		"test": "npx mocha test/**/*.spec.ts --require 'ts-node/register/transpile-only'"
+		"build": "tsc",
+		"test": "mocha test/**/*.spec.ts --require 'ts-node/register/transpile-only'"
 	},
 	"dependencies": {
 		"adm-zip": "^0.4.16",
