@@ -9,7 +9,7 @@ const expect = chai.expect;
 describe('CompletionScript', () => {
     it('should generate a bash script that registers completion', () => {
         const script = CompletionScript.generate(false);
-        expect(script).to.contain('complete -F _nigit_completions nigit');
+        expect(script).to.contain('complete -o nosort -F _nigit_completions nigit');
         expect(script).to.contain('clone list status branch tag');
         expect(script).to.contain('${COMP_WORDS[COMP_CWORD]}');
     });
