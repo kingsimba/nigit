@@ -6,7 +6,7 @@ import fs from 'fs';
 import { TablePrinter } from './table-printer';
 
 export function getCurrentBranchFromOutput(output: string): string | null {
-    let m = output.match(/^\* \(.* detached at (.*)\)$/m);
+    let m = output.match(/^\* \(.* detached (?:at|from) (.*)\)$/m);
     if (m) {
         return m[1];
     }
@@ -16,6 +16,16 @@ export function getCurrentBranchFromOutput(output: string): string | null {
     }
 
     return null;
+}
+
+/**
+ * Tags of this project look like 'v1.2.3' or 'v1.2.3-rc0'. A name in that
+ * form has to be a tag, see GitCheckout._resolveRef().
+ */
+const TAG_NAME_PATTERN = /^v\d+\.\d+\.\d+/;
+
+function refExists(projDir: string, ref: string): boolean {
+    return CmdUtils.exec(`cd ${projDir} && git rev-parse -q --verify ${ref}`).exitCode == 0;
 }
 
 function getCurrentBranch(projDir: string): string | null {
@@ -44,7 +54,8 @@ function getBranchWarning(currentBranch: string, missingBranch: string) {
 }
 
 export class GitCheckoutOptions {
-    force = false;
+    force?: boolean;
+    noLocal?: boolean;
 }
 
 class ProjectCheckoutResult {
@@ -167,8 +178,55 @@ export class GitCheckout {
         }
     }
 
+    /**
+     * Resolve NAME to a full ref, so that 'git checkout' never falls back to
+     * its DWIM branch creation. Returns undefined if nothing matches.
+     *
+     * A name in tag form ('v1.2.3') must resolve to a tag. Finding a branch
+     * with that name means the repository is broken, so we fail loudly instead
+     * of silently building the wrong revision.
+     */
+    private _resolveRef(projDir: string, name: string): string | undefined {
+        // the fallback path of _checkoutSubproject() re-enters with a resolved ref
+        if (name.includes('/') && refExists(projDir, name)) {
+            return name;
+        }
+
+        if (TAG_NAME_PATTERN.test(name)) {
+            if (refExists(projDir, `refs/tags/${name}`)) {
+                return `refs/tags/${name}`;
+            }
+            if (
+                refExists(projDir, `refs/remotes/origin/${name}`) ||
+                refExists(projDir, `refs/heads/${name}`)
+            ) {
+                throw new Error(`'${name}' looks like a tag, but it is a branch`);
+            }
+        } else if (refExists(projDir, `refs/remotes/origin/${name}`)) {
+            return `origin/${name}`;
+        }
+
+        return undefined;
+    }
+
     _checkout(projDir: string, branchName: string): ProjectCheckoutResult {
-        const cmd = `cd ${projDir} && git checkout ${branchName} ${this.options.force ? '--force' : ''}`;
+        // '--detach' is required, otherwise git creates a local branch for a
+        // remote branch, and DWIM can even prefer a branch over a tag
+        const args: string[] = [];
+        let target = branchName;
+        if (this.options.noLocal) {
+            const ref = this._resolveRef(projDir, branchName);
+            if (ref == undefined) {
+                return { succ: false };
+            }
+            target = ref;
+            args.push('--detach');
+        }
+        if (this.options.force) {
+            args.push('--force');
+        }
+
+        const cmd = `cd ${projDir} && git checkout ${target} ${args.join(' ')}`;
         const result = CmdUtils.exec(cmd);
         if (result.exitCode == 0) {
             let message;

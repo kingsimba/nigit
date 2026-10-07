@@ -93,11 +93,18 @@ program
     .description('run "git fetch" for all projects')
     .option('--skip-main', 'Skip the main project', false)
     .option('-p --prune', 'Same as "git fetch --prune"', false)
+    .option(
+        '--prune-tags',
+        'Delete local tags that no longer exist on the remote. Implies --prune',
+        false
+    )
     .option('-t --tags', 'Same as "git fetch --tags"', false)
     .option('-f --force', 'Same as "git fetch --force"', false)
     .action((projects: string[], options: any) => {
         const opts = new GitPullOptions();
         opts.skipMainProject = options.skipMain;
+        opts.prune = options.prune;
+        opts.pruneTags = options.pruneTags;
         opts.tags = options.tags;
         opts.force = options.force;
         GitPull.cmdGitPullOrFetch(projects, 'fetch', opts);
@@ -127,9 +134,19 @@ program
         "If a subproject doesn't have it, fallback to the same branch as the main project."
     )
     .option('--force', 'Discard local modifications')
-    .action((branchName: string, options: GitCheckoutOptions) => {
+    .option(
+        '--no-local',
+        'Check out the resolved remote ref with a detached HEAD, so that no local branch or tag is created. For build servers'
+    )
+    .action((branchName: string, options: GitCheckoutOptions & { local?: boolean }) => {
         const o = new GitCheckout();
-        o.cmdCheckout(branchName, options);
+        const exitCode = o.cmdCheckout(branchName, {
+            force: options.force === true,
+            noLocal: options.local === false,
+        });
+        if (exitCode != 0) {
+            process.exit(exitCode);
+        }
     });
 
 program

@@ -181,6 +181,29 @@ src/the_app.cpp | 62 ++++++++++++++++----------
 
 As shown above, if you have no access to a project, it will be skipped.
 
+## Fetch
+
+The `fetch` command runs `git fetch` for all projects. It does not touch the
+working tree, so it is the safe way to refresh a build server.
+
+```
+$ nigit fetch --prune --prune-tags --force
+```
+
+`--prune`
+: Delete the remote-tracking branches which no longer exist on the remote.
+
+`--prune-tags`
+: Also delete the local tags which no longer exist on the remote. Implies `--prune`.
+  Note that it deletes the tags you created locally as well.
+
+`--tags`
+: Fetch all tags.
+
+`--force`
+: Update tags which were rewritten (`git push --force`) on the remote. Without
+  it git keeps the old tag and reports `would clobber existing tag`.
+
 ## Push
 
 The `push` command pushes branches or tags to remote for all projects.
@@ -287,6 +310,16 @@ subproject_C   master (Cannot find 'data-driver')
 
 --force
 : Discard all local changes. Checkout to specified branch forcefully.
+
+--no-local
+: Resolve BRANCH_NAME to a remote ref and check it out with a detached HEAD,
+  so that no local branch or tag is created. Meant for build servers.
+
+  A name in tag form (`v1.2.3`, `v1.2.3-rc0`) must be a tag. If such a name is
+  a branch, `nigit` fails instead of silently building the wrong revision.
+
+  Since HEAD is detached, `nigit pull` and `nigit push` no longer work on that
+  checkout. Refresh with `nigit fetch --prune --prune-tags --force` instead.
 
 ### Create Feature Branch
 

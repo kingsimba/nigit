@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.8
+
+- 2026-10-07 nigit: Add `--no-local` to `nigit checkout`, checking out the resolved remote ref with a detached HEAD
+- 2026-10-07 nigit: Add `--prune-tags` to `nigit fetch`, syncing local tags with the remote
+- 2026-10-07 nigit: Fix `nigit fetch --prune` not passing `--prune` to git
+
 ## 1.8.6
 
 - 2026-08-16 nigit: Add tab completion via the 'completion' command

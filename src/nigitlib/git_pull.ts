@@ -6,7 +6,13 @@ import async from 'async';
 import { GitProject } from './git_config';
 
 export class GitPullOptions {
-    constructor(public skipMainProject = false, public prune = false, public tags = false, public force = false) { }
+    constructor(
+        public skipMainProject = false,
+        public prune = false,
+        public tags = false,
+        public force = false,
+        public pruneTags = false
+    ) { }
 }
 
 export class GitPull {
@@ -28,8 +34,12 @@ export class GitPull {
         GitForAll.createWorkspaceFile(`${mainProject.directory}/..`, mainProject.name);
 
         const moreArgs = [];
-        if (options.prune) {
+        // '--prune-tags' does nothing on its own, it needs '--prune' as well
+        if (options.prune || options.pruneTags) {
             moreArgs.push('--prune');
+        }
+        if (options.pruneTags) {
+            moreArgs.push('--prune-tags');
         }
         if (options.tags) {
             moreArgs.push('--tags');

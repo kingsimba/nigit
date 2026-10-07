@@ -64,7 +64,7 @@ _nigit_completions() {
             COMPREPLY=( \$(compgen -W "\$(__nigit_projects)" -- "\$cur") )
             ;;
         fetch)
-            COMPREPLY=( \$(compgen -W "--skip-main --prune --tags --force -p -t -f \$(__nigit_projects)" -- "\$cur") )
+            COMPREPLY=( \$(compgen -W "--skip-main --prune --prune-tags --tags --force -p -t -f \$(__nigit_projects)" -- "\$cur") )
             ;;
         start)
             if [ "$COMP_CWORD" -eq 2 ]; then
@@ -77,7 +77,7 @@ _nigit_completions() {
             COMPREPLY=( \$(compgen -W "--force --dry -f -n" -- "\$cur") )
             ;;
         checkout|co)
-            COMPREPLY=( \$(compgen -W "\$(__nigit_branches)" -- "\$cur") )
+            COMPREPLY=( \$(compgen -W "--no-local --force \$(__nigit_branches)" -- "\$cur") )
             ;;
         checkout-info|dump-info)
             COMPREPLY=( \$(compgen -f -- "\$cur") )
