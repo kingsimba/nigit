@@ -1,4 +1,4 @@
-import { GitCheckout, getCurrentBranchFromOutput } from '../src/nigitlib/git_checkout';
+import { GitCheckout, getCurrentBranch } from '../src/nigitlib/git_checkout';
 import chai from 'chai';
 import { CmdUtils } from '../src/nigitlib/cmd_utils';
 import fs from 'fs';
@@ -24,18 +24,6 @@ describe('GitCheckout', function () {
     });
 
 
-
-    it('getCurrentBranchFromOutput() works', () => {
-
-
-        let result = getCurrentBranchFromOutput(
-            '* (HEAD detached at origin/dev)\n  branches/1.0.x\n  branches/stable\n  dev  \n  master'
-        );
-        expect(result).equals('origin/dev');
-
-        result = getCurrentBranchFromOutput('  branches/1.0.x\n  branches/stable\n  dev  \n* master');
-        expect(result).equals('master');
-    });
 
     it('should be able to checkout to specific branch', () => {
         const o = new GitCheckout();
@@ -149,6 +137,37 @@ describe('GitCheckout --no-local', () => {
         expect(git(cloneA, 'rev-parse HEAD').stdout.trim()).equals(
             git(cloneA, 'rev-parse refs/remotes/origin/branches/2.13.x').stdout.trim()
         );
+    });
+
+    it('should name a detached HEAD after the checked out remote branch', () => {
+        const o = new GitCheckout();
+        o.setOptions({ noLocal: true });
+
+        expect(o._checkout(cloneA, 'branches/2.13.x').succ).is.true;
+        expect(getCurrentBranch(cloneA, 'branches/2.13.x')).equals(
+            'origin/branches/2.13.x'
+        );
+    });
+
+    it('should name an attached HEAD after the local branch', () => {
+        const o = new GitCheckout();
+
+        expect(o._checkout(cloneB, 'master').succ).is.true;
+        expect(getCurrentBranch(cloneB, 'master')).equals('master');
+    });
+
+    it('should name a detached HEAD without any ref after its commit', () => {
+        const dir = path.join(root, 'detached');
+        git(root, 'init -q detached');
+        fs.writeFileSync(path.join(dir, 'f.txt'), 'x\n');
+        git(dir, 'add .');
+        git(dir, '-c user.email=a@b.c -c user.name=a commit -qm x');
+        const branchName = git(dir, 'symbolic-ref --short HEAD').stdout.trim();
+        git(dir, 'checkout -q --detach HEAD');
+        git(dir, `update-ref -d refs/heads/${branchName}`);
+
+        const shortId = git(dir, 'rev-parse --short HEAD').stdout.trim();
+        expect(getCurrentBranch(dir, branchName)).equals(`(detached at ${shortId})`);
     });
 
     it('should not create any ref when checking out a tag', () => {

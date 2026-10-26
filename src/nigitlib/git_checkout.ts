@@ -5,19 +5,6 @@ import colors from 'colors';
 import fs from 'fs';
 import { TablePrinter } from './table-printer';
 
-export function getCurrentBranchFromOutput(output: string): string | null {
-    let m = output.match(/^\* \(.* detached (?:at|from) (.*)\)$/m);
-    if (m) {
-        return m[1];
-    }
-    m = output.match(/^\* (.*)$/m);
-    if (m) {
-        return m[1];
-    }
-
-    return null;
-}
-
 /**
  * Tags of this project look like 'v1.2.3' or 'v1.2.3-rc0'. A name in that
  * form has to be a tag, see GitCheckout._resolveRef().
@@ -28,17 +15,78 @@ function refExists(projDir: string, ref: string): boolean {
     return CmdUtils.exec(`cd ${projDir} && git rev-parse -q --verify ${ref}`).exitCode == 0;
 }
 
-function getCurrentBranch(projDir: string): string | null {
-    const cmd = `cd ${projDir} && git branch`;
-    const result = CmdUtils.exec(cmd);
-    if (result.exitCode == 0) {
-        return getCurrentBranchFromOutput(result.stdout);
+/**
+ * Refs pointing at HEAD, in the order they are tried when naming a detached
+ * HEAD: the branch that was checked out first, then local and remote branches,
+ * and tags as the last resort.
+ */
+function orderRefsPointingAtHead(
+    refs: string[],
+    preferredBranch: string | undefined
+): string[] {
+    const order: string[] = [];
+    if (preferredBranch != undefined) {
+        order.push(`refs/heads/${preferredBranch}`);
+        order.push(`refs/remotes/origin/${preferredBranch}`);
+    }
+    order.push(...refs.filter((ref) => ref.startsWith('refs/heads/')));
+    order.push(...refs.filter((ref) => ref.startsWith('refs/remotes/origin/')));
+    order.push(...refs.filter((ref) => ref.startsWith('refs/tags/')));
+
+    // origin/HEAD is a symbolic ref to the default branch, it names nothing
+    return order.filter(
+        (ref) => ref != 'refs/remotes/origin/HEAD' && refs.indexOf(ref) != -1
+    );
+}
+
+function toShortRefName(ref: string): string {
+    for (const prefix of ['refs/heads/', 'refs/remotes/', 'refs/tags/']) {
+        if (ref.startsWith(prefix)) {
+            return ref.substring(prefix.length);
+        }
+    }
+
+    return ref;
+}
+
+/**
+ * Name HEAD the same way for every project. 'git branch' describes a detached
+ * HEAD with whichever ref happens to point at the commit, falling back to a
+ * bare object name, so a single column mixes 'origin/branches/2.13.x' with
+ * '42a7030'. Resolve the name here instead, preferring the branch that was
+ * checked out.
+ */
+export function getCurrentBranch(
+    projDir: string,
+    preferredBranch?: string
+): string | null {
+    const attached = CmdUtils.exec(
+        `cd ${projDir} && git symbolic-ref --quiet --short HEAD`
+    );
+    if (attached.exitCode == 0) {
+        return attached.stdout.trim();
+    }
+
+    const pointsAt = CmdUtils.exec(
+        `cd ${projDir} && git for-each-ref --points-at HEAD --format='%(refname)'`
+    );
+    if (pointsAt.exitCode == 0) {
+        const refs = pointsAt.stdout.split(/\r?\n/).filter((ref) => ref.length > 0);
+        const names = orderRefsPointingAtHead(refs, preferredBranch);
+        if (names.length > 0) {
+            return toShortRefName(names[0]);
+        }
+    }
+
+    const head = CmdUtils.exec(`cd ${projDir} && git rev-parse --short HEAD`);
+    if (head.exitCode == 0) {
+        return `(detached at ${head.stdout.trim()})`;
     }
 
     return null;
 }
 
-function getBranchMessage(currentBranch: string, message: string) {
+function getBranchMessage(currentBranch: string, message: string | undefined) {
     if (message == undefined) {
         return `* ${currentBranch}`;
     } else {
@@ -115,7 +163,7 @@ export class GitCheckout {
         const coResult = this._checkout(projDir, this.branchName);
 
         // get current branch
-        const mainProjectBranch = getCurrentBranch(projDir);
+        const mainProjectBranch = getCurrentBranch(projDir, this.branchName);
         if (mainProjectBranch == undefined) {
             throw new Error(
                 `Failed to get the branch name of main project '${proj.name}'`
@@ -125,7 +173,7 @@ export class GitCheckout {
         if (coResult.succ) {
             table.printLine(
                 proj.name,
-                getBranchMessage(mainProjectBranch, coResult.message || '')
+                getBranchMessage(mainProjectBranch, coResult.message)
             );
         } else {
             table.printLine(
@@ -157,11 +205,11 @@ export class GitCheckout {
                 this._checkout(projDir, this.mainProjectBranch);
             }
 
-            const branch = getCurrentBranch(projDir);
+            const branch = getCurrentBranch(projDir, this.branchName);
             if (coResult.succ) {
                 table.printLine(
                     proj.name,
-                    getBranchMessage(branch!, coResult.message || '')
+                    getBranchMessage(branch!, coResult.message)
                 );
             } else {
                 table.printLine(proj.name, getBranchWarning(branch!, this.branchName));

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.10
+
+- 2026-10-26 nigit: Fix `nigit checkout` mixing branch names with commit ids in
+  the project list
+
 ## 1.8.9
 
 - 2026-10-26 nigit: Fix `checkout --no-local` sticking to a stale local branch
