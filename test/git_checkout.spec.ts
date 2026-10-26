@@ -107,6 +107,12 @@ describe('GitCheckout --no-local', () => {
         git(seed, 'push -q --tags origin master');
         // remote branch that shares the tag's name
         git(seed, 'push -q origin master:refs/heads/v1.2.3');
+        // remote branch whose name contains '/', so that a stale local branch
+        // of the same name cannot be told apart from a resolved ref
+        fs.writeFileSync(path.join(seed, 'f.txt'), 'two\n');
+        git(seed, `${author} commit -qam two`);
+        git(seed, 'push -q origin HEAD:refs/heads/branches/2.13.x');
+        git(seed, 'reset -q --hard HEAD~1');
 
         git(root, 'clone -q remote.git cloneA');
         git(root, 'clone -q remote.git cloneB');
@@ -129,6 +135,20 @@ describe('GitCheckout --no-local', () => {
         expect(o._checkout(cloneA, 'master').succ).is.true;
         expect(isDetached(cloneA)).is.true;
         expect(hasRef(cloneA, 'refs/heads/master')).is.false;
+    });
+
+    it('should ignore a stale local branch and use the remote ref', () => {
+        // leftover of an earlier checkout without --no-local, one commit behind
+        git(cloneA, 'branch branches/2.13.x HEAD');
+
+        const o = new GitCheckout();
+        o.setOptions({ noLocal: true });
+
+        expect(o._checkout(cloneA, 'branches/2.13.x').succ).is.true;
+        expect(isDetached(cloneA)).is.true;
+        expect(git(cloneA, 'rev-parse HEAD').stdout.trim()).equals(
+            git(cloneA, 'rev-parse refs/remotes/origin/branches/2.13.x').stdout.trim()
+        );
     });
 
     it('should not create any ref when checking out a tag', () => {

@@ -187,9 +187,12 @@ export class GitCheckout {
      * of silently building the wrong revision.
      */
     private _resolveRef(projDir: string, name: string): string | undefined {
-        // the fallback path of _checkoutSubproject() re-enters with a resolved ref
-        if (name.includes('/') && refExists(projDir, name)) {
-            return name;
+        // the fallback path of _checkoutSubproject() re-enters with a resolved
+        // ref. A plain branch name like 'branches/2.13.x' must not be taken for
+        // one: git resolves it to a local branch, which is left behind by an
+        // earlier checkout and may be many commits behind the remote.
+        if (name.startsWith('refs/') || name.startsWith('origin/')) {
+            return refExists(projDir, name) ? name : undefined;
         }
 
         if (TAG_NAME_PATTERN.test(name)) {

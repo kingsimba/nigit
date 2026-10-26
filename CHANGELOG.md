@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.9
+
+- 2026-10-26 nigit: Fix `checkout --no-local` sticking to a stale local branch
+  when the branch name contains a slash
+
 ## 1.8.8
 
 - 2026-10-07 nigit: Add `--no-local` to `nigit checkout`, checking out the resolved remote ref with a detached HEAD
